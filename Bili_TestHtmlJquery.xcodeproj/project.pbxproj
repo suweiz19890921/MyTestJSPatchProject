@@ -34,6 +34,7 @@
 		4A0649691D372CAB000D02B4 /* UIImageView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A0649581D372CAB000D02B4 /* UIImageView+WebCache.m */; };
 		4A06496A1D372CAB000D02B4 /* UIView+WebCacheOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A06495A1D372CAB000D02B4 /* UIView+WebCacheOperation.m */; };
 		4A0649C51D38C6B6000D02B4 /* SWBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A0649C41D38C6B6000D02B4 /* SWBaseViewController.m */; };
+		4A0649C71D38DEFB000D02B4 /* demo.js in Resources */ = {isa = PBXBuildFile; fileRef = 4A0649C61D38DEFB000D02B4 /* demo.js */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -107,6 +108,7 @@
 		4A06495A1D372CAB000D02B4 /* UIView+WebCacheOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+WebCacheOperation.m"; sourceTree = "<group>"; };
 		4A0649C31D38C6B6000D02B4 /* SWBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWBaseViewController.h; sourceTree = "<group>"; };
 		4A0649C41D38C6B6000D02B4 /* SWBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWBaseViewController.m; sourceTree = "<group>"; };
+		4A0649C61D38DEFB000D02B4 /* demo.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = demo.js; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -161,6 +163,7 @@
 				4A0648F91D350287000D02B4 /* AppDelegate.m */,
 				4A0649C31D38C6B6000D02B4 /* SWBaseViewController.h */,
 				4A0649C41D38C6B6000D02B4 /* SWBaseViewController.m */,
+				4A0649C61D38DEFB000D02B4 /* demo.js */,
 				4A0649391D372CAB000D02B4 /* SDWebImage */,
 				4A0649311D3619FF000D02B4 /* JSPatch */,
 				4A0648FE1D350287000D02B4 /* Main.storyboard */,
@@ -355,6 +358,7 @@
 				4A0649361D3619FF000D02B4 /* JSPatch.js in Resources */,
 				4A0649051D350287000D02B4 /* LaunchScreen.storyboard in Resources */,
 				4A0649381D361A43000D02B4 /* demo.js in Resources */,
+				4A0649C71D38DEFB000D02B4 /* demo.js in Resources */,
 				4A0649021D350287000D02B4 /* Assets.xcassets in Resources */,
 				4A0649001D350287000D02B4 /* Main.storyboard in Resources */,
 			);
