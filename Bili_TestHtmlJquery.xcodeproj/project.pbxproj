@@ -15,7 +15,6 @@
 		4A06491B1D350287000D02B4 /* Bili_TestHtmlJqueryUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A06491A1D350287000D02B4 /* Bili_TestHtmlJqueryUITests.m */; };
 		4A0649351D3619FF000D02B4 /* JPEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A0649331D3619FF000D02B4 /* JPEngine.m */; };
 		4A0649361D3619FF000D02B4 /* JSPatch.js in Resources */ = {isa = PBXBuildFile; fileRef = 4A0649341D3619FF000D02B4 /* JSPatch.js */; };
-		4A0649381D361A43000D02B4 /* demo.js in Resources */ = {isa = PBXBuildFile; fileRef = 4A0649371D361A43000D02B4 /* demo.js */; };
 		4A06495B1D372CAB000D02B4 /* MKAnnotationView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A06493B1D372CAB000D02B4 /* MKAnnotationView+WebCache.m */; };
 		4A06495C1D372CAB000D02B4 /* NSData+ImageContentType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A06493D1D372CAB000D02B4 /* NSData+ImageContentType.m */; };
 		4A06495D1D372CAB000D02B4 /* SDImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A06493F1D372CAB000D02B4 /* SDImageCache.m */; };
@@ -125,6 +124,7 @@
 		4A064AE51D38F845000D02B4 /* UITableViewHeaderFooterView+RACSignalSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A064A861D38F845000D02B4 /* UITableViewHeaderFooterView+RACSignalSupport.m */; };
 		4A064AE61D38F845000D02B4 /* UITextField+RACSignalSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A064A881D38F845000D02B4 /* UITextField+RACSignalSupport.m */; };
 		4A064AE71D38F845000D02B4 /* UITextView+RACSignalSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A064A8A1D38F845000D02B4 /* UITextView+RACSignalSupport.m */; };
+		4AE192FD1D3929F600DFCCDD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4AE192FC1D3929F600DFCCDD /* Images.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -388,6 +388,7 @@
 		4A064A881D38F845000D02B4 /* UITextField+RACSignalSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextField+RACSignalSupport.m"; sourceTree = "<group>"; };
 		4A064A891D38F845000D02B4 /* UITextView+RACSignalSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextView+RACSignalSupport.h"; sourceTree = "<group>"; };
 		4A064A8A1D38F845000D02B4 /* UITextView+RACSignalSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextView+RACSignalSupport.m"; sourceTree = "<group>"; };
+		4AE192FC1D3929F600DFCCDD /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -449,6 +450,7 @@
 				4A0649011D350287000D02B4 /* Assets.xcassets */,
 				4A0649031D350287000D02B4 /* LaunchScreen.storyboard */,
 				4A0649061D350287000D02B4 /* Info.plist */,
+				4AE192FC1D3929F600DFCCDD /* Images.xcassets */,
 				4A0648F51D350286000D02B4 /* Supporting Files */,
 			);
 			path = Bili_TestHtmlJquery;
@@ -848,8 +850,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				4A0649361D3619FF000D02B4 /* JSPatch.js in Resources */,
+				4AE192FD1D3929F600DFCCDD /* Images.xcassets in Resources */,
 				4A0649051D350287000D02B4 /* LaunchScreen.storyboard in Resources */,
-				4A0649381D361A43000D02B4 /* demo.js in Resources */,
 				4A0649C71D38DEFB000D02B4 /* demo.js in Resources */,
 				4A0649021D350287000D02B4 /* Assets.xcassets in Resources */,
 			);
