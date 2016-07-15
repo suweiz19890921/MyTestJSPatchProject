@@ -62,7 +62,7 @@ defineClass("SWHomeViewController: SWBaseViewController",{
         button.setTag(1);
         //var tap = require('UITapGestureRecognizer').alloc().initWithTarget_action(self,'tapClick:');
         //self.view().addGestureRecognizer(tap);
-        var tableView = UITableView.alloc().initWithFrame({x:0, y:0, width:375, height:UIScreen.mainScreen().bounds().height });
+        var tableView = UITableView.alloc().initWithFrame(UIScreen.mainScreen().bounds());
         self.view().addSubview(tableView);
         tableView.setBackgroundColor(UIColor.grayColor());
         tableView.setRowHeight(80);
@@ -183,10 +183,7 @@ defineClass("SWHomeSecondViewController: SWHomeViewController<UITableViewDelegat
         var imageView = self.lazyImageView();
         imageView.sd__setImageWithURL(url);
         self.view().addSubview(imageView);
-        //var vc = require('SWViewController').alloc().init();
-        //vc.view().setBackgroundColor(UIColor.yellowColor());
-        //self.navigationController().pushViewController_animated(vc,1);
-
+  
     }
 })
 
