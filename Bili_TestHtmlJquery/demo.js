@@ -201,7 +201,8 @@ defineClass("SWTableViewCell: UITableViewCell", {
 defineClass("SWTableViewCell: UITableViewCell",{
     //- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(nullable NSString *)reuseIdentifier
     initWithStyle_reuseIdentifier:function(style,reuseIdentifier){
-        if(self = self.super().initWithStyle_reuseIdentifier(style,reuseIdentifier)){
+
+        if(self = self.ORIGinitWithStyle_reuseIdentifier(style,reuseIdentifier)){
             self.configSubview();
         }
         return self;
@@ -308,7 +309,6 @@ defineClass("SWSearchViewController: SWHomeViewController",{
 
 
 // SW 我的-------------------------// SW 我的-------------------------// SW 我的-------------------------// SW 我的-------------------------// SW 我的-------------------------// SW 我的-------------------------
-
 defineClass("SWPlayerUserCenterViewController: SWHomeViewController",{
     init:function(){
         if(self.ORIGinit()){
@@ -326,4 +326,3 @@ defineClass("SWPlayerUserCenterViewController: SWHomeViewController",{
     }
 
 })
-//end--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
