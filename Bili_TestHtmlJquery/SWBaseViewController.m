@@ -16,8 +16,6 @@
 - (id)init{
     if (self = [super init]) {
         self.tabBarItem.imageInsets = UIEdgeInsetsMake(6, 0, -6, 0);
-        UILabel *la;
-//        la.textColor
     }
     return self;
 }
