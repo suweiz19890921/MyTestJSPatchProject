@@ -155,23 +155,6 @@ defineClass("SWHomeSecondViewController:SWHomeViewController",{
         return imageView;
     }
 })
-defineClass("SWHomeSecondViewController: SWHomeViewController <UIAlertViewDelegate>", {
-    viewDidAppear: function(animated) {
-        var alertView = require('UIAlertView')
-            .alloc()
-            .initWithTitle_message_delegate_cancelButtonTitle_otherButtonTitles(
-            "Alert",
-            "我是自定义类",
-            self,
-            "OK",
-            null
-        )
-        alertView.show();
-    },
-    alertView_clickedButtonAtIndex: function(alertView, buttonIndex) {
-        console.log('clicked index ' + buttonIndex)
-    }
-})
 
 defineClass("SWHomeSecondViewController: SWHomeViewController<UITableViewDelegate>", {
     tableView_didSelectRowAtIndexPath: function (tableView, indexPath) {
