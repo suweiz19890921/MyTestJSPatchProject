@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		4A0648F71D350286000D02B4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A0648F61D350286000D02B4 /* main.m */; };
 		4A0648FA1D350287000D02B4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A0648F91D350287000D02B4 /* AppDelegate.m */; };
-		4A0649001D350287000D02B4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4A0648FE1D350287000D02B4 /* Main.storyboard */; };
 		4A0649021D350287000D02B4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4A0649011D350287000D02B4 /* Assets.xcassets */; };
 		4A0649051D350287000D02B4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4A0649031D350287000D02B4 /* LaunchScreen.storyboard */; };
 		4A0649101D350287000D02B4 /* Bili_TestHtmlJqueryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A06490F1D350287000D02B4 /* Bili_TestHtmlJqueryTests.m */; };
@@ -35,7 +34,6 @@
 		4A06496A1D372CAB000D02B4 /* UIView+WebCacheOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A06495A1D372CAB000D02B4 /* UIView+WebCacheOperation.m */; };
 		4A0649C51D38C6B6000D02B4 /* SWBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A0649C41D38C6B6000D02B4 /* SWBaseViewController.m */; };
 		4A0649C71D38DEFB000D02B4 /* demo.js in Resources */ = {isa = PBXBuildFile; fileRef = 4A0649C61D38DEFB000D02B4 /* demo.js */; };
-		4A064A8C1D38F845000D02B4 /* LICENSE.md in Sources */ = {isa = PBXBuildFile; fileRef = 4A0649CA1D38F845000D02B4 /* LICENSE.md */; };
 		4A064A8D1D38F845000D02B4 /* RACEXTRuntimeExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A0649CF1D38F845000D02B4 /* RACEXTRuntimeExtensions.m */; };
 		4A064A8E1D38F845000D02B4 /* MKAnnotationView+RACSignalSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A0649D31D38F845000D02B4 /* MKAnnotationView+RACSignalSupport.m */; };
 		4A064A8F1D38F845000D02B4 /* NSArray+RACSequenceAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A0649D51D38F845000D02B4 /* NSArray+RACSequenceAdditions.m */; };
@@ -127,7 +125,7 @@
 		4A064AE51D38F845000D02B4 /* UITableViewHeaderFooterView+RACSignalSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A064A861D38F845000D02B4 /* UITableViewHeaderFooterView+RACSignalSupport.m */; };
 		4A064AE61D38F845000D02B4 /* UITextField+RACSignalSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A064A881D38F845000D02B4 /* UITextField+RACSignalSupport.m */; };
 		4A064AE71D38F845000D02B4 /* UITextView+RACSignalSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A064A8A1D38F845000D02B4 /* UITextView+RACSignalSupport.m */; };
-		4A064AE81D38F845000D02B4 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 4A064A8B1D38F845000D02B4 /* README.md */; };
+		4A064AEA1D38FCAC000D02B4 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4A064AE91D38FCAC000D02B4 /* Images.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -152,7 +150,6 @@
 		4A0648F61D350286000D02B4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		4A0648F81D350287000D02B4 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		4A0648F91D350287000D02B4 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		4A0648FF1D350287000D02B4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		4A0649011D350287000D02B4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4A0649041D350287000D02B4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4A0649061D350287000D02B4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -202,7 +199,6 @@
 		4A0649C31D38C6B6000D02B4 /* SWBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWBaseViewController.h; sourceTree = "<group>"; };
 		4A0649C41D38C6B6000D02B4 /* SWBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWBaseViewController.m; sourceTree = "<group>"; };
 		4A0649C61D38DEFB000D02B4 /* demo.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = demo.js; sourceTree = "<group>"; };
-		4A0649CA1D38F845000D02B4 /* LICENSE.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = LICENSE.md; sourceTree = "<group>"; };
 		4A0649CD1D38F845000D02B4 /* RACEXTKeyPathCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RACEXTKeyPathCoding.h; sourceTree = "<group>"; };
 		4A0649CE1D38F845000D02B4 /* RACEXTRuntimeExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RACEXTRuntimeExtensions.h; sourceTree = "<group>"; };
 		4A0649CF1D38F845000D02B4 /* RACEXTRuntimeExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RACEXTRuntimeExtensions.m; sourceTree = "<group>"; };
@@ -393,7 +389,7 @@
 		4A064A881D38F845000D02B4 /* UITextField+RACSignalSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextField+RACSignalSupport.m"; sourceTree = "<group>"; };
 		4A064A891D38F845000D02B4 /* UITextView+RACSignalSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextView+RACSignalSupport.h"; sourceTree = "<group>"; };
 		4A064A8A1D38F845000D02B4 /* UITextView+RACSignalSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextView+RACSignalSupport.m"; sourceTree = "<group>"; };
-		4A064A8B1D38F845000D02B4 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		4A064AE91D38FCAC000D02B4 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -452,10 +448,10 @@
 				4A0649C91D38F845000D02B4 /* ReactiveCocoa */,
 				4A0649391D372CAB000D02B4 /* SDWebImage */,
 				4A0649311D3619FF000D02B4 /* JSPatch */,
-				4A0648FE1D350287000D02B4 /* Main.storyboard */,
 				4A0649011D350287000D02B4 /* Assets.xcassets */,
 				4A0649031D350287000D02B4 /* LaunchScreen.storyboard */,
 				4A0649061D350287000D02B4 /* Info.plist */,
+				4A064AE91D38FCAC000D02B4 /* Images.xcassets */,
 				4A0648F51D350286000D02B4 /* Supporting Files */,
 			);
 			path = Bili_TestHtmlJquery;
@@ -541,9 +537,7 @@
 		4A0649C91D38F845000D02B4 /* ReactiveCocoa */ = {
 			isa = PBXGroup;
 			children = (
-				4A0649CA1D38F845000D02B4 /* LICENSE.md */,
 				4A0649CB1D38F845000D02B4 /* ReactiveCocoa */,
-				4A064A8B1D38F845000D02B4 /* README.md */,
 			);
 			path = ReactiveCocoa;
 			sourceTree = "<group>";
@@ -859,9 +853,9 @@
 				4A0649361D3619FF000D02B4 /* JSPatch.js in Resources */,
 				4A0649051D350287000D02B4 /* LaunchScreen.storyboard in Resources */,
 				4A0649381D361A43000D02B4 /* demo.js in Resources */,
+				4A064AEA1D38FCAC000D02B4 /* Images.xcassets in Resources */,
 				4A0649C71D38DEFB000D02B4 /* demo.js in Resources */,
 				4A0649021D350287000D02B4 /* Assets.xcassets in Resources */,
-				4A0649001D350287000D02B4 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -955,8 +949,6 @@
 				4A064AA21D38F845000D02B4 /* NSURLConnection+RACSupport.m in Sources */,
 				4A064AE11D38F845000D02B4 /* UISlider+RACSignalSupport.m in Sources */,
 				4A06496A1D372CAB000D02B4 /* UIView+WebCacheOperation.m in Sources */,
-				4A064A8C1D38F845000D02B4 /* LICENSE.md in Sources */,
-				4A064AE81D38F845000D02B4 /* README.md in Sources */,
 				4A064AD51D38F845000D02B4 /* UIActionSheet+RACSignalSupport.m in Sources */,
 				4A064AB71D38F845000D02B4 /* RACKVOChannel.m in Sources */,
 				4A064A991D38F845000D02B4 /* NSObject+RACKVOWrapper.m in Sources */,
@@ -1034,14 +1026,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		4A0648FE1D350287000D02B4 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				4A0648FF1D350287000D02B4 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		4A0649031D350287000D02B4 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -1141,6 +1125,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
 				INFOPLIST_FILE = Bili_TestHtmlJquery/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1153,6 +1138,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
 				INFOPLIST_FILE = Bili_TestHtmlJquery/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
