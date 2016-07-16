@@ -4,6 +4,7 @@
 require('UIButton,UIWindow,SWBaseViewController,SWTabBarController,UINavigationController,SWHomeViewController,SWCategoryController,SWConcernViewController,SWSearchViewController,SWPlayerUserCenterViewController,JPViewController,UITabBarController,NSArray,UITableView,UIScreen,UIViewController,AppDelegate, UIImageView, UIImage, UIScreen,UITableViewCell,UILabel, NSURL, NSURLRequest,NSURLConnection,NSOperationQueue');
 require('UIColor,NSURLResponse,NSData,NSError,NSJSONSerialization,NSDictionary,NSArray, UIViewController,SWTableViewCell');
 require('JPEngine').addExtensions(['JPMemory']);
+require('SWContainerView,UIScrollView,SWTopBar');
 var button
 //app代理--------------------------//app代理--------------------------//app代理--------------------------//app代理--------------------------//app代理--------------------------//app代理--------------------------
 defineClass('AppDelegate : UIResponder',{
@@ -72,22 +73,30 @@ defineClass("SWHomeViewController: SWBaseViewController",{
         var url= NSURL.URLWithString(self.getProp('urlStr'));
         var request = NSURLRequest.alloc().initWithURL(url);
         var sel = self;
-//        var btn = UIButton.alloc().initWithFrame({x:100, y:100, width:100, height:100});
-//        self.view().addSubview(btn);
-//        btn.setBackgroundColor(UIColor.redColor());
-//        btn.rac__signalForControlEvents(1 <<  6).subscribeNext(block("id",function(x){
-//            console.log("真实吊炸了，也可以直接调用RAC");
-//        }));
-        //现在JSPatch除了不支持 动态调用C函数 和 一些特殊结构体之外，几乎什么都支持了。
+        var btn = UIButton.alloc().initWithFrame({x:100, y:100, width:100, height:100});
+        self.view().addSubview(btn);
+        btn.setBackgroundColor(UIColor.redColor());
+        btn.rac__signalForControlEvents(1 <<  6).subscribeNext(block("id",function(x){
+            console.log("真实吊炸了，也可以直接调用RAC");
+            var contain = SWContainerView.alloc().init();
+            sel.view().addSubview(contain);
+        }));
+//        现在JSPatch除了不支持 动态调用C函数 和 一些特殊结构体之外，几乎什么都支持了。
         NSURLConnection.sendAsynchronousRequest_queue_completionHandler(request,NSOperationQueue.mainQueue(),block("NSURLResponse* ,NSData*, NSError*",function(response,data,error) {
-            var NSJSONReadingMutableContainers = 1 << 0;
-           var dict = NSJSONSerialization.JSONObjectWithData_options_error(data,NSJSONReadingMutableContainers,null);
-            dict = dict.objectForKey('result');
-            var array = dict.objectForKey('list');
-            sel.setProp_forKey(array, "data");
-            var data = sel.getProp("data");
-            //console.log(data);
-            tableView.reloadData();
+            if(!error){
+                var NSJSONReadingMutableContainers = 1 << 0;
+                var dict = NSJSONSerialization.JSONObjectWithData_options_error(data,NSJSONReadingMutableContainers,null);
+                dict = dict.objectForKey('result');
+                var array = dict.objectForKey('list');
+                sel.setProp_forKey(array, "data");
+                var data = sel.getProp("data");
+                //console.log(data);
+                tableView.reloadData();
+            }else{
+                console.log("请求失败");
+                console.log(error)
+            }
+
         }));
     },
     init:function(){
@@ -311,5 +320,52 @@ defineClass("SWPlayerUserCenterViewController: SWHomeViewController",{
         }
         return self;
     }
+
+})
+
+//public element 自己手动封装一些公共控件
+defineClass("SWContainerView:UIView",{
+    init:function(){
+        if(self.ORIGinit()){
+            //初始化子控件
+            var scrollView = UIScrollView.alloc().init();
+            scrollView.setShowsVerticalScrollIndicator(0);
+            scrollView.setShowsHorizontalScrollIndicator(0);
+            scrollView.setPagingEnabled(1);
+            scrollView.setBounces(0);
+            scrollView.setDelegate(self);
+            scrollView.setScrollsToTop(0);
+            scrollView.setBackgroundColor(UIColor.redColor());
+            self.setProp_forKey(scrollView,"scrollView");
+            self.addSubview(scrollView);
+
+            var topBar = SWTopBar.alloc().init();
+            topBar.setBackgroundColor(UIColor.yellowColor());
+            self.setProp_forKey(topBar,"topBar");
+            self.addSubview(topBar);
+
+            self.setUserInteractionEnabled(1);
+
+            self.setProp_forKey(64,"topBarHeight");
+
+        }
+        return self;
+    },
+    touchesBegan_withEvent:function(touches,event){
+    console.log("ssllslslllsslls");
+    },
+    layoutSubviews:function(){
+        self.super().layoutSubviews();
+        var topBarHeight = self.getProp("topBarHeight");
+        var rect = self.bounds();
+        var viewWidth = 375;
+        var viewHeight = 667;
+        self.getProp("topBar").setFrame({x:0, y:0, width:viewHeight, height:topBarHeight});
+        self.getProp("scrollView").setFrame({x:0, y:topBarHeight, width:viewWidth, height:viewHeight - topBarHeight});
+
+    }
+
+})
+defineClass("SWTopBar:UIView",function(){
 
 })
