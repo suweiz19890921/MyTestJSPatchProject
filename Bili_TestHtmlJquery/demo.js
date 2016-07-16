@@ -78,6 +78,7 @@ defineClass("SWHomeViewController: SWBaseViewController",{
 //        btn.rac__signalForControlEvents(1 <<  6).subscribeNext(block("id",function(x){
 //            console.log("真实吊炸了，也可以直接调用RAC");
 //        }));
+        //现在JSPatch除了不支持 动态调用C函数 和 一些特殊结构体之外，几乎什么都支持了。
         NSURLConnection.sendAsynchronousRequest_queue_completionHandler(request,NSOperationQueue.mainQueue(),block("NSURLResponse* ,NSData*, NSError*",function(response,data,error) {
             var NSJSONReadingMutableContainers = 1 << 0;
            var dict = NSJSONSerialization.JSONObjectWithData_options_error(data,NSJSONReadingMutableContainers,null);
