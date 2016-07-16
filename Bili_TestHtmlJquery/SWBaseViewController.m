@@ -7,7 +7,7 @@
 //
 
 #import "SWBaseViewController.h"
-
+#import "ReactiveCocoa.h"
 @interface SWBaseViewController ()
 
 @end

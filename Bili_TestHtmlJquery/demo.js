@@ -72,6 +72,12 @@ defineClass("SWHomeViewController: SWBaseViewController",{
         var url= NSURL.URLWithString(self.getProp('urlStr'));
         var request = NSURLRequest.alloc().initWithURL(url);
         var sel = self;
+//        var btn = UIButton.alloc().initWithFrame({x:100, y:100, width:100, height:100});
+//        self.view().addSubview(btn);
+//        btn.setBackgroundColor(UIColor.redColor());
+//        btn.rac__signalForControlEvents(1 <<  6).subscribeNext(block("id",function(x){
+//            console.log("真实吊炸了，也可以直接调用RAC");
+//        }));
         NSURLConnection.sendAsynchronousRequest_queue_completionHandler(request,NSOperationQueue.mainQueue(),block("NSURLResponse* ,NSData*, NSError*",function(response,data,error) {
             var NSJSONReadingMutableContainers = 1 << 0;
            var dict = NSJSONSerialization.JSONObjectWithData_options_error(data,NSJSONReadingMutableContainers,null);
