@@ -79,6 +79,7 @@ defineClass("SWHomeViewController: SWBaseViewController",{
         btn.rac__signalForControlEvents(1 <<  6).subscribeNext(block("id",function(x){
             console.log("真实吊炸了，也可以直接调用RAC");
             var contain = SWContainerView.alloc().init();
+            contain.setFrame(sel.view().bounds());
             sel.view().addSubview(contain);
         }));
 //        现在JSPatch除了不支持 动态调用C函数 和 一些特殊结构体之外，几乎什么都支持了。
@@ -358,9 +359,9 @@ defineClass("SWContainerView:UIView",{
         self.super().layoutSubviews();
         var topBarHeight = self.getProp("topBarHeight");
         var rect = self.bounds();
-        var viewWidth = 375;
-        var viewHeight = 667;
-        self.getProp("topBar").setFrame({x:0, y:0, width:viewHeight, height:topBarHeight});
+        var viewWidth = rect.width;
+        var viewHeight = rect.height;
+        self.getProp("topBar").setFrame({x:0, y:0, width:viewWidth, height:topBarHeight});
         self.getProp("scrollView").setFrame({x:0, y:topBarHeight, width:viewWidth, height:viewHeight - topBarHeight});
 
     }
