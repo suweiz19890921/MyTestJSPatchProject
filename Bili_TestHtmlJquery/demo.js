@@ -62,7 +62,7 @@ defineClass("SWHomeViewController: SWBaseViewController",{
         button.setTag(1);
         //var tap = require('UITapGestureRecognizer').alloc().initWithTarget_action(self,'tapClick:');
         //self.view().addGestureRecognizer(tap);
-        var tableView = UITableView.alloc().initWithFrame({x:0, y:0, width:375, height:UIScreen.mainScreen().bounds().height });
+        var tableView = UITableView.alloc().initWithFrame(UIScreen.mainScreen().bounds());
         self.view().addSubview(tableView);
         tableView.setBackgroundColor(UIColor.grayColor());
         tableView.setRowHeight(80);
@@ -72,6 +72,12 @@ defineClass("SWHomeViewController: SWBaseViewController",{
         var url= NSURL.URLWithString(self.getProp('urlStr'));
         var request = NSURLRequest.alloc().initWithURL(url);
         var sel = self;
+//        var btn = UIButton.alloc().initWithFrame({x:100, y:100, width:100, height:100});
+//        self.view().addSubview(btn);
+//        btn.setBackgroundColor(UIColor.redColor());
+//        btn.rac__signalForControlEvents(1 <<  6).subscribeNext(block("id",function(x){
+//            console.log("真实吊炸了，也可以直接调用RAC");
+//        }));
         NSURLConnection.sendAsynchronousRequest_queue_completionHandler(request,NSOperationQueue.mainQueue(),block("NSURLResponse* ,NSData*, NSError*",function(response,data,error) {
             var NSJSONReadingMutableContainers = 1 << 0;
            var dict = NSJSONSerialization.JSONObjectWithData_options_error(data,NSJSONReadingMutableContainers,null);
@@ -183,10 +189,7 @@ defineClass("SWHomeSecondViewController: SWHomeViewController<UITableViewDelegat
         var imageView = self.lazyImageView();
         imageView.sd__setImageWithURL(url);
         self.view().addSubview(imageView);
-        //var vc = require('SWViewController').alloc().init();
-        //vc.view().setBackgroundColor(UIColor.yellowColor());
-        //self.navigationController().pushViewController_animated(vc,1);
-
+  
     }
 })
 
