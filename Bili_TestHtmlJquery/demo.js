@@ -89,6 +89,7 @@ defineClass("SWHomeViewController: SWBaseViewController",{
                 var dict = NSJSONSerialization.JSONObjectWithData_options_error(data,NSJSONReadingMutableContainers,null);
                 dict = dict.objectForKey('result');
                 var array = dict.objectForKey('list');
+                console.log(array.count());
                 sel.setProp_forKey(array, "data");
                 var data = sel.getProp("data");
                 //console.log(data);
@@ -324,7 +325,7 @@ defineClass("SWPlayerUserCenterViewController: SWHomeViewController",{
 
 })
 
-//public element 自己手动封装一些公共控件
+//public element 自己手动封装一些公共控件--------------------------------------//public element 自己手动封装一些公共控件--------------------------------------//public element 自己手动封装一些公共控件--------------------------------------
 defineClass("SWContainerView:UIView",{
     init:function(){
         if(self.ORIGinit()){
