@@ -361,7 +361,7 @@ defineClass("SWContainerView:UIView",{
     console.log("ssllslslllsslls");
     },
     installViewControllers:function(VCArray){
-      self.setProp(VCArray,'vcs');
+      self.setProp_forKey(VCArray,"vcs");
          var scrollView = self.getProp("scrollView");
         var count = VCArray.count();
         for(var i = 0;i<count; i++){
@@ -380,7 +380,7 @@ defineClass("SWContainerView:UIView",{
         var scrollView = self.getProp("scrollView");
         self.getProp("topBar").setFrame({x:0, y:0, width:viewWidth, height:topBarHeight});
         scrollView.setFrame({x:0, y:topBarHeight, width:viewWidth, height:viewHeight - topBarHeight});
-        var vcs = self.getProp(vcs);
+        var vcs = self.getProp("vcs");
         if(vcs.count() > 0){
             for(var i = 0;i<count; i++){
                 var vc = VCArray.objectAtIndex(i);
@@ -397,30 +397,30 @@ defineClass("SWTopBar:UIView",{
         if(count <= 0){
             return;
         }
-        self.setProp(titleArray,'titleArray');
+        self.setProp_forKey(titleArray,'titleArray');
         for(var i = 0; i<count; i++){
             var title = titleArray.objectAtIndex(i);
             var titleLabel = UILabel.alloc().init();
             titleLabel.setText(title);
             self.addSubview(titleLabel);
         }
-    },
-    layoutSubviews:function(){
-        self.super().layoutSubviews();
-        var topBarHeight = self.getProp("topBarHeight");
-        var rect = self.bounds();
-        var viewWidth = rect.width;
-        var viewHeight = rect.height;
-        var scrollView = self.getProp("scrollView");
-        self.getProp("topBar").setFrame({x:0, y:0, width:viewWidth, height:topBarHeight});
-        scrollView.setFrame({x:0, y:topBarHeight, width:viewWidth, height:viewHeight - topBarHeight});
-        var vcs = self.getProp(titleArray);
-        if(vcs.count() > 0){
-            for(var i = 0;i<count; i++){
-                var vc = VCArray.objectAtIndex(i);
-                vc.view().setFrame({x:i*viewWidth, y:topBarHeight, width:viewWidth, height:viewHeight - topBarHeight});
-            }
-
-        }
     }
+    //layoutSubviews:function(){
+    //    self.super().layoutSubviews();
+    //    var topBarHeight = self.getProp("topBarHeight");
+    //    var rect = self.bounds();
+    //    var viewWidth = rect.width;
+    //    var viewHeight = rect.height;
+    //    var scrollView = self.getProp("scrollView");
+    //    self.getProp("topBar").setFrame({x:0, y:0, width:viewWidth, height:topBarHeight});
+    //    scrollView.setFrame({x:0, y:topBarHeight, width:viewWidth, height:viewHeight - topBarHeight});
+    //    var vcs = self.getProp(titleArray);
+    //    if(vcs.count() > 0){
+    //        for(var i = 0;i<count; i++){
+    //            var vc = VCArray.objectAtIndex(i);
+    //            vc.view().setFrame({x:i*viewWidth, y:topBarHeight, width:viewWidth, height:viewHeight - topBarHeight});
+    //        }
+    //
+    //    }
+    //}
 })
