@@ -1,7 +1,7 @@
 /**
  * Created by suwei on 16/7/13.
  */
-require('UIButton,UIWindow,SWBaseViewController,SWTabBarController,UINavigationController,SWHomeViewController,SWCategoryController,SWConcernViewController,SWSearchViewController,SWPlayerUserCenterViewController,JPViewController,UITabBarController,NSArray,UITableView,UIScreen,UIViewController,AppDelegate, UIImageView, UIImage, UIScreen,UITableViewCell,UILabel, NSURL, NSURLRequest,NSURLConnection,NSOperationQueue');
+require('UIButton,UIWindow,SWBaseViewController,NSMutableArray,SWTabBarController,UINavigationController,SWHomeViewController,SWCategoryController,SWConcernViewController,SWSearchViewController,SWPlayerUserCenterViewController,JPViewController,UITabBarController,NSArray,UITableView,UIScreen,UIViewController,AppDelegate, UIImageView, UIImage, UIScreen,UITableViewCell,UILabel, NSURL, NSURLRequest,NSURLConnection,NSOperationQueue');
 require('UIColor,NSURLResponse,NSData,NSError,NSJSONSerialization,NSDictionary,NSArray, UIViewController,SWTableViewCell');
 require('JPEngine').addExtensions(['JPMemory']);
 require('SWContainerView,UIScrollView,SWTopBar');
@@ -69,7 +69,6 @@ defineClass("SWHomeViewController: SWBaseViewController",{
         //self.view().addGestureRecognizer(tap);
         var tableView = UITableView.alloc().initWithFrame(UIScreen.mainScreen().bounds());
         self.view().addSubview(tableView);
-        tableView.setBackgroundColor(UIColor.grayColor());
         tableView.setRowHeight(80);
         tableView.setDataSource(self);
         tableView.setDelegate(self);
@@ -84,6 +83,17 @@ defineClass("SWHomeViewController: SWBaseViewController",{
             console.log("真实吊炸了，也可以直接调用RAC");
             var contain = SWContainerView.alloc().init();
             contain.setFrame(sel.view().bounds());
+            var vc1 = UIViewController.alloc().init();
+            vc1.setTitle("直播");
+            vc1.view().setBackgroundColor(UIColor.redColor());
+
+            var vc2 = UIViewController.alloc().init();
+            vc2.view().setBackgroundColor(UIColor.blueColor());
+            vc2.setTitle("推荐");
+            var vc3 = UIViewController.alloc().init();
+            vc3.setTitle("番剧");
+            vc3.view().setBackgroundColor(UIColor.whiteColor());
+            contain.installViewControllers(NSArray.arrayWithObjects(vc1,vc2,vc3,null));
             sel.view().addSubview(contain);
         }));
 //        现在JSPatch除了不支持 动态调用C函数 和 一些特殊结构体之外，几乎什么都支持了。
@@ -104,6 +114,11 @@ defineClass("SWHomeViewController: SWBaseViewController",{
             }
 
         }));
+    },
+    viewWillAppear:function(animation){
+        self.super().viewWillAppear(animation);
+        self.navigationController().setNavigationBarHidden_animated(1,1);
+
     },
     init:function(){
         if(self.ORIGinit()){
@@ -360,15 +375,19 @@ defineClass("SWContainerView:UIView",{
     touchesBegan_withEvent:function(touches,event){
     console.log("ssllslslllsslls");
     },
-    installViewControllers:function(VCArray){
-      self.setProp_forKey(VCArray,"vcs");
+    installViewControllers:function(array){
+      self.setProp_forKey(array,"vcArray");
          var scrollView = self.getProp("scrollView");
-        var count = VCArray.count();
+        var titles = NSMutableArray.alloc().init();
+        var count = array.count();
+        console.log(count);
         for(var i = 0;i<count; i++){
-            var vc = VCArray.objectAtIndex(i);
+            var vc = array.objectAtIndex(i);
+            var title = vc.title();
+            titles.addObject(title);
             scrollView.addSubview(vc.view());
         }
-        //scrollView
+        self.getProp("topBar").installTitles(titles);
 
     },
     layoutSubviews:function(){
@@ -379,15 +398,19 @@ defineClass("SWContainerView:UIView",{
         var viewHeight = rect.height;
         var scrollView = self.getProp("scrollView");
         self.getProp("topBar").setFrame({x:0, y:0, width:viewWidth, height:topBarHeight});
-        scrollView.setFrame({x:0, y:topBarHeight, width:viewWidth, height:viewHeight - topBarHeight});
-        var vcs = self.getProp("vcs");
-        if(vcs.count() > 0){
+        scrollView.setFrame({x:0, y:topBarHeight, width:viewWidth, height:viewHeight - topBarHeight - 44});
+        var vcs = self.getProp("vcArray");
+        var count = vcs.count();
+        if(count > 0){
             for(var i = 0;i<count; i++){
-                var vc = VCArray.objectAtIndex(i);
-                vc.view().setFrame({x:i*viewWidth, y:topBarHeight, width:viewWidth, height:viewHeight - topBarHeight});
+                var vc = vcs.objectAtIndex(i);
+                vc.view().setFrame({x:i*viewWidth, y:0, width:viewWidth, height:viewHeight - topBarHeight});
+                console.log(vc.view());
             }
 
         }
+        scrollView.setContentSize({width:viewWidth*count,height:viewHeight});
+        console.log(scrollView);
     }
 
 })
@@ -401,26 +424,27 @@ defineClass("SWTopBar:UIView",{
         for(var i = 0; i<count; i++){
             var title = titleArray.objectAtIndex(i);
             var titleLabel = UILabel.alloc().init();
+            titleLabel.setTextAlignment(1);
             titleLabel.setText(title);
             self.addSubview(titleLabel);
         }
+    },
+    layoutSubviews:function() {
+        self.super().layoutSubviews();
+        var topBarHeight = self.getProp("topBarHeight");
+        var rect = self.bounds();
+        var viewWidth = rect.width;
+        var viewHeight = rect.height;
+        var count = self.subviews().count();
+        var titleArray = self.getProp("titleArray");
+        var titleLabelArray = self.subviews();
+        var temWidth = (viewWidth - 100) / count;
+        if (count > 0) {
+            for (var i = 0; i < count; i++) {
+                var titleLabel = titleLabelArray.objectAtIndex(i);
+                titleLabel.setFrame({x: 50 + temWidth * i, y: 0, width: temWidth, height: viewHeight});
+            }
+
+        }
     }
-    //layoutSubviews:function(){
-    //    self.super().layoutSubviews();
-    //    var topBarHeight = self.getProp("topBarHeight");
-    //    var rect = self.bounds();
-    //    var viewWidth = rect.width;
-    //    var viewHeight = rect.height;
-    //    var scrollView = self.getProp("scrollView");
-    //    self.getProp("topBar").setFrame({x:0, y:0, width:viewWidth, height:topBarHeight});
-    //    scrollView.setFrame({x:0, y:topBarHeight, width:viewWidth, height:viewHeight - topBarHeight});
-    //    var vcs = self.getProp(titleArray);
-    //    if(vcs.count() > 0){
-    //        for(var i = 0;i<count; i++){
-    //            var vc = VCArray.objectAtIndex(i);
-    //            vc.view().setFrame({x:i*viewWidth, y:topBarHeight, width:viewWidth, height:viewHeight - topBarHeight});
-    //        }
-    //
-    //    }
-    //}
 })

@@ -16,9 +16,11 @@
 - (id)init{
     if (self = [super init]) {
         self.tabBarItem.imageInsets = UIEdgeInsetsMake(6, 0, -6, 0);
+        self.automaticallyAdjustsScrollViewInsets = NO;
     }
     return self;
 }
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
