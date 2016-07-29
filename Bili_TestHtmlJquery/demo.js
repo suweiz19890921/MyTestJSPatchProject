@@ -25,8 +25,12 @@ defineClass('SWTabBarController:UITabBarController',{
             self.super().viewDidLoad();
             var vcs = NSArray.arrayWithObjects(SWHomeViewController.alloc().init(),SWCategoryController.alloc().init(),SWConcernViewController.alloc().init(),SWSearchViewController.alloc().init(),SWPlayerUserCenterViewController.alloc().init(),null);
             self.setViewControllers(vcs);
+            for(var i =0;i<5;i++)
+            {
+            console.log(i);
+            }
         }
-})
+        })
 
 // SW 首页------------------------------------------// SW 首页------------------------------------------// SW 首页------------------------------------------// SW 首页------------------------------------------
 defineClass('SWHomeViewController:SWBaseViewController',{
@@ -356,15 +360,38 @@ defineClass("SWContainerView:UIView",{
     touchesBegan_withEvent:function(touches,event){
     console.log("ssllslslllsslls");
     },
+    installViewControllers:function(VCArray){
+      self.setProp(VCArray,'vcs');
+         var scrollView = self.getProp("scrollView");
+        //VCArray.enumerateObjectsUsingBlock(block("UIViewController* ,NSUInteger , BOOL*",function(vc,idx,*stop) {);
+        //[arr enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        //
+        //}];
+        var count = VCArray.count();
+        for(var i = 0;i<count; i++){
+            var vc = VCArray.objectAtIndex(i);
+            scrollView.addSubview(vc.view());
+        }
+        //scrollView
+
+    },
     layoutSubviews:function(){
         self.super().layoutSubviews();
         var topBarHeight = self.getProp("topBarHeight");
         var rect = self.bounds();
         var viewWidth = rect.width;
         var viewHeight = rect.height;
+        var scrollView = self.getProp("scrollView");
         self.getProp("topBar").setFrame({x:0, y:0, width:viewWidth, height:topBarHeight});
-        self.getProp("scrollView").setFrame({x:0, y:topBarHeight, width:viewWidth, height:viewHeight - topBarHeight});
+        scrollView.setFrame({x:0, y:topBarHeight, width:viewWidth, height:viewHeight - topBarHeight});
+        var vcs = self.getProp(vcs);
+        if(vcs.count() > 0){
+            for(var i = 0;i<count; i++){
+                var vc = VCArray.objectAtIndex(i);
+                vc.view().setFrame({x:i*viewWidth, y:topBarHeight, width:viewWidth, height:viewHeight - topBarHeight});
+            }
 
+        }
     }
 
 })
