@@ -1,11 +1,12 @@
 /**
  * Created by suwei on 16/7/13.
  */
-require('UIButton,UIWindow,SWBaseViewController,NSMutableArray,SWTabBarController,UINavigationController,SWHomeViewController,SWCategoryController,SWConcernViewController,SWSearchViewController,SWPlayerUserCenterViewController,JPViewController,UITabBarController,NSArray,UITableView,UIScreen,UIViewController,AppDelegate, UIImageView, UIImage, UIScreen,UITableViewCell,UILabel, NSURL, NSURLRequest,NSURLConnection,NSOperationQueue');
+require('UIButton,UIWindow,UIView,UITapGestureRecognizer,SWBaseViewController,NSMutableArray,SWTabBarController,UINavigationController,SWHomeViewController,SWCategoryController,SWConcernViewController,SWSearchViewController,SWPlayerUserCenterViewController,JPViewController,UITabBarController,NSArray,UITableView,UIScreen,UIViewController,AppDelegate, UIImageView, UIImage, UIScreen,UITableViewCell,UILabel, NSURL, NSURLRequest,NSURLConnection,NSOperationQueue');
 require('UIColor,NSURLResponse,NSData,NSError,NSJSONSerialization,NSDictionary,NSArray, UIViewController,SWTableViewCell');
 require('JPEngine').addExtensions(['JPMemory']);
 require('SWContainerView,UIScrollView,SWTopBar');
 var button
+var mainColor = UIColor.colorWithRed_green_blue_alpha(251./255,114./255,153./255,1);
 //app代理--------------------------//app代理--------------------------//app代理--------------------------//app代理--------------------------//app代理--------------------------//app代理--------------------------
 defineClass('AppDelegate : UIResponder',{
     configRootView:function(){
@@ -59,7 +60,7 @@ defineClass("SWHomeViewController: SWBaseViewController",{
     viewDidLoad:function(){
         self.super().viewDidLoad();
         button = UIButton.alloc().init();
-        self.view().setBackgroundColor(UIColor.redColor());
+        self.view().setBackgroundColor(mainColor);
         //self.view().addSubview(button);
         button.setBackgroundColor(UIColor.redColor());
         button.setFrame({x:20, y:64, width:100, height:100});
@@ -83,14 +84,14 @@ defineClass("SWHomeViewController: SWBaseViewController",{
             console.log("真实吊炸了，也可以直接调用RAC");
             var contain = SWContainerView.alloc().init();
             contain.setFrame(sel.view().bounds());
-            var vc1 = UIViewController.alloc().init();
+            var vc1 = SWHomeViewController.alloc().init();
             vc1.setTitle("直播");
             vc1.view().setBackgroundColor(UIColor.redColor());
 
-            var vc2 = UIViewController.alloc().init();
+            var vc2 = SWHomeViewController.alloc().init();
             vc2.view().setBackgroundColor(UIColor.blueColor());
             vc2.setTitle("推荐");
-            var vc3 = UIViewController.alloc().init();
+            var vc3 = SWCategoryController.alloc().init();
             vc3.setTitle("番剧");
             vc3.view().setBackgroundColor(UIColor.whiteColor());
             contain.installViewControllers(NSArray.arrayWithObjects(vc1,vc2,vc3,null));
@@ -345,7 +346,7 @@ defineClass("SWPlayerUserCenterViewController: SWHomeViewController",{
 })
 
 //public element 自己手动封装一些公共控件--------------------------------------//public element 自己手动封装一些公共控件--------------------------------------//public element 自己手动封装一些公共控件--------------------------------------
-defineClass("SWContainerView:UIView",{
+defineClass("SWContainerView:UIView<UIScrollViewDelegate>",{
     init:function(){
         if(self.ORIGinit()){
             //初始化子控件
@@ -361,19 +362,38 @@ defineClass("SWContainerView:UIView",{
             self.addSubview(scrollView);
 
             var topBar = SWTopBar.alloc().init();
-            topBar.setBackgroundColor(UIColor.yellowColor());
+            topBar.setProp_forKey(self,"delegate");
+            topBar.setBackgroundColor(mainColor);
             self.setProp_forKey(topBar,"topBar");
             self.addSubview(topBar);
-
             self.setUserInteractionEnabled(1);
-
             self.setProp_forKey(64,"topBarHeight");
 
         }
         return self;
     },
+    //topBarDelegate
+    changeContentOffset:function(tag){
+        var scrollView = self.getProp("scrollView");
+        var rect = scrollView.bounds();
+        var scrollViewWidth = rect.width;
+        UIView.animateWithDuration_animations(0.25,block("",function(){
+            scrollView.setContentOffset({x:tag*scrollViewWidth, y:0});
+        }));
+    },
     touchesBegan_withEvent:function(touches,event){
     console.log("ssllslslllsslls");
+    },
+    //scrollView delegate
+    scrollViewDidEndDecelerating:function(scrollView){
+        var rect = scrollView.bounds();
+        var width = rect.width;
+       var selectIndex = scrollView.contentOffset().x/width;
+        console.log(selectIndex);
+        self.getProp("topBar").changeSelectIndex(selectIndex);
+    },
+    scrollViewDidScroll:function(scrollView){
+        self.getProp("topBar").slowChangeIndicatorViewFrame(scrollView.contentOffset().x/scrollView.frame().width);
     },
     installViewControllers:function(array){
       self.setProp_forKey(array,"vcArray");
@@ -405,16 +425,21 @@ defineClass("SWContainerView:UIView",{
             for(var i = 0;i<count; i++){
                 var vc = vcs.objectAtIndex(i);
                 vc.view().setFrame({x:i*viewWidth, y:0, width:viewWidth, height:viewHeight - topBarHeight});
-                console.log(vc.view());
             }
 
         }
-        scrollView.setContentSize({width:viewWidth*count,height:viewHeight});
+        scrollView.setContentSize({width:viewWidth*count,height:viewHeight - topBarHeight - 44});
         console.log(scrollView);
+        console.log(viewHeight);
     }
 
 })
 defineClass("SWTopBar:UIView",{
+    init:function(){
+      if(self.ORIGinit()){
+      }
+        return self;
+    },
     installTitles:function(titleArray){
         var count = titleArray.count();
         if(count <= 0){
@@ -425,26 +450,78 @@ defineClass("SWTopBar:UIView",{
             var title = titleArray.objectAtIndex(i);
             var titleLabel = UILabel.alloc().init();
             titleLabel.setTextAlignment(1);
+            titleLabel.setTextColor(UIColor.whiteColor());
             titleLabel.setText(title);
+            titleLabel.setTag(i);
+            titleLabel.setUserInteractionEnabled(1);
+            var tap = UITapGestureRecognizer.alloc().initWithTarget_action(self,"tapClick:");
+            titleLabel.addGestureRecognizer(tap);
             self.addSubview(titleLabel);
         }
+        var indicatorView = UIView.alloc().init();
+        self.addSubview(indicatorView);
+        indicatorView.setBackgroundColor(UIColor.whiteColor());
+        self.setProp_forKey(indicatorView,"indicatorView");
+    },
+    changeSelectIndex:function(selectIndex){
+      console.log(selectIndex);
+        var subviewsArray = self.subviews();
+        if(selectIndex < subviewsArray.count()){
+            var indicatorView = self.getProp("indicatorView");
+            var label = subviewsArray.objectAtIndex(selectIndex);
+            console.log(label.frame().x);
+            var labelX = label.frame().x;
+            var rect = self.bounds();
+            var viewWidth = rect.width;
+            var viewHeight = rect.height;
+            var count = self.subviews().count();
+            var temWidth = (viewWidth - 100) / (count - 1);
+            //下面的 加x上面10 和width-20是因为indicatorView宽度太宽
+            UIView.animateWithDuration_animations(0.25,block("",function(){
+                indicatorView.setFrame({x:labelX + 10, y:viewHeight - 3, width:temWidth - 20, height:2});
+            }));
+
+        }
+    },
+    slowChangeIndicatorViewFrame:function(scaleProgress){
+        if(scaleProgress!=scaleProgress){
+            return;
+        }
+        console.log(scaleProgress);
+    },
+    tapClick:function(tap){
+        console.log(tap);
+        var tag = tap.view().tag();
+        var rect = self.bounds();
+        var viewWidth = rect.width;
+        var labelX = tap.view().frame().x;
+        var count = self.subviews().count();
+        var viewHeight = rect.height;
+        var temWidth = (viewWidth - 100) / (count - 1);
+        UIView.animateWithDuration_animations(0.25,block("",function(){
+            self.getProp("indicatorView").setFrame({x:labelX + 10, y:viewHeight - 3, width:temWidth - 20, height:2});
+        }));
+
+        self.getProp("delegate").changeContentOffset(tag);
+
     },
     layoutSubviews:function() {
         self.super().layoutSubviews();
-        var topBarHeight = self.getProp("topBarHeight");
         var rect = self.bounds();
         var viewWidth = rect.width;
         var viewHeight = rect.height;
         var count = self.subviews().count();
         var titleArray = self.getProp("titleArray");
         var titleLabelArray = self.subviews();
-        var temWidth = (viewWidth - 100) / count;
+        var temWidth = (viewWidth - 100) / (count - 1);
         if (count > 0) {
             for (var i = 0; i < count; i++) {
                 var titleLabel = titleLabelArray.objectAtIndex(i);
-                titleLabel.setFrame({x: 50 + temWidth * i, y: 0, width: temWidth, height: viewHeight});
+                titleLabel.setFrame({x: 50 + temWidth * i, y: 10, width: temWidth, height: viewHeight});
+                if(i ==count - 1){
+                titleLabel.setFrame({x:60, y:viewHeight - 3, width:temWidth - 20, height:2});
+                };
             }
-
         }
     }
 })

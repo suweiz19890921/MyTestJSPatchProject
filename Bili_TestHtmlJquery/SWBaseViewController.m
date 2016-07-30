@@ -8,7 +8,7 @@
 
 #import "SWBaseViewController.h"
 #import "ReactiveCocoa.h"
-@interface SWBaseViewController ()
+@interface SWBaseViewController ()<UIScrollViewDelegate>
 
 @end
 
@@ -17,14 +17,16 @@
     if (self = [super init]) {
         self.tabBarItem.imageInsets = UIEdgeInsetsMake(6, 0, -6, 0);
         self.automaticallyAdjustsScrollViewInsets = NO;
+       
     }
     return self;
 }
 
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
 }
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
