@@ -5,6 +5,8 @@ require('UIButton,UIWindow,UIView,UITapGestureRecognizer,SWBaseViewController,NS
 require('UIColor,NSURLResponse,NSData,NSError,NSJSONSerialization,NSDictionary,NSArray, UIViewController,SWTableViewCell');
 require('JPEngine').addExtensions(['JPMemory']);
 require('SWContainerView,UIScrollView,SWTopBar');
+require('SWTableView');
+require('SWHomeBangumiViewController,SWHomeBangumiNewBangumiLoadCell,SWHomeBangumiNewChangLoadItem,SWHomeBangumiDidEndCell,SWHomeBangumiDidEndItem,SWHomeBangumiRecommendCell');
 var button
 var mainColor = UIColor.colorWithRed_green_blue_alpha(251./255,114./255,153./255,1);
 //app代理--------------------------//app代理--------------------------//app代理--------------------------//app代理--------------------------//app代理--------------------------//app代理--------------------------
@@ -61,21 +63,16 @@ defineClass("SWHomeViewController: SWBaseViewController",{
         self.super().viewDidLoad();
         button = UIButton.alloc().init();
         self.view().setBackgroundColor(mainColor);
-        //self.view().addSubview(button);
         button.setBackgroundColor(UIColor.redColor());
         button.setFrame({x:20, y:64, width:100, height:100});
         button.addTarget_action_forControlEvents(self,'click:',1<<6);
         button.setTag(1);
-        //var tap = require('UITapGestureRecognizer').alloc().initWithTarget_action(self,'tapClick:');
-        //self.view().addGestureRecognizer(tap);
         var tableView = UITableView.alloc().initWithFrame(UIScreen.mainScreen().bounds());
         self.view().addSubview(tableView);
         tableView.setRowHeight(80);
         tableView.setDataSource(self);
         tableView.setDelegate(self);
         tableView.registerClass_forCellReuseIdentifier(SWTableViewCell.class(),"cell");
-        var url= NSURL.URLWithString(self.getProp('urlStr'));
-        var request = NSURLRequest.alloc().initWithURL(url);
         var sel = self;
         var btn = UIButton.alloc().initWithFrame({x:100, y:100, width:100, height:100});
         self.view().addSubview(btn);
@@ -91,12 +88,14 @@ defineClass("SWHomeViewController: SWBaseViewController",{
             var vc2 = SWHomeViewController.alloc().init();
             vc2.view().setBackgroundColor(UIColor.blueColor());
             vc2.setTitle("推荐");
-            var vc3 = SWCategoryController.alloc().init();
+            var vc3 = SWHomeBangumiViewController.alloc().init();
             vc3.setTitle("番剧");
             vc3.view().setBackgroundColor(UIColor.whiteColor());
             contain.installViewControllers(NSArray.arrayWithObjects(vc1,vc2,vc3,null));
             sel.view().addSubview(contain);
         }));
+        var url= NSURL.URLWithString(self.getProp('urlStr'));
+        var request = NSURLRequest.alloc().initWithURL(url);
 //        现在JSPatch除了不支持 动态调用C函数 和 一些特殊结构体之外，几乎什么都支持了。
         NSURLConnection.sendAsynchronousRequest_queue_completionHandler(request,NSOperationQueue.mainQueue(),block("NSURLResponse* ,NSData*, NSError*",function(response,data,error) {
             if(!error){
@@ -178,7 +177,118 @@ defineClass("SWHomeViewController:SWBaseViewController",{
         return imageView;
     }
 })
+//SW 首页番剧页面
+defineClass("SWHomeBangumiViewController:SWBaseViewController<UITableViewDataSource,UITableViewDelegate>",{
+    init:function(){
+        if(self.ORIGinit()){
+            self.setProp_forKey("http://bangumi.bilibili.com/api/app_index_page_v3?actionKey=appkey&appkey=27eb53fc9058f8c3&build=3431&device=phone&mobi_app=iphone&platform=ios&sign=8344bb7cee65b65db06625379578aaf5&ts=1469931813","urlStr");
+            self.setProp_forKey("http://bangumi.bilibili.com/api/bangumi_recommend?actionKey=appkey&appkey=27eb53fc9058f8c3&build=3431&cursor=0&device=phone&mobi_app=iphone&pagesize=10&platform=ios&sign=25e11a7b34c5e8fa943e359f03340f82&ts=1469931987","recommendUrlStr");
+        }
+        return self;
+    },
+    viewDidLoad:function(){
+        self.super().viewDidLoad();
+        var tableView = SWTableView.alloc().initWithFrame(self.view().bounds());
+        self.view().addSubview(tableView);
+        self.setProp_forKey(tableView,"tableView");
+        tableView.setDataSource(self);
+        tableView.setDelegate(self);
+        self.loadAndHandleData();
+    },
+    //datasource and delegate
+    numberOfSectionsInTableView:function(tableView){
+        return self.getProp("totalArray").count();
+    },
+    tableView_numberOfRowsInSection:function(tableView,section){
+        if(section == 3){
+            return self.getProp("totalArray").objectAtIndex(section).count();
+        }else{
+            return 1;
+        }
+    },
+    tableView_cellForRowAtIndexPath:function(tableView,indexPath){
+        return UITableViewCell.new();
+    },
+    tableView_heightForRowAtIndexPath:function(tableView,indexPath){
+        return 50;
+    },
+    tableView_viewForHeaderInSection:function(tableView,section){
+        var view = UIView.alloc().init();
+        view.setBackgroundColor(UIColor.redColor());
+        return view;
+    },
+    tableView_heightForHeaderInSection:function(tableView,section){
+        return 20;
+    },
+    loadAndHandleData:function(){
+        var url= NSURL.URLWithString(self.getProp('urlStr'));
+        var request = NSURLRequest.alloc().initWithURL(url);
+        var sel = self;
+        NSURLConnection.sendAsynchronousRequest_queue_completionHandler(request,NSOperationQueue.mainQueue(),block("NSURLResponse* ,NSData*, NSError*",function(response,data,error) {
+            if(!error){
+                var totalArray = NSMutableArray.new();
+                var NSJSONReadingMutableContainers = 1 << 0;
+                var dict = NSJSONSerialization.JSONObjectWithData_options_error(data,NSJSONReadingMutableContainers,null);
+                //番剧连载
+                var listArray= dict.objectForKey("result").objectForKey("latestUpdate").objectForKey("list");
+                //banner 封面
+                var bannersArray = dict.objectForKey("result").objectForKey("banners");
+                //完结动画
+                var endsArray = dict.objectForKey("result").objectForKey("ends");
+                var recommendUrl= NSURL.URLWithString(sel.getProp('recommendUrlStr'));
+                var request = NSURLRequest.alloc().initWithURL(recommendUrl);
+                totalArray.addObject(bannersArray);
+                totalArray.addObject(listArray);
+                totalArray.addObject(endsArray);
+                sel.setProp_forKey(totalArray,"totalArray");
+//        现在JSPatch除了不支持 动态调用C函数 和 一些特殊结构体之外，几乎什么都支持了。
+                NSURLConnection.sendAsynchronousRequest_queue_completionHandler(request,NSOperationQueue.mainQueue(),block("NSURLResponse* ,NSData*, NSError*",function(response,data,error) {
+                    if(!error){
+                        var NSJSONReadingMutableContainers = 1 << 0;
+                        var dict = NSJSONSerialization.JSONObjectWithData_options_error(data,NSJSONReadingMutableContainers,null);
+                        //番剧推荐
+                        var recommendArray= dict.objectForKey("result");
+                        sel.getProp("totalArray").addObject(recommendArray);
+                        sel.getProp("tableView").reloadData();
+                    }else{
+                        console.log("请求失败");
+                        console.log(error)
+                    }
+                }));
+            }else{
+                console.log("请求失败");
+                console.log(error)
+            }
 
+        }));
+    }
+})
+//SW 首页番剧页面中子控件
+//头部无限轮播控件(尽量封装，因为有很多别的地方会用到)
+defineClass("SWCircleView:UIView",{
+
+})
+//SW 首页番剧中 带有6个item的新番连载自定义视图
+defineClass("SWHomeBangumiNewBangumiLoadCell:UITableViewCell",{
+
+})
+//SW 首页番剧中watchCount 的item
+defineClass("SWHomeBangumiNewChangLoadItem:UIView",{
+
+})
+//SW 首页番剧中的完结动画cell SWHomeBangumiDidEndCell (有可以滚动的item)
+defineClass("SWHomeBangumiDidEndCell:UITableViewCell",{
+
+})
+// SW 首页番剧中的完结动画cell中的item
+defineClass("SWHomeBangumiDidEndItem:UIView",{
+
+})
+
+// SW 首页番剧中带有一个封面banner 一个title 一个content(其中有一个cell头部带有番剧推荐字样，我想通过继承关系子类通过条件去掉该番剧推荐字样)
+defineClass("SWHomeBangumiRecommendCell:UITableViewCell",{
+
+})
 
 //SW 首页二级页面 的控制器---------------------------//SW 首页二级页面 的控制器---------------------------//SW 首页二级页面 的控制器---------------------------//SW 首页二级页面 的控制器---------------------------
 
@@ -487,7 +597,7 @@ defineClass("SWTopBar:UIView",{
         if(scaleProgress!=scaleProgress){
             return;
         }
-        console.log(scaleProgress);
+//        console.log(scaleProgress);
     },
     tapClick:function(tap){
         console.log(tap);
@@ -524,4 +634,11 @@ defineClass("SWTopBar:UIView",{
             }
         }
     }
+})
+
+// 不允许悬浮的tableView
+defineClass("SWTableView:UITableView",{
+  allowsHeaderViewsToFloat:function(){
+      return 0;
+  }
 })
