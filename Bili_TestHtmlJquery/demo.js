@@ -6,9 +6,10 @@ require('UIColor,NSURLResponse,NSData,NSError,NSJSONSerialization,NSDictionary,N
 require('JPEngine').addExtensions(['JPMemory']);
 require('SWContainerView,UIScrollView,SWTopBar,SWLabel');
 require('SWTableView,NSDateFormatter,NSDate,NSCalendar');
-require('SWHomeBangumiViewController,SWHomeBangumiNewBangumiLoadCell,SWHomeBangumiNewChangLoadItem,SWHomeBangumiDidEndCell,SWHomeBangumiDidEndItem,SWHomeBangumiRecommendCell');
+require('SWHomeBangumiViewController,SWHomeBangumiDidEndCell,SWHomeBangumiNewBangumiLoadCell,SWHomeBangumiNewChangLoadItem,SWHomeBangumiDidEndItem,SWHomeBangumiRecommendCell');
 var button
 var mainColor = UIColor.colorWithRed_green_blue_alpha(251./255,114./255,153./255,1);
+var normalGrayColor = UIColor.colorWithRed_green_blue_alpha(170./255,170./255,170./255,1);
 //app代理--------------------------//app代理--------------------------//app代理--------------------------//app代理--------------------------//app代理--------------------------//app代理--------------------------
 defineClass('AppDelegate : UIResponder',{
     configRootView:function(){
@@ -234,6 +235,7 @@ defineClass("SWHomeBangumiViewController:SWBaseViewController<UITableViewDataSou
         self.view().addSubview(tableView);
         self.setProp_forKey(tableView,"tableView");
         tableView.registerClass_forCellReuseIdentifier(SWHomeBangumiNewBangumiLoadCell.class(),SWHomeBangumiNewBangumiLoadCell.description());
+        tableView.registerClass_forCellReuseIdentifier(SWHomeBangumiDidEndCell.class(),SWHomeBangumiDidEndCell.description());
         tableView.setDataSource(self);
         tableView.setDelegate(self);
         self.loadAndHandleData();
@@ -254,6 +256,10 @@ defineClass("SWHomeBangumiViewController:SWBaseViewController<UITableViewDataSou
             var cell = tableView.dequeueReusableCellWithIdentifier(SWHomeBangumiNewBangumiLoadCell.description());
             cell.installData(self.getProp("totalArray").objectAtIndex(indexPath.section()));
             return cell;
+        }else if(indexPath.section() == 2){
+            var cell = tableView.dequeueReusableCellWithIdentifier(SWHomeBangumiDidEndCell.description());
+            cell.installData(self.getProp("totalArray").objectAtIndex(indexPath.section()));
+            return cell;
         }
         return UITableViewCell.new();
     },
@@ -261,6 +267,8 @@ defineClass("SWHomeBangumiViewController:SWBaseViewController<UITableViewDataSou
         if(indexPath.section() == 1){
 
           return SWHomeBangumiNewBangumiLoadCell.getHeight();
+        }else if(indexPath.section() == 2){
+            return SWHomeBangumiDidEndCell.getHeight();
         }
         return 50;
     },
@@ -541,11 +549,127 @@ defineClass("SWHomeBangumiNewChangLoadItem:UIView",{
 })
 //SW 首页番剧中的完结动画cell SWHomeBangumiDidEndCell (有可以滚动的item) 完结动画
 defineClass("SWHomeBangumiDidEndCell:UITableViewCell",{
+    initWithStyle_reuseIdentifier:function(style,reuseIdentifier){
+        if(self.ORIGinitWithStyle_reuseIdentifier(style,reuseIdentifier)){
+             var scrollView = UIScrollView.new();
+            scrollView.setShowsHorizontalScrollIndicator(0);
+            self.contentView().addSubview(scrollView);
+            self.setProp_forKey(scrollView,"scrollView");
+        }
+        return self;
+    },
+    installData:function(array){
+        if(array.count()<=0){
+            return;
+        }
+        var itemArray = NSMutableArray.new();
+        for(var i = 0; i< array.count(); i++){
+            var didEndItem= SWHomeBangumiDidEndItem.new();
+            self.getProp("scrollView").addSubview(didEndItem);
+            itemArray.addObject(didEndItem);
+            didEndItem.installData(array.objectAtIndex(i));
+        }
+        self.setProp_forKey(itemArray,"itemArray");
+    },
+    layoutSubviews:function(){
+        self.super().layoutSubviews();
+        self.getProp("scrollView").setFrame(self.bounds());
+        var itemArray = self.getProp("itemArray");
+        if(itemArray.count() <= 0){
+            return;
+        }
+        var margin = 12;
+        var width;
+        if(UIScreen.mainScreen().bounds().width <= 320){
+            width = 110;
+        }else{
+            width = 128;
+        }
+        //高宽比
+        var scale = 1.32;
+        var height = width * scale;
+        for(var i = 0; i < itemArray.count(); i++){
+            var item = itemArray.objectAtIndex(i);
+            item.setFrame({x:margin + (margin + width) * i, y:0, width:width, height:SWHomeBangumiDidEndItem.getHeight()});
+        }
+        self.getProp("scrollView").setContentSize({width:(width + margin) * itemArray.count() + margin, height:SWHomeBangumiDidEndItem.getHeight()});
 
+    }
+
+},{
+  getHeight:function(){
+      return SWHomeBangumiDidEndItem.getHeight();
+  }
 })
 // SW 首页番剧中的完结动画cell中的item  完结动画item
 defineClass("SWHomeBangumiDidEndItem:UIView",{
+    init:function(){
+      if(self.ORIGinit()){
+          var coverImage = UIImageView.new();
+          self.setProp_forKey(coverImage,"coverImage");
+          coverImage.layer().setCornerRadius(5);
+          coverImage.setClipsToBounds(1);
+          self.addSubview(coverImage);
 
+          var titleLabel = SWLabel.new();
+          self.setProp_forKey(titleLabel,"titleLabel");
+          titleLabel.setFont (UIFont.systemFontOfSize(14));
+          titleLabel.setTextAlignment(1);
+          self.addSubview(titleLabel);
+
+          var epLabel = SWLabel.new();
+          self.setProp_forKey(epLabel,"epLabel");
+          epLabel.setTextAlignment(1);
+          epLabel.setFont (UIFont.systemFontOfSize(12));
+          epLabel.setTextColor(normalGrayColor);
+          self.addSubview(epLabel);
+
+
+      }
+       return self;
+    },
+    installData:function(model){
+        if(!model){
+            return;
+        }
+        var epTitle = model.objectForKey("total_count") ;
+        var title = model.objectForKey("title");
+        var urlStr = model.objectForKey("cover");
+        var url = NSURL.URLWithString(urlStr);
+        self.getProp("coverImage").sd__setImageWithURL(url);
+        self.getProp("titleLabel").setText(title);
+        self.getProp("epLabel").setText(epTitle.toJS() +"话全");
+    },
+    layoutSubviews:function(){
+        self.super().layoutSubviews();
+        var width;
+        if(UIScreen.mainScreen().bounds().width <= 320){
+            width = 110;
+        }else{
+            width = 128;
+        }
+        //高宽比
+        var scale = 1.32;
+        var height = width * scale;
+        self.getProp("coverImage").setFrame({x:0, y:0, width:width, height:height});
+        self.getProp("titleLabel").setFrame({x:0, y:height + 6, width:width, height:17});
+        // 第一个6为 titleLabel到cover的间距  17为titleLabel的高度 第二6为titleLabel到epLabel的间距 14.5为epLabel的高度
+        self.getProp("epLabel").setFrame({x:0, y:height + 6 + 17 + 6, width:width, height:14.5});
+    }
+},{
+    getHeight:function(){
+        var width;
+        if(UIScreen.mainScreen().bounds().width <= 320){
+            width = 110;
+        }else{
+            width = 128;
+        }
+        //高宽比
+        var scale = 1.32;
+        var height = width * scale;
+        // height为cover的高度 第一个6为 titleLabel到cover的间距  17为titleLabel的高度 第二6为titleLabel到epLabel的间距 14.5为epLabel的高度 12为底部默认留的间距
+        return height + 6 + 17 + 6 + 14.5 + 12;
+    }
 })
 
 // SW 首页番剧中带有一个封面banner 一个title 一个content(其中有一个cell头部带有番剧推荐字样，我想通过继承关系子类通过条件去掉该番剧推荐字样)  番剧推荐
