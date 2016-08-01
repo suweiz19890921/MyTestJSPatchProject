@@ -17,7 +17,8 @@
     if (self = [super init]) {
         self.tabBarItem.imageInsets = UIEdgeInsetsMake(6, 0, -6, 0);
         self.automaticallyAdjustsScrollViewInsets = NO;
-       
+        UILabel* label;
+        
     }
     return self;
 }
@@ -25,6 +26,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
+    
+    
 }
 
 - (void)didReceiveMemoryWarning {
