@@ -350,6 +350,11 @@ defineClass("SWHomeBangumiViewController:SWBaseViewController<UITableViewDataSou
                                                         {"imageName":"hd_bangumi_unfinished","title":"新番连载","desc":"今日更新","count":sel.getProp("updateCount")},
                                                         {"imageName":"hd_bangumi_finished","title":"完结动画","desc":"进去看看","count":" "},
                                                         {"imageName":"热门推荐","title":"番剧推荐","count":" ","desc":" "},null);
+//               JSPatch 支持原生数组 字典 表达方式和OC的区别就是不需要@符号
+//                  var dictArray = [{"imageName":" ","title":" ","count":" ","desc":" "},
+//                                 {"imageName":"hd_bangumi_unfinished","title":"新番连载","desc":"今日更新","desc":"今日更新","count":sel.getProp("updateCount")},
+//                                {"imageName":"hd_bangumi_finished","title":"完结动画","desc":"进去看看","count":" "},
+//                                {"imageName":"热门推荐","title":"番剧推荐","count":" ","desc":" "}];
                 sel.setProp_forKey(dictArray,"dictArray");
                 sel.getProp("tableView").reloadData();
                 sel.loadRecommendData();
