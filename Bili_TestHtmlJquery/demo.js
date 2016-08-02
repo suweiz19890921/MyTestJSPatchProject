@@ -1,12 +1,12 @@
 /**
  * Created by suwei on 16/7/13.
  */
-require('UIButton,UIWindow,UIView,UIFont,NSMutableString,UITapGestureRecognizer,SWBaseViewController,NSMutableArray,SWTabBarController,UINavigationController,SWHomeViewController,SWCategoryController,SWConcernViewController,SWSearchViewController,SWPlayerUserCenterViewController,JPViewController,UITabBarController,NSArray,UITableView,UIScreen,UIViewController,AppDelegate, UIImageView, UIImage, UIScreen,UITableViewCell,UILabel, NSURL, NSURLRequest,NSURLConnection,NSOperationQueue');
+require('UIButton,UIWindow,UIView,UIFont,NSMutableAttributedString,NSMutableString,UITapGestureRecognizer,SWBaseViewController,NSMutableArray,SWTabBarController,UINavigationController,SWHomeViewController,SWCategoryController,SWConcernViewController,SWSearchViewController,SWPlayerUserCenterViewController,JPViewController,UITabBarController,NSArray,UITableView,UIScreen,UIViewController,AppDelegate, UIImageView, UIImage, UIScreen,UITableViewCell,UILabel, NSURL, NSURLRequest,NSURLConnection,NSOperationQueue');
 require('UIColor,NSURLResponse,NSData,NSError,NSJSONSerialization,NSDictionary,NSArray, UIViewController,SWTableViewCell');
 require('JPEngine').addExtensions(['JPMemory']);
 require('SWContainerView,UIScrollView,SWTopBar,SWLabel');
 require('SWTableView,SWHomeBangumiCell,NSDateFormatter,NSDate,NSCalendar');
-require('SWHomeBangumiViewController,SWHomeBangumiDidEndCell,SWHomeBangumiNewBangumiLoadCell,SWHomeBangumiNewChangLoadItem,SWHomeBangumiDidEndItem,SWHomeBangumiRecommendCell');
+require('SWHomeBangumiViewController,SWHomeBangumiDidEndCell,SWHomeBangumiNewBangumiLoadCell,SWHomeBangumiNewChangLoadItem,SWHomeBangumiDidEndItem,SWHomeBangumiRecommendCell,SWHomeBangumiUniversalHeadView,UITableViewHeaderFooterView');
 var button
 var mainColor = UIColor.colorWithRed_green_blue_alpha(251./255,114./255,153./255,1);
 var normalGrayColor = UIColor.colorWithRed_green_blue_alpha(170./255,170./255,170./255,1);
@@ -134,7 +134,6 @@ defineClass("SWHomeViewController: SWBaseViewController<UITableViewDataSource,UI
             var dict = self.getProp("data").objectAtIndex(indexPath.row());
             cell.installData_indexPath(dict,indexPath);
         }else{
-        //    cell.textLabel().setText("春节");
         }
         return cell;
     },
@@ -149,15 +148,11 @@ defineClass("SWHomeViewController: SWBaseViewController<UITableViewDataSource,UI
     },
     viewWillLayoutSubviews:function(){
         self.super().viewWillLayoutSubviews();
-        var rect = self.view().bounds()
-        var contain = self.getProp("contain")
-        console.log("sw");
-        console.log(rect);
+        var rect = self.view().bounds();
+        var contain = self.getProp("contain");
         contain.setFrame({x:0, y:0, width:rect.width, height:rect.height - 44 });
-        var tableView = self.getProp("tableView")
+        var tableView = self.getProp("tableView");
         tableView.setFrame(rect);
-        console.log("zw");
-        console.log(tableView);
     },
     click:function(btn){
         //console.log(btn);
@@ -246,12 +241,15 @@ defineClass("SWHomeBangumiViewController:SWBaseViewController<UITableViewDataSou
     },
     viewDidLoad:function(){
         self.super().viewDidLoad();
+        self.view().setBackgroundColor(bgGrayColor);
         var tableView = SWTableView.alloc().initWithFrame(self.view().bounds());
+        tableView.setBackgroundColor(bgGrayColor);
         self.view().addSubview(tableView);
         self.setProp_forKey(tableView,"tableView");
         tableView.registerClass_forCellReuseIdentifier(SWHomeBangumiNewBangumiLoadCell.class(),SWHomeBangumiNewBangumiLoadCell.description());
         tableView.registerClass_forCellReuseIdentifier(SWHomeBangumiDidEndCell.class(),SWHomeBangumiDidEndCell.description());
         tableView.registerClass_forCellReuseIdentifier(SWHomeBangumiRecommendCell.class(),SWHomeBangumiRecommendCell.description());
+        tableView.registerClass_forHeaderFooterViewReuseIdentifier(SWHomeBangumiUniversalHeadView.class(),SWHomeBangumiUniversalHeadView.description());
         tableView.setDataSource(self);
         tableView.setDelegate(self);
         self.loadAndHandleData();
@@ -274,6 +272,8 @@ defineClass("SWHomeBangumiViewController:SWBaseViewController<UITableViewDataSou
             return cell;
         }else if(indexPath.section() == 2){
             var cell = tableView.dequeueReusableCellWithIdentifier(SWHomeBangumiDidEndCell.description());
+            //如果为了解决重影可以直接在此处不去重用cell，直接每次都重新创建
+            //var cell = SWHomeBangumiDidEndCell.alloc().initWithStyle_reuseIdentifier(0,SWHomeBangumiDidEndCell.description());
             cell.installData(self.getProp("totalArray").objectAtIndex(indexPath.section()));
             return cell;
         }else if(indexPath.section() == 3){
@@ -306,12 +306,18 @@ defineClass("SWHomeBangumiViewController:SWBaseViewController<UITableViewDataSou
         }
     },
     tableView_viewForHeaderInSection:function(tableView,section){
-        var view = UIView.alloc().init();
-        view.setBackgroundColor(UIColor.redColor());
-        return view;
+        if(section != 0){
+            var headView = tableView.dequeueReusableHeaderFooterViewWithIdentifier(SWHomeBangumiUniversalHeadView.description());
+            var dict = self.getProp("dictArray").objectAtIndex(section);
+            if(dict){
+                headView.installData_section(dict,section);
+            }
+            return headView;
+        }
+        return UIView.new();
     },
     tableView_heightForHeaderInSection:function(tableView,section){
-        return 20;
+        return 44;
     },
     scrollViewDidScroll:function(scrollView){
     },
@@ -335,35 +341,48 @@ defineClass("SWHomeBangumiViewController:SWBaseViewController<UITableViewDataSou
                 var bannersArray = dict.objectForKey("result").objectForKey("banners");
                 //完结动画
                 var endsArray = dict.objectForKey("result").objectForKey("ends");
-                var recommendUrl= NSURL.URLWithString(sel.getProp('recommendUrlStr'));
-                var request = NSURLRequest.alloc().initWithURL(recommendUrl);
                 totalArray.addObject(bannersArray);
                 totalArray.addObject(listArray);
                 totalArray.addObject(endsArray);
                 sel.setProp_forKey(totalArray,"totalArray");
-//        现在JSPatch除了不支持 动态调用C函数 和 一些特殊结构体之外，几乎什么都支持了。
-                NSURLConnection.sendAsynchronousRequest_queue_completionHandler(request,NSOperationQueue.mainQueue(),block("NSURLResponse* ,NSData*, NSError*",function(response,data,error) {
-                    if(!error){
-                        var NSJSONReadingMutableContainers = 1 << 0;
-                        var dict = NSJSONSerialization.JSONObjectWithData_options_error(data,NSJSONReadingMutableContainers,null);
-                        //番剧推荐
-                        if(dict.isKindOfClass(NSDictionary.class())){
-                            var recommendArray= dict.objectForKey("result");
-                            sel.getProp("totalArray").addObject(recommendArray);
-                            sel.getProp("tableView").reloadData();
-                        }
-                    }else{
-                        console.log("请求失败");
-                        console.log(error)
-                    }
-                }));
+                sel.setProp_forKey(dict.objectForKey("result").objectForKey("latestUpdate").objectForKey("updateCount"),"updateCount");
+                var dictArray = NSArray.arrayWithObjects({"imageName":" ","title":" ","count":" ","desc":" "},
+                                                        {"imageName":"hd_bangumi_unfinished","title":"新番连载","desc":"今日更新","count":sel.getProp("updateCount")},
+                                                        {"imageName":"hd_bangumi_finished","title":"完结动画","desc":"进去看看","count":" "},
+                                                        {"imageName":"热门推荐","title":"番剧推荐","count":" ","desc":" "},null);
+                sel.setProp_forKey(dictArray,"dictArray");
+                sel.getProp("tableView").reloadData();
+                sel.loadRecommendData();
             }else{
                 console.log("请求失败");
                 console.log(error)
             }
 
         }));
-    }
+    },
+    loadRecommendData:function(){
+        //        现在JSPatch除了不支持 动态调用C函数 和 一些特殊结构体之外，几乎什么都支持了。
+        var sel = self;
+        var recommendUrl= NSURL.URLWithString(sel.getProp('recommendUrlStr'));
+        var request = NSURLRequest.alloc().initWithURL(recommendUrl);
+        NSURLConnection.sendAsynchronousRequest_queue_completionHandler(request,NSOperationQueue.mainQueue(),block("NSURLResponse* ,NSData*, NSError*",function(response,data,error) {
+            if(!error){
+                var NSJSONReadingMutableContainers = 1 << 0;
+                var dict = NSJSONSerialization.JSONObjectWithData_options_error(data,NSJSONReadingMutableContainers,null);
+                //番剧推荐
+                if(dict.isKindOfClass(NSDictionary.class())){
+                    var recommendArray= dict.objectForKey("result");
+                    if(recommendArray){
+                        sel.getProp("totalArray").addObject(recommendArray);
+                        sel.getProp("tableView").reloadData();
+                    }
+                }
+            }else{
+                console.log("请求失败");
+                console.log(error)
+            }
+        }));
+    },
 })
 //SW 首页番剧页面中子控件
 //头部无限轮播控件(尽量封装减少耦合性，因为有很多别的地方会用到)
@@ -374,8 +393,8 @@ defineClass("SWCircleView:UIView",{
 defineClass("SWHomeBangumiNewBangumiLoadCell:UITableViewCell",{
     initWithStyle_reuseIdentifier:function(style,reuseIdentifier){
         if(self.ORIGinitWithStyle_reuseIdentifier(style,reuseIdentifier)){
-            self.contentView().setBackgroundColor(UIColor.yellowColor());
-
+            self.contentView().setBackgroundColor(UIColor.whiteColor());
+            self.setSelectionStyle(0);
             var itemArray = NSMutableArray.new();
             var itemOne = SWHomeBangumiNewChangLoadItem.new();
             itemArray.addObject(itemOne);
@@ -592,6 +611,8 @@ defineClass("SWHomeBangumiNewChangLoadItem:UIView",{
 defineClass("SWHomeBangumiDidEndCell:UITableViewCell",{
     initWithStyle_reuseIdentifier:function(style,reuseIdentifier){
         if(self.ORIGinitWithStyle_reuseIdentifier(style,reuseIdentifier)){
+            self.contentView().setBackgroundColor(UIColor.whiteColor());
+            self.setSelectionStyle(0);
              var scrollView = UIScrollView.new();
             scrollView.setShowsHorizontalScrollIndicator(0);
             self.contentView().addSubview(scrollView);
@@ -604,9 +625,13 @@ defineClass("SWHomeBangumiDidEndCell:UITableViewCell",{
             return;
         }
         var itemArray = NSMutableArray.new();
+       var scrollView = self.getProp("scrollView");
+        // 这个地方先要移除所有的子控件是因为tableview在上下滑动重用的时候会导致下面这个for循环多次调用，导致scrollView上面叠加了很多的item，导致重影，解决方法有两个，第一就是下面的这种方法，先移除以前的item，然后重新添加，再一种方法就是直接不重用。
+        scrollView.subviews().makeObjectsPerformSelector('removeFromSuperview');
+
         for(var i = 0; i< array.count(); i++){
             var didEndItem= SWHomeBangumiDidEndItem.new();
-            self.getProp("scrollView").addSubview(didEndItem);
+            scrollView.addSubview(didEndItem);
             itemArray.addObject(didEndItem);
             didEndItem.installData(array.objectAtIndex(i));
         }
@@ -655,7 +680,7 @@ defineClass("SWHomeBangumiDidEndItem:UIView",{
 
           var titleLabel = SWLabel.new();
           self.setProp_forKey(titleLabel,"titleLabel");
-          titleLabel.setFont (UIFont.systemFontOfSize(14));
+          titleLabel.setFont(UIFont.systemFontOfSize(14));
           titleLabel.setTextAlignment(1);
           self.addSubview(titleLabel);
 
@@ -675,11 +700,10 @@ defineClass("SWHomeBangumiDidEndItem:UIView",{
             return;
         }
         var epTitle = model.objectForKey("total_count") ;
-        var title = model.objectForKey("title");
         var urlStr = model.objectForKey("cover");
         var url = NSURL.URLWithString(urlStr);
         self.getProp("coverImage").sd__setImageWithURL(url);
-        self.getProp("titleLabel").setText(title);
+        self.getProp("titleLabel").setText( model.objectForKey("title"));
         self.getProp("epLabel").setText(epTitle.toJS() +"话全");
     },
     layoutSubviews:function(){
@@ -691,8 +715,8 @@ defineClass("SWHomeBangumiDidEndItem:UIView",{
             width = 128;
         }
         //高宽比
-        var scale = 1.32;
-        var height = width * scale;
+        var scale = 1.320;
+        var height = width * scale ;
         self.getProp("coverImage").setFrame({x:0, y:0, width:width, height:height});
         self.getProp("titleLabel").setFrame({x:0, y:height + 6, width:width, height:17});
         // 第一个6为 titleLabel到cover的间距  17为titleLabel的高度 第二6为titleLabel到epLabel的间距 14.5为epLabel的高度
@@ -719,6 +743,8 @@ defineClass("SWHomeBangumiRecommendCell:UITableViewCell",{
     initWithStyle_reuseIdentifier:function(style,reuseIdentifier){
         if(self.ORIGinitWithStyle_reuseIdentifier(style,reuseIdentifier)){
             self.contentView().setBackgroundColor(bgGrayColor);
+            self.setSelectionStyle(0);
+
             var bgView = UIView.new();
             self.contentView().addSubview(bgView);
             bgView.setBackgroundColor(UIColor.whiteColor());
@@ -773,6 +799,14 @@ defineClass("SWHomeBangumiRecommendCell:UITableViewCell",{
         var url = NSURL.URLWithString(urlStr);
         self.getProp("coverImage").sd__setImageWithURL(url);
         self.getProp("bgView").setFrame({x:12, y:0 , width:width , height:coverHeight + 12 + 17 + 12 + detailHeight + 12});
+
+        var is_new = model.objectForKey("is_new");
+        if(is_new){
+            self.getProp("newIconImage").setHidden(0);
+        }else{
+            self.getProp("newIconImage").setHidden(1);
+        }
+
     },
     calculateDetailLabelHeight:function(desc){
         var attributeDict = {
@@ -803,6 +837,80 @@ defineClass("SWHomeBangumiRecommendCell:UITableViewCell",{
         return  coverHeight + 12 + 17 + 12 + height + 12 + 12 ;
     }
 
+})
+
+// SWHome  首页番剧 新番连载  完结动画 番剧推荐 共用的headView
+defineClass("SWHomeBangumiUniversalHeadView:UITableViewHeaderFooterView",{
+    initWithReuseIdentifier:function(reuseIdentifier){
+        if(self.ORIGinitWithReuseIdentifier(reuseIdentifier)){
+            self.contentView().setBackgroundColor(UIColor.whiteColor());
+
+            var iconImage = UIImageView.new();
+            self.contentView().addSubview(iconImage);
+            self.setProp_forKey(iconImage,"iconImage");
+
+            var titleLable = SWLabel.new();
+            titleLable.setFont(UIFont.systemFontOfSize(15));
+            self.contentView().addSubview(titleLable);
+            self.setProp_forKey(titleLable,"titleLable");
+
+            var descLabel = SWLabel.new();
+            self.contentView().addSubview(descLabel);
+            descLabel.setFont(UIFont.systemFontOfSize(15));
+            self.setProp_forKey(descLabel,"descLabel");
+            descLabel.setTextColor(normalGrayColor);
+
+            var rightRowImage = UIImageView.new();
+            rightRowImage.setImage(UIImage.imageNamed("home_right_arrow"));
+            self.contentView().addSubview(rightRowImage);
+            self.setProp_forKey(rightRowImage,"rightRowImage");
+
+        }
+        return self;
+    },
+    installData_section:function(dict,section){
+        if(!dict){
+            return;
+        }
+        var rightRowImage = self.getProp("rightRowImage");
+        if(section == 3){
+            rightRowImage.setHidden(1);
+        }else{
+            rightRowImage.setHidden(0);
+        }
+        self.getProp("iconImage").setImage(UIImage.imageNamed(dict.objectForKey("imageName")));
+        var title = dict.objectForKey("title");
+        self.getProp("titleLable").setText(title);
+        var desc = dict.objectForKey("desc");
+        var count = dict.objectForKey("count");
+        var desLabel = self.getProp("descLabel");
+        if(section == 1){
+            var totalTitle = desc.toJS() + " " + count.toJS();
+            desLabel.setText(totalTitle);
+            var attrbuteString = NSMutableAttributedString.alloc().initWithString(desLabel.text());
+            var range = {location:totalTitle.length - 1,length:1};
+            attrbuteString.addAttribute_value_range("NSColor",mainColor,range);
+            desLabel.setAttributedText(attrbuteString);
+        }else{
+            desLabel.setText(desc);
+        }
+        self.setProp_forKey(section,"section");
+    },
+    layoutSubviews:function(){
+        self.super().layoutSubviews();
+        var rect = self.bounds();
+        self.getProp("iconImage").setFrame({x:12, y:12, width:20, height:20});
+        self.getProp("titleLable").setFrame({x:36, y:13, width:75, height:18});
+        var section = self.getProp("section");
+        var tempX;
+        if(section == 2){
+            tempX = 60;
+        }else{
+            tempX = 75
+        }
+        self.getProp("descLabel").setFrame({x:rect.width - 12 - 20 - 10 - tempX , y:13, width:tempX, height:18});
+        self.getProp("rightRowImage").setFrame({x:rect.width - 12 - 20, y:13, width:20, height:20});
+    }
 })
 
 //SW 首页二级页面 的控制器---------------------------//SW 首页二级页面 的控制器---------------------------//SW 首页二级页面 的控制器---------------------------//SW 首页二级页面 的控制器---------------------------
