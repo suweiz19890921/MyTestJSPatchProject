@@ -5,11 +5,12 @@ require('UIButton,UIWindow,UIView,UIFont,NSMutableString,UITapGestureRecognizer,
 require('UIColor,NSURLResponse,NSData,NSError,NSJSONSerialization,NSDictionary,NSArray, UIViewController,SWTableViewCell');
 require('JPEngine').addExtensions(['JPMemory']);
 require('SWContainerView,UIScrollView,SWTopBar,SWLabel');
-require('SWTableView,NSDateFormatter,NSDate,NSCalendar');
+require('SWTableView,SWHomeBangumiCell,NSDateFormatter,NSDate,NSCalendar');
 require('SWHomeBangumiViewController,SWHomeBangumiDidEndCell,SWHomeBangumiNewBangumiLoadCell,SWHomeBangumiNewChangLoadItem,SWHomeBangumiDidEndItem,SWHomeBangumiRecommendCell');
 var button
 var mainColor = UIColor.colorWithRed_green_blue_alpha(251./255,114./255,153./255,1);
 var normalGrayColor = UIColor.colorWithRed_green_blue_alpha(170./255,170./255,170./255,1);
+var bgGrayColor = UIColor.colorWithRed_green_blue_alpha(244./255,244./255,244./255,1);
 //app代理--------------------------//app代理--------------------------//app代理--------------------------//app代理--------------------------//app代理--------------------------//app代理--------------------------
 defineClass('AppDelegate : UIResponder',{
     configRootView:function(){
@@ -64,6 +65,7 @@ defineClass("SWHomeViewController: SWBaseViewController<UITableViewDataSource,UI
         tableView.setDataSource(self);
         tableView.setDelegate(self);
         tableView.registerClass_forCellReuseIdentifier(SWTableViewCell.class(),"cell");
+        self.setProp_forKey(tableView,"tableView");
         var sel = self;
         var btn = UIButton.alloc().initWithFrame({x:100, y:100, width:100, height:100});
         self.view().addSubview(btn);
@@ -71,6 +73,7 @@ defineClass("SWHomeViewController: SWBaseViewController<UITableViewDataSource,UI
         btn.rac__signalForControlEvents(1 <<  6).subscribeNext(block("id",function(x){
             console.log("真实吊炸了，也可以直接调用RAC");
             var contain = SWContainerView.alloc().init();
+            sel.setProp_forKey(contain,"contain");
             contain.setFrame(sel.view().bounds());
             var vc1 = SWHomeViewController.alloc().init();
             vc1.setTitle("直播");
@@ -143,6 +146,18 @@ defineClass("SWHomeViewController: SWBaseViewController<UITableViewDataSource,UI
         imageView.setContentMode(1);
         imageView.setBackgroundColor(UIColor.blackColor());
         return imageView;
+    },
+    viewWillLayoutSubviews:function(){
+        self.super().viewWillLayoutSubviews();
+        var rect = self.view().bounds()
+        var contain = self.getProp("contain")
+        console.log("sw");
+        console.log(rect);
+        contain.setFrame({x:0, y:0, width:rect.width, height:rect.height - 44 });
+        var tableView = self.getProp("tableView")
+        tableView.setFrame(rect);
+        console.log("zw");
+        console.log(tableView);
     },
     click:function(btn){
         //console.log(btn);
@@ -236,6 +251,7 @@ defineClass("SWHomeBangumiViewController:SWBaseViewController<UITableViewDataSou
         self.setProp_forKey(tableView,"tableView");
         tableView.registerClass_forCellReuseIdentifier(SWHomeBangumiNewBangumiLoadCell.class(),SWHomeBangumiNewBangumiLoadCell.description());
         tableView.registerClass_forCellReuseIdentifier(SWHomeBangumiDidEndCell.class(),SWHomeBangumiDidEndCell.description());
+        tableView.registerClass_forCellReuseIdentifier(SWHomeBangumiRecommendCell.class(),SWHomeBangumiRecommendCell.description());
         tableView.setDataSource(self);
         tableView.setDelegate(self);
         self.loadAndHandleData();
@@ -260,17 +276,34 @@ defineClass("SWHomeBangumiViewController:SWBaseViewController<UITableViewDataSou
             var cell = tableView.dequeueReusableCellWithIdentifier(SWHomeBangumiDidEndCell.description());
             cell.installData(self.getProp("totalArray").objectAtIndex(indexPath.section()));
             return cell;
+        }else if(indexPath.section() == 3){
+            var recommendArray = self.getProp("totalArray").objectAtIndex(indexPath.section());
+            var model;
+            if(indexPath.row() < recommendArray.count()){
+                model = recommendArray.objectAtIndex(indexPath.row());
+            }
+            var cell = tableView.dequeueReusableCellWithIdentifier(SWHomeBangumiRecommendCell.description());
+
+            cell.installData(model);
+            return cell;
         }
         return UITableViewCell.new();
     },
     tableView_heightForRowAtIndexPath:function(tableView,indexPath){
         if(indexPath.section() == 1){
-
           return SWHomeBangumiNewBangumiLoadCell.getHeight();
         }else if(indexPath.section() == 2){
             return SWHomeBangumiDidEndCell.getHeight();
+        }else if(indexPath.section()== 3){
+            var recommendArray = self.getProp("totalArray").objectAtIndex(indexPath.section());
+            var model;
+            if(indexPath.row() < recommendArray.count()){
+                model = recommendArray.objectAtIndex(indexPath.row());
+            }
+            return SWHomeBangumiRecommendCell.getHeight(model.objectForKey("desc"));
+        }else{
+            return 50;
         }
-        return 50;
     },
     tableView_viewForHeaderInSection:function(tableView,section){
         var view = UIView.alloc().init();
@@ -279,6 +312,13 @@ defineClass("SWHomeBangumiViewController:SWBaseViewController<UITableViewDataSou
     },
     tableView_heightForHeaderInSection:function(tableView,section){
         return 20;
+    },
+    scrollViewDidScroll:function(scrollView){
+    },
+    viewWillLayoutSubviews:function(){
+      self.super().viewWillLayoutSubviews();
+        var tableView = self.getProp("tableView")
+        tableView.setFrame(self.view().bounds());
     },
     loadAndHandleData:function(){
         var url= NSURL.URLWithString(self.getProp('urlStr'));
@@ -547,6 +587,7 @@ defineClass("SWHomeBangumiNewChangLoadItem:UIView",{
     }
 
 })
+
 //SW 首页番剧中的完结动画cell SWHomeBangumiDidEndCell (有可以滚动的item) 完结动画
 defineClass("SWHomeBangumiDidEndCell:UITableViewCell",{
     initWithStyle_reuseIdentifier:function(style,reuseIdentifier){
@@ -601,6 +642,7 @@ defineClass("SWHomeBangumiDidEndCell:UITableViewCell",{
       return SWHomeBangumiDidEndItem.getHeight();
   }
 })
+
 // SW 首页番剧中的完结动画cell中的item  完结动画item
 defineClass("SWHomeBangumiDidEndItem:UIView",{
     init:function(){
@@ -674,6 +716,92 @@ defineClass("SWHomeBangumiDidEndItem:UIView",{
 
 // SW 首页番剧中带有一个封面banner 一个title 一个content(其中有一个cell头部带有番剧推荐字样，我想通过继承关系子类通过条件去掉该番剧推荐字样)  番剧推荐
 defineClass("SWHomeBangumiRecommendCell:UITableViewCell",{
+    initWithStyle_reuseIdentifier:function(style,reuseIdentifier){
+        if(self.ORIGinitWithStyle_reuseIdentifier(style,reuseIdentifier)){
+            self.contentView().setBackgroundColor(bgGrayColor);
+            var bgView = UIView.new();
+            self.contentView().addSubview(bgView);
+            bgView.setBackgroundColor(UIColor.whiteColor());
+            bgView.layer().setCornerRadius(5);
+            bgView.setClipsToBounds(1);
+            self.setProp_forKey(bgView,"bgView");
+
+            var coverImage = UIImageView.new();
+            bgView.addSubview(coverImage);
+            self.setProp_forKey(coverImage,"coverImage");
+
+            var newIconImage = UIImageView.new();
+            bgView.addSubview(newIconImage);
+            newIconImage.setImage(UIImage.imageNamed("home_bangumi_tableHead_new"));
+            self.setProp_forKey(newIconImage,"newIconImage");
+
+            var titleLabel = SWLabel.new();
+            self.setProp_forKey(titleLabel,"titleLabel");
+            titleLabel.setFont (UIFont.systemFontOfSize(14));
+            //titleLabel.setTextAlignment(1);
+            bgView.addSubview(titleLabel);
+
+            var detailLabel = SWLabel.new();
+            self.setProp_forKey(detailLabel,"detailLabel");
+            //epLabel.setTextAlignment(1);
+            detailLabel.setNumberOfLines(0);
+            detailLabel.setFont (UIFont.systemFontOfSize(12));
+            detailLabel.setTextColor(normalGrayColor);
+            bgView.addSubview(detailLabel);
+
+
+        }
+        return self;
+    },
+    installData:function(model){
+        if(!model) {
+            return;
+        }
+        var scale = 3.2;
+        //12为两边的间距
+        var width = UIScreen.mainScreen().bounds().width - 12 * 2;
+        var coverHeight = width /3.2;
+        var detailHeight = self.calculateDetailLabelHeight(model.objectForKey("desc"));
+        self.getProp("coverImage").setFrame({x:0, y:0, width:width, height:coverHeight});
+        self.getProp("newIconImage").setFrame({x:width - 20 - 44, y:0, width:44, height:22.5});
+        self.getProp("titleLabel").setFrame({x:12, y:coverHeight + 12, width:width - 12, height:17});
+        self.getProp("detailLabel").setFrame({x:12, y:coverHeight + 12 + 17 + 12, width:width - 12, height:detailHeight});
+        var desc = model.objectForKey("desc");
+        self.getProp("detailLabel").setText(desc);
+        self.getProp("titleLabel").setText(model.objectForKey("title"));
+        var urlStr = model.objectForKey("cover");
+        var url = NSURL.URLWithString(urlStr);
+        self.getProp("coverImage").sd__setImageWithURL(url);
+        self.getProp("bgView").setFrame({x:12, y:0 , width:width , height:coverHeight + 12 + 17 + 12 + detailHeight + 12});
+    },
+    calculateDetailLabelHeight:function(desc){
+        var attributeDict = {
+            "NSFont":UIFont.systemFontOfSize(12),
+        };
+        var boundWidth = UIScreen.mainScreen().bounds().width - 12 * 2 - 12;
+        var size = {width:boundWidth, height: 1000};
+        var rect = desc.boundingRectWithSize_options_attributes_context(size,1 << 0,attributeDict,null);
+        return rect.height ;
+    },
+    layoutSubviews:function(){
+        self.super().layoutSubviews();
+    }
+
+},{
+    getHeight:function(desc){
+        var scale = 3.2;
+        //12为两边的间距
+        var attributeDict = {
+            "NSFont":UIFont.systemFontOfSize(12),
+        };
+        var width = UIScreen.mainScreen().bounds().width - 12 * 2;
+        var coverHeight = width /3.2;
+        var boundWidth = UIScreen.mainScreen().bounds().width - 12 * 2 - 12;
+        var size = {width:boundWidth, height: 1000};
+        var height = desc.boundingRectWithSize_options_attributes_context(size,1 << 0,attributeDict,null).height ;
+        //第一个12 为coverImage与titleLabel的间距  第二个12为titleLabel和detailLabel的间距 第三个12为detailLabel下面默认留12的间距  最后一个12为cell高度默认在bgView的高度的基础上面再加12.
+        return  coverHeight + 12 + 17 + 12 + height + 12 + 12 ;
+    }
 
 })
 
@@ -852,22 +980,28 @@ defineClass("SWContainerView:UIView<UIScrollViewDelegate>",{
     layoutSubviews:function(){
         self.super().layoutSubviews();
         var topBarHeight = self.getProp("topBarHeight");
+        var scrollView = self.getProp("scrollView");
+        scrollView.setFrame(self.bounds());
         var rect = self.bounds();
         var viewWidth = rect.width;
         var viewHeight = rect.height;
-        var scrollView = self.getProp("scrollView");
         self.getProp("topBar").setFrame({x:0, y:0, width:viewWidth, height:topBarHeight});
-        scrollView.setFrame({x:0, y:topBarHeight, width:viewWidth, height:viewHeight - topBarHeight - 44});
+        scrollView.setFrame({x:0, y:topBarHeight, width:viewWidth, height:viewHeight - topBarHeight });
+
+        //console.log("sssssssssswwwwwwwwzzzzzzz");
+        //console.log(self.frame());
+        //console.log("viewWidth"+rect.width + "viewHeight"+ rect.height)
         var vcs = self.getProp("vcArray");
         var count = vcs.count();
         if(count > 0){
             for(var i = 0;i<count; i++){
                 var vc = vcs.objectAtIndex(i);
-                vc.view().setFrame({x:i*viewWidth, y:0, width:viewWidth, height:viewHeight - topBarHeight});
+                vc.view().setFrame({x:i*viewWidth, y:0, width:viewWidth, height:viewHeight - topBarHeight });
+                //console.log(vc.view().frame());
             }
 
         }
-        scrollView.setContentSize({width:viewWidth*count,height:viewHeight - topBarHeight - 44});
+        scrollView.setContentSize({width:viewWidth*count,height:viewHeight - topBarHeight });
     }
 
 })
@@ -965,7 +1099,13 @@ defineClass("SWTopBar:UIView",{
 defineClass("SWTableView:UITableView",{
   allowsHeaderViewsToFloat:function(){
       return 0;
-  }
+  },
+    initWithFrame:function(frame){
+        if(self.ORIGinitWithFrame(frame)){
+            self.setSeparatorStyle(0);
+        }
+        return self;
+    }
 })
 
 //可以垂直居中的label
@@ -1001,4 +1141,14 @@ defineClass("SWLabel:UILabel",{
     var actualRect = self.textRectForBounds_limitedToNumberOfLines(requestedRect,self.getProp("numberOfLines"));
     self.super().drawTextInRect(actualRect);
 }
+})
+
+//首页番剧中不允许显示分隔线 的tableViewCell
+defineClass("SWHomeBangumiCell:UITableViewCell",{
+    initWithStyle_reuseIdentifier:function(style,reuseIdentifier){
+        if(self.ORIGinitWithStyle_reuseIdentifier(style,reuseIdentifier)){
+            //self.setSelectionStyle(0);
+        }
+        return self;
+    }
 })

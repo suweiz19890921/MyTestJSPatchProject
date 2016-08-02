@@ -8,7 +8,7 @@
 
 #import "SWBaseViewController.h"
 #import "ReactiveCocoa.h"
-@interface SWBaseViewController ()<UIScrollViewDelegate>
+@interface SWBaseViewController ()<UITableViewDelegate>
 
 @end
 
@@ -24,16 +24,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    
-    
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
 /*
 #pragma mark - Navigation
 
