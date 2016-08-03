@@ -20,7 +20,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     [JPEngine startEngine];
-    NSString *sourcePath = [[NSBundle mainBundle]pathForResource:@"demo.js" ofType:nil];
+    NSString *sourcePath = [[NSBundle mainBundle]pathForResource:@"main.js" ofType:nil];
     NSString *script = [NSString stringWithContentsOfFile:sourcePath encoding:NSUTF8StringEncoding error:nil];
     [JPEngine evaluateScript:script];
     [self configRootView];

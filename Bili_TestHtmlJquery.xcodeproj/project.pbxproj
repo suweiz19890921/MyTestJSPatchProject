@@ -32,7 +32,7 @@
 		4A0649691D372CAB000D02B4 /* UIImageView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A0649581D372CAB000D02B4 /* UIImageView+WebCache.m */; };
 		4A06496A1D372CAB000D02B4 /* UIView+WebCacheOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A06495A1D372CAB000D02B4 /* UIView+WebCacheOperation.m */; };
 		4A0649C51D38C6B6000D02B4 /* SWBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A0649C41D38C6B6000D02B4 /* SWBaseViewController.m */; };
-		4A0649C71D38DEFB000D02B4 /* demo.js in Resources */ = {isa = PBXBuildFile; fileRef = 4A0649C61D38DEFB000D02B4 /* demo.js */; };
+		4A0649C71D38DEFB000D02B4 /* main.js in Resources */ = {isa = PBXBuildFile; fileRef = 4A0649C61D38DEFB000D02B4 /* main.js */; };
 		4A064A8D1D38F845000D02B4 /* RACEXTRuntimeExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A0649CF1D38F845000D02B4 /* RACEXTRuntimeExtensions.m */; };
 		4A064A8E1D38F845000D02B4 /* MKAnnotationView+RACSignalSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A0649D31D38F845000D02B4 /* MKAnnotationView+RACSignalSupport.m */; };
 		4A064A8F1D38F845000D02B4 /* NSArray+RACSequenceAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A0649D51D38F845000D02B4 /* NSArray+RACSequenceAdditions.m */; };
@@ -228,7 +228,7 @@
 		4A06495A1D372CAB000D02B4 /* UIView+WebCacheOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+WebCacheOperation.m"; sourceTree = "<group>"; };
 		4A0649C31D38C6B6000D02B4 /* SWBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWBaseViewController.h; sourceTree = "<group>"; };
 		4A0649C41D38C6B6000D02B4 /* SWBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWBaseViewController.m; sourceTree = "<group>"; };
-		4A0649C61D38DEFB000D02B4 /* demo.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = demo.js; sourceTree = "<group>"; };
+		4A0649C61D38DEFB000D02B4 /* main.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = main.js; sourceTree = "<group>"; };
 		4A0649CD1D38F845000D02B4 /* RACEXTKeyPathCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RACEXTKeyPathCoding.h; sourceTree = "<group>"; };
 		4A0649CE1D38F845000D02B4 /* RACEXTRuntimeExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RACEXTRuntimeExtensions.h; sourceTree = "<group>"; };
 		4A0649CF1D38F845000D02B4 /* RACEXTRuntimeExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RACEXTRuntimeExtensions.m; sourceTree = "<group>"; };
@@ -539,7 +539,7 @@
 				4A0648F91D350287000D02B4 /* AppDelegate.m */,
 				4A0649C31D38C6B6000D02B4 /* SWBaseViewController.h */,
 				4A0649C41D38C6B6000D02B4 /* SWBaseViewController.m */,
-				4A0649C61D38DEFB000D02B4 /* demo.js */,
+				4A0649C61D38DEFB000D02B4 /* main.js */,
 				4AA0DEB21D51AA260099BAA2 /* Extensions */,
 				4A0649C91D38F845000D02B4 /* ReactiveCocoa */,
 				4A0649391D372CAB000D02B4 /* SDWebImage */,
@@ -1110,7 +1110,7 @@
 				4A0649361D3619FF000D02B4 /* JSPatch.js in Resources */,
 				4AE192FD1D3929F600DFCCDD /* Images.xcassets in Resources */,
 				4A0649051D350287000D02B4 /* LaunchScreen.storyboard in Resources */,
-				4A0649C71D38DEFB000D02B4 /* demo.js in Resources */,
+				4A0649C71D38DEFB000D02B4 /* main.js in Resources */,
 				4A0649021D350287000D02B4 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
