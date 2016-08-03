@@ -124,6 +124,7 @@
 		4AA0DF291D5201980099BAA2 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AA0DF281D5201980099BAA2 /* libz.tbd */; };
 		4AA0DF2B1D5202000099BAA2 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AA0DF2A1D5202000099BAA2 /* JavaScriptCore.framework */; };
 		4AA0DF2D1D5203C00099BAA2 /* JSPatch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AA0DF2C1D5203C00099BAA2 /* JSPatch.framework */; };
+		4AA2A7081D522B17001B9283 /* demo.js in Resources */ = {isa = PBXBuildFile; fileRef = 4AA2A7071D522B17001B9283 /* demo.js */; };
 		4AE192FD1D3929F600DFCCDD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4AE192FC1D3929F600DFCCDD /* Images.xcassets */; };
 /* End PBXBuildFile section */
 
@@ -386,6 +387,7 @@
 		4AA0DF281D5201980099BAA2 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		4AA0DF2A1D5202000099BAA2 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		4AA0DF2C1D5203C00099BAA2 /* JSPatch.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = JSPatch.framework; sourceTree = "<group>"; };
+		4AA2A7071D522B17001B9283 /* demo.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = demo.js; sourceTree = "<group>"; };
 		4AE192FC1D3929F600DFCCDD /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -420,9 +422,8 @@
 		4A0648E91D350286000D02B4 = {
 			isa = PBXGroup;
 			children = (
-				4AA0DF2C1D5203C00099BAA2 /* JSPatch.framework */,
-				4AA0DF2A1D5202000099BAA2 /* JavaScriptCore.framework */,
-				4AA0DF281D5201980099BAA2 /* libz.tbd */,
+				4AA2A7091D522B25001B9283 /* thirdPart */,
+				4AA2A7061D5229A7001B9283 /* frameworks */,
 				4A0648F41D350286000D02B4 /* Bili_TestHtmlJquery */,
 				4A06490E1D350287000D02B4 /* Bili_TestHtmlJqueryTests */,
 				4A0649191D350287000D02B4 /* Bili_TestHtmlJqueryUITests */,
@@ -447,8 +448,7 @@
 				4A0648F91D350287000D02B4 /* AppDelegate.m */,
 				4A0649C31D38C6B6000D02B4 /* SWBaseViewController.h */,
 				4A0649C41D38C6B6000D02B4 /* SWBaseViewController.m */,
-				4A0649C91D38F845000D02B4 /* ReactiveCocoa */,
-				4A0649391D372CAB000D02B4 /* SDWebImage */,
+				4AA2A7071D522B17001B9283 /* demo.js */,
 				4A0649011D350287000D02B4 /* Assets.xcassets */,
 				4A0649031D350287000D02B4 /* LaunchScreen.storyboard */,
 				4A0649061D350287000D02B4 /* Info.plist */,
@@ -521,15 +521,8 @@
 				4A0649591D372CAB000D02B4 /* UIView+WebCacheOperation.h */,
 				4A06495A1D372CAB000D02B4 /* UIView+WebCacheOperation.m */,
 			);
-			path = SDWebImage;
-			sourceTree = "<group>";
-		};
-		4A0649C91D38F845000D02B4 /* ReactiveCocoa */ = {
-			isa = PBXGroup;
-			children = (
-				4A0649CB1D38F845000D02B4 /* ReactiveCocoa */,
-			);
-			path = ReactiveCocoa;
+			name = SDWebImage;
+			path = ../SDWebImage;
 			sourceTree = "<group>";
 		};
 		4A0649CB1D38F845000D02B4 /* ReactiveCocoa */ = {
@@ -737,6 +730,26 @@
 			path = extobjc;
 			sourceTree = "<group>";
 		};
+		4AA2A7061D5229A7001B9283 /* frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4AA0DF281D5201980099BAA2 /* libz.tbd */,
+				4AA0DF2A1D5202000099BAA2 /* JavaScriptCore.framework */,
+				4AA0DF2C1D5203C00099BAA2 /* JSPatch.framework */,
+			);
+			name = frameworks;
+			sourceTree = "<group>";
+		};
+		4AA2A7091D522B25001B9283 /* thirdPart */ = {
+			isa = PBXGroup;
+			children = (
+				4A0649391D372CAB000D02B4 /* SDWebImage */,
+				4A0649CB1D38F845000D02B4 /* ReactiveCocoa */,
+			);
+			name = thirdPart;
+			path = Bili_TestHtmlJquery/ReactiveCocoa;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -844,6 +857,7 @@
 				4AE192FD1D3929F600DFCCDD /* Images.xcassets in Resources */,
 				4A0649051D350287000D02B4 /* LaunchScreen.storyboard in Resources */,
 				4A0649021D350287000D02B4 /* Assets.xcassets in Resources */,
+				4AA2A7081D522B17001B9283 /* demo.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
