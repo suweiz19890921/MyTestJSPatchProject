@@ -312,14 +312,17 @@ defineClass("SWHomeBangumiViewController:SWBaseViewController<UITableViewDataSou
             }
             return headView;
         }else{
-            return self.lazyBannerView();
+            var head = UIView.new();
+            head.setBackgroundColor(UIColor.redColor());
+            head.addSubview(self.lazyBannerView());
+            return head;
         }
     },
     tableView_heightForHeaderInSection:function(tableView,section){
         if(section == 0){
            var rect = UIScreen.mainScreen().bounds();
-           var width = rect.width - 24;
-            return width /3.20;
+           var width = rect.width ;
+            return width /3.2;
         }
         return 44;
     },
@@ -329,6 +332,8 @@ defineClass("SWHomeBangumiViewController:SWBaseViewController<UITableViewDataSou
       self.super().viewWillLayoutSubviews();
         var tableView = self.getProp("tableView")
         tableView.setFrame(self.view().bounds());
+        var width= self.view().bounds().width
+        self.lazyBannerView().setFrame({x:0, y:0, width:width , height:width/3.2});
     },
     lazyBannerView:function(){
         if(!self.getProp("bannerView")){
@@ -1285,9 +1290,11 @@ defineClass('SWBannerCollectionView:UIView <UICollectionViewDataSource,UICollect
             if(self.ORIGinitWithFrame(frame)){
             var layout = UICollectionViewFlowLayout.alloc().init();
             layout.setScrollDirection(1);
-                layout.setMinimumInteritemSpacing = 0.0;
-                var collectionView = UICollectionView.alloc().initWithFrame_collectionViewLayout(frame,layout);
-             collectionView.setPagingEnabled(1);
+
+            layout.setMinimumInteritemSpacing = 0.0;
+            var collectionView = UICollectionView.alloc().initWithFrame_collectionViewLayout(frame,layout);
+            collectionView.setPagingEnabled(1);
+                collectionView.setBackgroundColor(UIColor.yellowColor());
             collectionView.setDataSource(self);
             collectionView.setDelegate(self);
             self.setProp_forKey(collectionView,"collectionView");
@@ -1323,7 +1330,9 @@ defineClass('SWBannerCollectionView:UIView <UICollectionViewDataSource,UICollect
             },
 
             collectionView_layout_sizeForItemAtIndexPath:function(collectionView,collectionViewLayout,indexPath){
-//                return {width:self.bounds().width, height:self.bounds().height};
+                console.log(self.bounds());
+                var width = UIScreen.mainScreen().width;
+//                return {width:width, height:width/3.2};
 
                 return {width:375, height:(375 -24)/3.2};
            },
@@ -1357,7 +1366,8 @@ defineClass('SWCollectionViewCell:UICollectionViewCell',{
             
             layoutSubviews:function() {
             self.super().layoutSubviews();
-            self.getProp("imageView").setFrame(self.contentView().bounds());
+//                console.log(self.bounds());
+            self.getProp("imageView").setFrame(self.bounds());
             }
             
 })
