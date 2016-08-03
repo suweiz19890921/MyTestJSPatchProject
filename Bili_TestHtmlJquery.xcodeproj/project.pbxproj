@@ -124,6 +124,37 @@
 		4A064AE51D38F845000D02B4 /* UITableViewHeaderFooterView+RACSignalSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A064A861D38F845000D02B4 /* UITableViewHeaderFooterView+RACSignalSupport.m */; };
 		4A064AE61D38F845000D02B4 /* UITextField+RACSignalSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A064A881D38F845000D02B4 /* UITextField+RACSignalSupport.m */; };
 		4A064AE71D38F845000D02B4 /* UITextView+RACSignalSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A064A8A1D38F845000D02B4 /* UITextView+RACSignalSupport.m */; };
+		4AA0DEFF1D51AA260099BAA2 /* JPCFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AA0DEB51D51AA260099BAA2 /* JPCFunction.m */; };
+		4AA0DF001D51AA260099BAA2 /* JPMemory.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AA0DEB71D51AA260099BAA2 /* JPMemory.m */; };
+		4AA0DF011D51AA270099BAA2 /* JPStructPointer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AA0DEB91D51AA260099BAA2 /* JPStructPointer.m */; };
+		4AA0DF021D51AA270099BAA2 /* ffi_arm64.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AA0DECE1D51AA260099BAA2 /* ffi_arm64.c */; };
+		4AA0DF031D51AA270099BAA2 /* sysv_arm64.S in Sources */ = {isa = PBXBuildFile; fileRef = 4AA0DECF1D51AA260099BAA2 /* sysv_arm64.S */; };
+		4AA0DF041D51AA270099BAA2 /* ffi_armv7.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AA0DED11D51AA260099BAA2 /* ffi_armv7.c */; };
+		4AA0DF051D51AA270099BAA2 /* sysv_armv7.S in Sources */ = {isa = PBXBuildFile; fileRef = 4AA0DED21D51AA260099BAA2 /* sysv_armv7.S */; };
+		4AA0DF061D51AA270099BAA2 /* trampoline_armv7.S in Sources */ = {isa = PBXBuildFile; fileRef = 4AA0DED31D51AA260099BAA2 /* trampoline_armv7.S */; };
+		4AA0DF071D51AA270099BAA2 /* prep_cif.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AA0DED51D51AA260099BAA2 /* prep_cif.c */; };
+		4AA0DF081D51AA270099BAA2 /* raw_api.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AA0DED61D51AA260099BAA2 /* raw_api.c */; };
+		4AA0DF091D51AA270099BAA2 /* types.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AA0DED71D51AA260099BAA2 /* types.c */; };
+		4AA0DF0A1D51AA270099BAA2 /* darwin64_x86_64.S in Sources */ = {isa = PBXBuildFile; fileRef = 4AA0DED91D51AA260099BAA2 /* darwin64_x86_64.S */; };
+		4AA0DF0B1D51AA270099BAA2 /* darwin_i386.S in Sources */ = {isa = PBXBuildFile; fileRef = 4AA0DEDA1D51AA260099BAA2 /* darwin_i386.S */; };
+		4AA0DF0C1D51AA270099BAA2 /* ffi64_x86_64.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AA0DEDB1D51AA260099BAA2 /* ffi64_x86_64.c */; };
+		4AA0DF0D1D51AA270099BAA2 /* ffi_i386.c in Sources */ = {isa = PBXBuildFile; fileRef = 4AA0DEDC1D51AA260099BAA2 /* ffi_i386.c */; };
+		4AA0DF0E1D51AA270099BAA2 /* win32_i386.S in Sources */ = {isa = PBXBuildFile; fileRef = 4AA0DEDD1D51AA260099BAA2 /* win32_i386.S */; };
+		4AA0DF0F1D51AA270099BAA2 /* JPCGBitmapContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AA0DEE11D51AA260099BAA2 /* JPCGBitmapContext.m */; };
+		4AA0DF101D51AA270099BAA2 /* JPCGColor.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AA0DEE31D51AA260099BAA2 /* JPCGColor.m */; };
+		4AA0DF111D51AA270099BAA2 /* JPCGContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AA0DEE51D51AA260099BAA2 /* JPCGContext.m */; };
+		4AA0DF121D51AA270099BAA2 /* JPCGGeometry.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AA0DEE71D51AA260099BAA2 /* JPCGGeometry.m */; };
+		4AA0DF131D51AA270099BAA2 /* JPCGImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AA0DEE91D51AA260099BAA2 /* JPCGImage.m */; };
+		4AA0DF141D51AA270099BAA2 /* JPCGPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AA0DEEB1D51AA260099BAA2 /* JPCGPath.m */; };
+		4AA0DF151D51AA270099BAA2 /* JPCGTransform.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AA0DEED1D51AA260099BAA2 /* JPCGTransform.m */; };
+		4AA0DF161D51AA270099BAA2 /* JPCoreGraphics.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AA0DEEF1D51AA260099BAA2 /* JPCoreGraphics.m */; };
+		4AA0DF171D51AA270099BAA2 /* JPUIGeometry.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AA0DEF21D51AA260099BAA2 /* JPUIGeometry.m */; };
+		4AA0DF181D51AA270099BAA2 /* JPUIGraphics.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AA0DEF41D51AA260099BAA2 /* JPUIGraphics.m */; };
+		4AA0DF191D51AA270099BAA2 /* JPUIImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AA0DEF61D51AA260099BAA2 /* JPUIImage.m */; };
+		4AA0DF1A1D51AA270099BAA2 /* JPUIKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AA0DEF81D51AA260099BAA2 /* JPUIKit.m */; };
+		4AA0DF1B1D51AA270099BAA2 /* JPCleaner.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AA0DEFA1D51AA260099BAA2 /* JPCleaner.m */; };
+		4AA0DF1C1D51AA270099BAA2 /* JPLocker.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AA0DEFC1D51AA260099BAA2 /* JPLocker.m */; };
+		4AA0DF1D1D51AA270099BAA2 /* JPSpecialInit.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AA0DEFE1D51AA260099BAA2 /* JPSpecialInit.m */; };
 		4AE192FD1D3929F600DFCCDD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4AE192FC1D3929F600DFCCDD /* Images.xcassets */; };
 /* End PBXBuildFile section */
 
@@ -388,6 +419,71 @@
 		4A064A881D38F845000D02B4 /* UITextField+RACSignalSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextField+RACSignalSupport.m"; sourceTree = "<group>"; };
 		4A064A891D38F845000D02B4 /* UITextView+RACSignalSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextView+RACSignalSupport.h"; sourceTree = "<group>"; };
 		4A064A8A1D38F845000D02B4 /* UITextView+RACSignalSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextView+RACSignalSupport.m"; sourceTree = "<group>"; };
+		4AA0DEB41D51AA260099BAA2 /* JPCFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPCFunction.h; sourceTree = "<group>"; };
+		4AA0DEB51D51AA260099BAA2 /* JPCFunction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JPCFunction.m; sourceTree = "<group>"; };
+		4AA0DEB61D51AA260099BAA2 /* JPMemory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPMemory.h; sourceTree = "<group>"; };
+		4AA0DEB71D51AA260099BAA2 /* JPMemory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JPMemory.m; sourceTree = "<group>"; };
+		4AA0DEB81D51AA260099BAA2 /* JPStructPointer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPStructPointer.h; sourceTree = "<group>"; };
+		4AA0DEB91D51AA260099BAA2 /* JPStructPointer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JPStructPointer.m; sourceTree = "<group>"; };
+		4AA0DEBC1D51AA260099BAA2 /* ffi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ffi.h; sourceTree = "<group>"; };
+		4AA0DEBD1D51AA260099BAA2 /* ffi_arm64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ffi_arm64.h; sourceTree = "<group>"; };
+		4AA0DEBE1D51AA260099BAA2 /* ffi_armv7.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ffi_armv7.h; sourceTree = "<group>"; };
+		4AA0DEBF1D51AA260099BAA2 /* ffi_common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ffi_common.h; sourceTree = "<group>"; };
+		4AA0DEC01D51AA260099BAA2 /* ffi_i386.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ffi_i386.h; sourceTree = "<group>"; };
+		4AA0DEC11D51AA260099BAA2 /* ffi_x86_64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ffi_x86_64.h; sourceTree = "<group>"; };
+		4AA0DEC21D51AA260099BAA2 /* fficonfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fficonfig.h; sourceTree = "<group>"; };
+		4AA0DEC31D51AA260099BAA2 /* fficonfig_arm64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fficonfig_arm64.h; sourceTree = "<group>"; };
+		4AA0DEC41D51AA260099BAA2 /* fficonfig_armv7.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fficonfig_armv7.h; sourceTree = "<group>"; };
+		4AA0DEC51D51AA260099BAA2 /* fficonfig_i386.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fficonfig_i386.h; sourceTree = "<group>"; };
+		4AA0DEC61D51AA260099BAA2 /* fficonfig_x86_64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fficonfig_x86_64.h; sourceTree = "<group>"; };
+		4AA0DEC71D51AA260099BAA2 /* ffitarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ffitarget.h; sourceTree = "<group>"; };
+		4AA0DEC81D51AA260099BAA2 /* ffitarget_arm64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ffitarget_arm64.h; sourceTree = "<group>"; };
+		4AA0DEC91D51AA260099BAA2 /* ffitarget_armv7.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ffitarget_armv7.h; sourceTree = "<group>"; };
+		4AA0DECA1D51AA260099BAA2 /* ffitarget_i386.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ffitarget_i386.h; sourceTree = "<group>"; };
+		4AA0DECB1D51AA260099BAA2 /* ffitarget_x86_64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ffitarget_x86_64.h; sourceTree = "<group>"; };
+		4AA0DECE1D51AA260099BAA2 /* ffi_arm64.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ffi_arm64.c; sourceTree = "<group>"; };
+		4AA0DECF1D51AA260099BAA2 /* sysv_arm64.S */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = sysv_arm64.S; sourceTree = "<group>"; };
+		4AA0DED11D51AA260099BAA2 /* ffi_armv7.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ffi_armv7.c; sourceTree = "<group>"; };
+		4AA0DED21D51AA260099BAA2 /* sysv_armv7.S */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = sysv_armv7.S; sourceTree = "<group>"; };
+		4AA0DED31D51AA260099BAA2 /* trampoline_armv7.S */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = trampoline_armv7.S; sourceTree = "<group>"; };
+		4AA0DED51D51AA260099BAA2 /* prep_cif.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = prep_cif.c; sourceTree = "<group>"; };
+		4AA0DED61D51AA260099BAA2 /* raw_api.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = raw_api.c; sourceTree = "<group>"; };
+		4AA0DED71D51AA260099BAA2 /* types.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = types.c; sourceTree = "<group>"; };
+		4AA0DED91D51AA260099BAA2 /* darwin64_x86_64.S */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = darwin64_x86_64.S; sourceTree = "<group>"; };
+		4AA0DEDA1D51AA260099BAA2 /* darwin_i386.S */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = darwin_i386.S; sourceTree = "<group>"; };
+		4AA0DEDB1D51AA260099BAA2 /* ffi64_x86_64.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ffi64_x86_64.c; sourceTree = "<group>"; };
+		4AA0DEDC1D51AA260099BAA2 /* ffi_i386.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = ffi_i386.c; sourceTree = "<group>"; };
+		4AA0DEDD1D51AA260099BAA2 /* win32_i386.S */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.asm; path = win32_i386.S; sourceTree = "<group>"; };
+		4AA0DEE01D51AA260099BAA2 /* JPCGBitmapContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPCGBitmapContext.h; sourceTree = "<group>"; };
+		4AA0DEE11D51AA260099BAA2 /* JPCGBitmapContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JPCGBitmapContext.m; sourceTree = "<group>"; };
+		4AA0DEE21D51AA260099BAA2 /* JPCGColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPCGColor.h; sourceTree = "<group>"; };
+		4AA0DEE31D51AA260099BAA2 /* JPCGColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JPCGColor.m; sourceTree = "<group>"; };
+		4AA0DEE41D51AA260099BAA2 /* JPCGContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPCGContext.h; sourceTree = "<group>"; };
+		4AA0DEE51D51AA260099BAA2 /* JPCGContext.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JPCGContext.m; sourceTree = "<group>"; };
+		4AA0DEE61D51AA260099BAA2 /* JPCGGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPCGGeometry.h; sourceTree = "<group>"; };
+		4AA0DEE71D51AA260099BAA2 /* JPCGGeometry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JPCGGeometry.m; sourceTree = "<group>"; };
+		4AA0DEE81D51AA260099BAA2 /* JPCGImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPCGImage.h; sourceTree = "<group>"; };
+		4AA0DEE91D51AA260099BAA2 /* JPCGImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JPCGImage.m; sourceTree = "<group>"; };
+		4AA0DEEA1D51AA260099BAA2 /* JPCGPath.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPCGPath.h; sourceTree = "<group>"; };
+		4AA0DEEB1D51AA260099BAA2 /* JPCGPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JPCGPath.m; sourceTree = "<group>"; };
+		4AA0DEEC1D51AA260099BAA2 /* JPCGTransform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPCGTransform.h; sourceTree = "<group>"; };
+		4AA0DEED1D51AA260099BAA2 /* JPCGTransform.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JPCGTransform.m; sourceTree = "<group>"; };
+		4AA0DEEE1D51AA260099BAA2 /* JPCoreGraphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPCoreGraphics.h; sourceTree = "<group>"; };
+		4AA0DEEF1D51AA260099BAA2 /* JPCoreGraphics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JPCoreGraphics.m; sourceTree = "<group>"; };
+		4AA0DEF11D51AA260099BAA2 /* JPUIGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPUIGeometry.h; sourceTree = "<group>"; };
+		4AA0DEF21D51AA260099BAA2 /* JPUIGeometry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JPUIGeometry.m; sourceTree = "<group>"; };
+		4AA0DEF31D51AA260099BAA2 /* JPUIGraphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPUIGraphics.h; sourceTree = "<group>"; };
+		4AA0DEF41D51AA260099BAA2 /* JPUIGraphics.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JPUIGraphics.m; sourceTree = "<group>"; };
+		4AA0DEF51D51AA260099BAA2 /* JPUIImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPUIImage.h; sourceTree = "<group>"; };
+		4AA0DEF61D51AA260099BAA2 /* JPUIImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JPUIImage.m; sourceTree = "<group>"; };
+		4AA0DEF71D51AA260099BAA2 /* JPUIKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPUIKit.h; sourceTree = "<group>"; };
+		4AA0DEF81D51AA260099BAA2 /* JPUIKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JPUIKit.m; sourceTree = "<group>"; };
+		4AA0DEF91D51AA260099BAA2 /* JPCleaner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPCleaner.h; sourceTree = "<group>"; };
+		4AA0DEFA1D51AA260099BAA2 /* JPCleaner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JPCleaner.m; sourceTree = "<group>"; };
+		4AA0DEFB1D51AA260099BAA2 /* JPLocker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPLocker.h; sourceTree = "<group>"; };
+		4AA0DEFC1D51AA260099BAA2 /* JPLocker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JPLocker.m; sourceTree = "<group>"; };
+		4AA0DEFD1D51AA260099BAA2 /* JPSpecialInit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPSpecialInit.h; sourceTree = "<group>"; };
+		4AA0DEFE1D51AA260099BAA2 /* JPSpecialInit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JPSpecialInit.m; sourceTree = "<group>"; };
 		4AE192FC1D3929F600DFCCDD /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -444,6 +540,7 @@
 				4A0649C31D38C6B6000D02B4 /* SWBaseViewController.h */,
 				4A0649C41D38C6B6000D02B4 /* SWBaseViewController.m */,
 				4A0649C61D38DEFB000D02B4 /* demo.js */,
+				4AA0DEB21D51AA260099BAA2 /* Extensions */,
 				4A0649C91D38F845000D02B4 /* ReactiveCocoa */,
 				4A0649391D372CAB000D02B4 /* SDWebImage */,
 				4A0649311D3619FF000D02B4 /* JSPatch */,
@@ -746,6 +843,166 @@
 			path = extobjc;
 			sourceTree = "<group>";
 		};
+		4AA0DEB21D51AA260099BAA2 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				4AA0DEB31D51AA260099BAA2 /* JPCFunction */,
+				4AA0DEDE1D51AA260099BAA2 /* JPCFunctionBinder */,
+				4AA0DEF91D51AA260099BAA2 /* JPCleaner.h */,
+				4AA0DEFA1D51AA260099BAA2 /* JPCleaner.m */,
+				4AA0DEFB1D51AA260099BAA2 /* JPLocker.h */,
+				4AA0DEFC1D51AA260099BAA2 /* JPLocker.m */,
+				4AA0DEFD1D51AA260099BAA2 /* JPSpecialInit.h */,
+				4AA0DEFE1D51AA260099BAA2 /* JPSpecialInit.m */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		4AA0DEB31D51AA260099BAA2 /* JPCFunction */ = {
+			isa = PBXGroup;
+			children = (
+				4AA0DEB41D51AA260099BAA2 /* JPCFunction.h */,
+				4AA0DEB51D51AA260099BAA2 /* JPCFunction.m */,
+				4AA0DEB61D51AA260099BAA2 /* JPMemory.h */,
+				4AA0DEB71D51AA260099BAA2 /* JPMemory.m */,
+				4AA0DEB81D51AA260099BAA2 /* JPStructPointer.h */,
+				4AA0DEB91D51AA260099BAA2 /* JPStructPointer.m */,
+				4AA0DEBA1D51AA260099BAA2 /* libffi */,
+			);
+			path = JPCFunction;
+			sourceTree = "<group>";
+		};
+		4AA0DEBA1D51AA260099BAA2 /* libffi */ = {
+			isa = PBXGroup;
+			children = (
+				4AA0DEBB1D51AA260099BAA2 /* headers */,
+				4AA0DECC1D51AA260099BAA2 /* src */,
+			);
+			path = libffi;
+			sourceTree = "<group>";
+		};
+		4AA0DEBB1D51AA260099BAA2 /* headers */ = {
+			isa = PBXGroup;
+			children = (
+				4AA0DEBC1D51AA260099BAA2 /* ffi.h */,
+				4AA0DEBD1D51AA260099BAA2 /* ffi_arm64.h */,
+				4AA0DEBE1D51AA260099BAA2 /* ffi_armv7.h */,
+				4AA0DEBF1D51AA260099BAA2 /* ffi_common.h */,
+				4AA0DEC01D51AA260099BAA2 /* ffi_i386.h */,
+				4AA0DEC11D51AA260099BAA2 /* ffi_x86_64.h */,
+				4AA0DEC21D51AA260099BAA2 /* fficonfig.h */,
+				4AA0DEC31D51AA260099BAA2 /* fficonfig_arm64.h */,
+				4AA0DEC41D51AA260099BAA2 /* fficonfig_armv7.h */,
+				4AA0DEC51D51AA260099BAA2 /* fficonfig_i386.h */,
+				4AA0DEC61D51AA260099BAA2 /* fficonfig_x86_64.h */,
+				4AA0DEC71D51AA260099BAA2 /* ffitarget.h */,
+				4AA0DEC81D51AA260099BAA2 /* ffitarget_arm64.h */,
+				4AA0DEC91D51AA260099BAA2 /* ffitarget_armv7.h */,
+				4AA0DECA1D51AA260099BAA2 /* ffitarget_i386.h */,
+				4AA0DECB1D51AA260099BAA2 /* ffitarget_x86_64.h */,
+			);
+			path = headers;
+			sourceTree = "<group>";
+		};
+		4AA0DECC1D51AA260099BAA2 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				4AA0DECD1D51AA260099BAA2 /* aarch64 */,
+				4AA0DED01D51AA260099BAA2 /* arm */,
+				4AA0DED41D51AA260099BAA2 /* common */,
+				4AA0DED81D51AA260099BAA2 /* x86 */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		4AA0DECD1D51AA260099BAA2 /* aarch64 */ = {
+			isa = PBXGroup;
+			children = (
+				4AA0DECE1D51AA260099BAA2 /* ffi_arm64.c */,
+				4AA0DECF1D51AA260099BAA2 /* sysv_arm64.S */,
+			);
+			path = aarch64;
+			sourceTree = "<group>";
+		};
+		4AA0DED01D51AA260099BAA2 /* arm */ = {
+			isa = PBXGroup;
+			children = (
+				4AA0DED11D51AA260099BAA2 /* ffi_armv7.c */,
+				4AA0DED21D51AA260099BAA2 /* sysv_armv7.S */,
+				4AA0DED31D51AA260099BAA2 /* trampoline_armv7.S */,
+			);
+			path = arm;
+			sourceTree = "<group>";
+		};
+		4AA0DED41D51AA260099BAA2 /* common */ = {
+			isa = PBXGroup;
+			children = (
+				4AA0DED51D51AA260099BAA2 /* prep_cif.c */,
+				4AA0DED61D51AA260099BAA2 /* raw_api.c */,
+				4AA0DED71D51AA260099BAA2 /* types.c */,
+			);
+			path = common;
+			sourceTree = "<group>";
+		};
+		4AA0DED81D51AA260099BAA2 /* x86 */ = {
+			isa = PBXGroup;
+			children = (
+				4AA0DED91D51AA260099BAA2 /* darwin64_x86_64.S */,
+				4AA0DEDA1D51AA260099BAA2 /* darwin_i386.S */,
+				4AA0DEDB1D51AA260099BAA2 /* ffi64_x86_64.c */,
+				4AA0DEDC1D51AA260099BAA2 /* ffi_i386.c */,
+				4AA0DEDD1D51AA260099BAA2 /* win32_i386.S */,
+			);
+			path = x86;
+			sourceTree = "<group>";
+		};
+		4AA0DEDE1D51AA260099BAA2 /* JPCFunctionBinder */ = {
+			isa = PBXGroup;
+			children = (
+				4AA0DEDF1D51AA260099BAA2 /* CoreGraphics */,
+				4AA0DEF01D51AA260099BAA2 /* UIKit */,
+			);
+			path = JPCFunctionBinder;
+			sourceTree = "<group>";
+		};
+		4AA0DEDF1D51AA260099BAA2 /* CoreGraphics */ = {
+			isa = PBXGroup;
+			children = (
+				4AA0DEE01D51AA260099BAA2 /* JPCGBitmapContext.h */,
+				4AA0DEE11D51AA260099BAA2 /* JPCGBitmapContext.m */,
+				4AA0DEE21D51AA260099BAA2 /* JPCGColor.h */,
+				4AA0DEE31D51AA260099BAA2 /* JPCGColor.m */,
+				4AA0DEE41D51AA260099BAA2 /* JPCGContext.h */,
+				4AA0DEE51D51AA260099BAA2 /* JPCGContext.m */,
+				4AA0DEE61D51AA260099BAA2 /* JPCGGeometry.h */,
+				4AA0DEE71D51AA260099BAA2 /* JPCGGeometry.m */,
+				4AA0DEE81D51AA260099BAA2 /* JPCGImage.h */,
+				4AA0DEE91D51AA260099BAA2 /* JPCGImage.m */,
+				4AA0DEEA1D51AA260099BAA2 /* JPCGPath.h */,
+				4AA0DEEB1D51AA260099BAA2 /* JPCGPath.m */,
+				4AA0DEEC1D51AA260099BAA2 /* JPCGTransform.h */,
+				4AA0DEED1D51AA260099BAA2 /* JPCGTransform.m */,
+				4AA0DEEE1D51AA260099BAA2 /* JPCoreGraphics.h */,
+				4AA0DEEF1D51AA260099BAA2 /* JPCoreGraphics.m */,
+			);
+			path = CoreGraphics;
+			sourceTree = "<group>";
+		};
+		4AA0DEF01D51AA260099BAA2 /* UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				4AA0DEF11D51AA260099BAA2 /* JPUIGeometry.h */,
+				4AA0DEF21D51AA260099BAA2 /* JPUIGeometry.m */,
+				4AA0DEF31D51AA260099BAA2 /* JPUIGraphics.h */,
+				4AA0DEF41D51AA260099BAA2 /* JPUIGraphics.m */,
+				4AA0DEF51D51AA260099BAA2 /* JPUIImage.h */,
+				4AA0DEF61D51AA260099BAA2 /* JPUIImage.m */,
+				4AA0DEF71D51AA260099BAA2 /* JPUIKit.h */,
+				4AA0DEF81D51AA260099BAA2 /* JPUIKit.m */,
+			);
+			path = UIKit;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -890,16 +1147,21 @@
 				4A064ABB1D38F845000D02B4 /* RACObjCRuntime.m in Sources */,
 				4A064AD41D38F845000D02B4 /* RACValueTransformer.m in Sources */,
 				4A064AE21D38F845000D02B4 /* UIStepper+RACSignalSupport.m in Sources */,
+				4AA0DF101D51AA270099BAA2 /* JPCGColor.m in Sources */,
 				4A064AC91D38F845000D02B4 /* RACStringSequence.m in Sources */,
 				4A0649611D372CAB000D02B4 /* SDWebImageDownloaderOperation.m in Sources */,
 				4A064ACC1D38F845000D02B4 /* RACSubscriptingAssignmentTrampoline.m in Sources */,
 				4A064A931D38F845000D02B4 /* NSFileHandle+RACSupport.m in Sources */,
 				4A064AB31D38F845000D02B4 /* RACEvent.m in Sources */,
 				4A064AE01D38F845000D02B4 /* UISegmentedControl+RACSignalSupport.m in Sources */,
+				4AA0DF1A1D51AA270099BAA2 /* JPUIKit.m in Sources */,
+				4AA0DF0D1D51AA270099BAA2 /* ffi_i386.c in Sources */,
 				4A064AB51D38F845000D02B4 /* RACImmediateScheduler.m in Sources */,
 				4A064AB21D38F845000D02B4 /* RACErrorSignal.m in Sources */,
+				4AA0DF0F1D51AA270099BAA2 /* JPCGBitmapContext.m in Sources */,
 				4A064ACD1D38F845000D02B4 /* RACSubscriptionScheduler.m in Sources */,
 				4A06495E1D372CAB000D02B4 /* SDWebImageCompat.m in Sources */,
+				4AA0DF1C1D51AA270099BAA2 /* JPLocker.m in Sources */,
 				4A064AD21D38F845000D02B4 /* RACUnarySequence.m in Sources */,
 				4A064ABA1D38F845000D02B4 /* RACMulticastConnection.m in Sources */,
 				4A064AC21D38F845000D02B4 /* RACSequence.m in Sources */,
@@ -908,20 +1170,32 @@
 				4A064AD61D38F845000D02B4 /* UIAlertView+RACSignalSupport.m in Sources */,
 				4A0649651D372CAB000D02B4 /* UIImage+GIF.m in Sources */,
 				4A064AA01D38F845000D02B4 /* NSString+RACSequenceAdditions.m in Sources */,
+				4AA0DF091D51AA270099BAA2 /* types.c in Sources */,
+				4AA0DF1B1D51AA270099BAA2 /* JPCleaner.m in Sources */,
+				4AA0DF061D51AA270099BAA2 /* trampoline_armv7.S in Sources */,
 				4A064AAC1D38F845000D02B4 /* RACDisposable.m in Sources */,
 				4A064A9E1D38F845000D02B4 /* NSSet+RACSequenceAdditions.m in Sources */,
 				4A064A961D38F845000D02B4 /* NSNotificationCenter+RACSupport.m in Sources */,
 				4A064ADA1D38F845000D02B4 /* UIControl+RACSignalSupport.m in Sources */,
 				4A0649631D372CAB000D02B4 /* SDWebImagePrefetcher.m in Sources */,
+				4AA0DF111D51AA270099BAA2 /* JPCGContext.m in Sources */,
+				4AA0DF0B1D51AA270099BAA2 /* darwin_i386.S in Sources */,
+				4AA0DF131D51AA270099BAA2 /* JPCGImage.m in Sources */,
+				4AA0DF1D1D51AA270099BAA2 /* JPSpecialInit.m in Sources */,
 				4A0649351D3619FF000D02B4 /* JPEngine.m in Sources */,
 				4A064ADE1D38F845000D02B4 /* UIImagePickerController+RACSignalSupport.m in Sources */,
 				4A064A8D1D38F845000D02B4 /* RACEXTRuntimeExtensions.m in Sources */,
+				4AA0DF081D51AA270099BAA2 /* raw_api.c in Sources */,
 				4A064A911D38F845000D02B4 /* NSDictionary+RACSequenceAdditions.m in Sources */,
 				4A064A941D38F845000D02B4 /* NSIndexSet+RACSequenceAdditions.m in Sources */,
 				4A064AC71D38F845000D02B4 /* RACSignalSequence.m in Sources */,
+				4AA0DF191D51AA270099BAA2 /* JPUIImage.m in Sources */,
 				4A0648FA1D350287000D02B4 /* AppDelegate.m in Sources */,
 				4A0649671D372CAB000D02B4 /* UIImage+WebP.m in Sources */,
+				4AA0DF051D51AA270099BAA2 /* sysv_armv7.S in Sources */,
 				4A064AB41D38F845000D02B4 /* RACGroupedSignal.m in Sources */,
+				4AA0DF171D51AA270099BAA2 /* JPUIGeometry.m in Sources */,
+				4AA0DEFF1D51AA260099BAA2 /* JPCFunction.m in Sources */,
 				4A064A8F1D38F845000D02B4 /* NSArray+RACSequenceAdditions.m in Sources */,
 				4A064AD91D38F845000D02B4 /* UICollectionReusableView+RACSignalSupport.m in Sources */,
 				4A0649C51D38C6B6000D02B4 /* SWBaseViewController.m in Sources */,
@@ -934,14 +1208,17 @@
 				4A064AA51D38F845000D02B4 /* RACBehaviorSubject.m in Sources */,
 				4A064AA61D38F845000D02B4 /* RACBlockTrampoline.m in Sources */,
 				4A064AD01D38F845000D02B4 /* RACTuple.m in Sources */,
+				4AA0DF011D51AA270099BAA2 /* JPStructPointer.m in Sources */,
 				4A064AA91D38F845000D02B4 /* RACCompoundDisposable.m in Sources */,
 				4A0649601D372CAB000D02B4 /* SDWebImageDownloader.m in Sources */,
 				4A064AC11D38F845000D02B4 /* RACScopedDisposable.m in Sources */,
 				4A064ADB1D38F845000D02B4 /* UIControl+RACSignalSupportPrivate.m in Sources */,
+				4AA0DF041D51AA270099BAA2 /* ffi_armv7.c in Sources */,
 				4A064AA31D38F845000D02B4 /* NSUserDefaults+RACSupport.m in Sources */,
 				4A064A9B1D38F845000D02B4 /* NSObject+RACPropertySubscribing.m in Sources */,
 				4A064AC51D38F845000D02B4 /* RACSignal.m in Sources */,
 				4A064ABD1D38F845000D02B4 /* RACQueueScheduler.m in Sources */,
+				4AA0DF151D51AA270099BAA2 /* JPCGTransform.m in Sources */,
 				4A064ABC1D38F845000D02B4 /* RACPassthroughSubscriber.m in Sources */,
 				4A064AE51D38F845000D02B4 /* UITableViewHeaderFooterView+RACSignalSupport.m in Sources */,
 				4A064AAF1D38F845000D02B4 /* RACEagerSequence.m in Sources */,
@@ -949,7 +1226,9 @@
 				4A064AE11D38F845000D02B4 /* UISlider+RACSignalSupport.m in Sources */,
 				4A06496A1D372CAB000D02B4 /* UIView+WebCacheOperation.m in Sources */,
 				4A064AD51D38F845000D02B4 /* UIActionSheet+RACSignalSupport.m in Sources */,
+				4AA0DF0C1D51AA270099BAA2 /* ffi64_x86_64.c in Sources */,
 				4A064AB71D38F845000D02B4 /* RACKVOChannel.m in Sources */,
+				4AA0DF141D51AA270099BAA2 /* JPCGPath.m in Sources */,
 				4A064A991D38F845000D02B4 /* NSObject+RACKVOWrapper.m in Sources */,
 				4A064A9A1D38F845000D02B4 /* NSObject+RACLifting.m in Sources */,
 				4A064AB01D38F845000D02B4 /* RACEmptySequence.m in Sources */,
@@ -967,6 +1246,7 @@
 				4A064AA71D38F845000D02B4 /* RACChannel.m in Sources */,
 				4A064AA41D38F845000D02B4 /* RACArraySequence.m in Sources */,
 				4A064AC61D38F845000D02B4 /* RACSignalProvider.d in Sources */,
+				4AA0DF0E1D51AA270099BAA2 /* win32_i386.S in Sources */,
 				4A064A901D38F845000D02B4 /* NSData+RACSupport.m in Sources */,
 				4A064AC41D38F845000D02B4 /* RACSignal+Operations.m in Sources */,
 				4A0649641D372CAB000D02B4 /* UIButton+WebCache.m in Sources */,
@@ -976,17 +1256,25 @@
 				4A064AAA1D38F845000D02B4 /* RACCompoundDisposableProvider.d in Sources */,
 				4A064ACE1D38F845000D02B4 /* RACTargetQueueScheduler.m in Sources */,
 				4A064AE31D38F845000D02B4 /* UISwitch+RACSignalSupport.m in Sources */,
+				4AA0DF031D51AA270099BAA2 /* sysv_arm64.S in Sources */,
 				4A06495C1D372CAB000D02B4 /* NSData+ImageContentType.m in Sources */,
+				4AA0DF181D51AA270099BAA2 /* JPUIGraphics.m in Sources */,
 				4A064AC31D38F845000D02B4 /* RACSerialDisposable.m in Sources */,
 				4A064AD81D38F845000D02B4 /* UIButton+RACCommandSupport.m in Sources */,
 				4A064AB61D38F845000D02B4 /* RACIndexSetSequence.m in Sources */,
+				4AA0DF071D51AA270099BAA2 /* prep_cif.c in Sources */,
 				4A0648F71D350286000D02B4 /* main.m in Sources */,
 				4A064ABE1D38F845000D02B4 /* RACReplaySubject.m in Sources */,
 				4A064ACF1D38F845000D02B4 /* RACTestScheduler.m in Sources */,
 				4A064AAB1D38F845000D02B4 /* RACDelegateProxy.m in Sources */,
+				4AA0DF0A1D51AA270099BAA2 /* darwin64_x86_64.S in Sources */,
 				4A0649621D372CAB000D02B4 /* SDWebImageManager.m in Sources */,
+				4AA0DF021D51AA270099BAA2 /* ffi_arm64.c in Sources */,
+				4AA0DF121D51AA270099BAA2 /* JPCGGeometry.m in Sources */,
 				4A064AC81D38F845000D02B4 /* RACStream.m in Sources */,
+				4AA0DF161D51AA270099BAA2 /* JPCoreGraphics.m in Sources */,
 				4A06495F1D372CAB000D02B4 /* SDWebImageDecoder.m in Sources */,
+				4AA0DF001D51AA260099BAA2 /* JPMemory.m in Sources */,
 				4A064AD31D38F845000D02B4 /* RACUnit.m in Sources */,
 				4A06495D1D372CAB000D02B4 /* SDImageCache.m in Sources */,
 				4A064AE61D38F845000D02B4 /* UITextField+RACSignalSupport.m in Sources */,
