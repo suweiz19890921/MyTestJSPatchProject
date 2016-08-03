@@ -6,11 +6,13 @@ require('UIColor,NSURLResponse,NSData,NSError,NSJSONSerialization,NSDictionary,N
 require('JPEngine').addExtensions(['JPMemory']);
 require('SWContainerView,UIScrollView,SWTopBar,SWLabel');
 require('SWTableView,SWHomeBangumiCell,NSDateFormatter,NSDate,NSCalendar');
+require('JPEngine').addExtensions(['JPCFunction'])
 require('SWHomeBangumiViewController,SWHomeBangumiDidEndCell,SWHomeBangumiNewBangumiLoadCell,SWHomeBangumiNewChangLoadItem,SWHomeBangumiDidEndItem,SWHomeBangumiRecommendCell,SWHomeBangumiUniversalHeadView,UITableViewHeaderFooterView');
 var button
 var mainColor = UIColor.colorWithRed_green_blue_alpha(251./255,114./255,153./255,1);
 var normalGrayColor = UIColor.colorWithRed_green_blue_alpha(170./255,170./255,170./255,1);
 var bgGrayColor = UIColor.colorWithRed_green_blue_alpha(244./255,244./255,244./255,1);
+defineCFunction("NSClassFromString", "Class, NSString *");
 //app代理--------------------------//app代理--------------------------//app代理--------------------------//app代理--------------------------//app代理--------------------------//app代理--------------------------
 defineClass('AppDelegate : UIResponder',{
     configRootView:function(){
@@ -23,7 +25,6 @@ defineClass('AppDelegate : UIResponder',{
         self.window().makeKeyAndVisible();
     }
 })
-
 //自定义tabbarVC-----------------------//自定义tabbarVC-----------------------//自定义tabbarVC-----------------------//自定义tabbarVC-----------------------//自定义tabbarVC-----------------------
 defineClass('SWTabBarController:UITabBarController',{
         viewDidLoad:function(){
@@ -71,6 +72,8 @@ defineClass("SWHomeViewController: SWBaseViewController<UITableViewDataSource,UI
         self.view().addSubview(btn);
         btn.setBackgroundColor(UIColor.redColor());
         btn.rac__signalForControlEvents(1 <<  6).subscribeNext(block("id",function(x){
+            console.log(NSClassFromString("UIViewController"));
+
             console.log("真实吊炸了，也可以直接调用RAC");
             var contain = SWContainerView.alloc().init();
             sel.setProp_forKey(contain,"contain");
