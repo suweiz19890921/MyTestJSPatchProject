@@ -1,10 +1,10 @@
 /**
  * Created by suwei on 16/7/13.
  */
-require('UIButton,UIWindow,UIView,UICollectionView,UIFont,NSMutableAttributedString,NSMutableString,UITapGestureRecognizer,SWBaseViewController,NSMutableArray,SWTabBarController,UINavigationController,SWHomeViewController,SWCategoryController,SWConcernViewController,SWSearchViewController,SWPlayerUserCenterViewController,JPViewController,UITabBarController,NSArray,UITableView,UIScreen,UIViewController,AppDelegate, UIImageView, UIImage, UIScreen,UITableViewCell,UILabel, NSURL, NSURLRequest,NSURLConnection,NSOperationQueue');
+require('UIButton,UIWindow,UIView,UICollectionView,UICollectionViewFlowLayout,UIFont,NSMutableAttributedString,NSMutableString,UITapGestureRecognizer,SWBaseViewController,NSMutableArray,SWTabBarController,UINavigationController,SWHomeViewController,SWCategoryController,SWConcernViewController,SWSearchViewController,SWPlayerUserCenterViewController,JPViewController,UITabBarController,NSArray,UITableView,UIScreen,UIViewController,AppDelegate, UIImageView, UIImage, UIScreen,UITableViewCell,UILabel, NSURL, NSURLRequest,NSURLConnection,NSOperationQueue');
 require('UIColor,NSURLResponse,NSData,NSError,NSJSONSerialization,NSDictionary,NSArray, UIViewController,SWTableViewCell');
 require('JPEngine').addExtensions(['JPMemory']);
-require('SWContainerView,UIScrollView,SWTopBar,SWLabel');
+require('SWContainerView,UIScrollView,SWTopBar,SWLabel,SWBannerCollectionView');
 require('SWTableView,SWHomeBangumiCell,NSDateFormatter,NSDate,NSCalendar');
 require('SWHomeBangumiViewController,SWHomeBangumiDidEndCell,SWHomeBangumiNewBangumiLoadCell,SWHomeBangumiNewChangLoadItem,SWHomeBangumiDidEndItem,SWHomeBangumiRecommendCell,SWHomeBangumiUniversalHeadView,UITableViewHeaderFooterView');
 var mainColor = UIColor.colorWithRed_green_blue_alpha(251./255,114./255,153./255,1);
@@ -311,10 +311,16 @@ defineClass("SWHomeBangumiViewController:SWBaseViewController<UITableViewDataSou
                 headView.installData_section(dict,section);
             }
             return headView;
+        }else{
+            return self.lazyBannerView();
         }
-        return UIView.new();
     },
     tableView_heightForHeaderInSection:function(tableView,section){
+        if(section == 0){
+           var rect = UIScreen.mainScreen().bounds();
+           var width = rect.width - 24;
+            return width /3.20;
+        }
         return 44;
     },
     scrollViewDidScroll:function(scrollView){
@@ -323,6 +329,13 @@ defineClass("SWHomeBangumiViewController:SWBaseViewController<UITableViewDataSou
       self.super().viewWillLayoutSubviews();
         var tableView = self.getProp("tableView")
         tableView.setFrame(self.view().bounds());
+    },
+    lazyBannerView:function(){
+        if(!self.getProp("bannerView")){
+            var bannerView = SWBannerCollectionView.new();
+            self.setProp_forKey(bannerView,"bannerView");
+        }
+        return self.getProp("bannerView");
     },
     loadAndHandleData:function(){
         var url= NSURL.URLWithString(self.getProp('urlStr'));
@@ -343,6 +356,8 @@ defineClass("SWHomeBangumiViewController:SWBaseViewController<UITableViewDataSou
                 totalArray.addObject(listArray);
                 totalArray.addObject(endsArray);
                 sel.setProp_forKey(totalArray,"totalArray");
+//                console.log(sel.bannerView());
+                sel.lazyBannerView().installData(bannersArray);
                 sel.setProp_forKey(dict.objectForKey("result").objectForKey("latestUpdate").objectForKey("updateCount"),"updateCount");
                 var dictArray = NSArray.arrayWithObjects({"imageName":" ","title":" ","count":" ","desc":" "},
                                                         {"imageName":"hd_bangumi_unfinished","title":"新番连载","desc":"今日更新","count":sel.getProp("updateCount")},
@@ -385,7 +400,7 @@ defineClass("SWHomeBangumiViewController:SWBaseViewController<UITableViewDataSou
                 console.log(error)
             }
         }));
-    },
+    }
 })
 //SW 首页番剧页面中子控件
 //头部无限轮播控件(尽量封装减少耦合性，因为有很多别的地方会用到)
@@ -813,7 +828,7 @@ defineClass("SWHomeBangumiRecommendCell:UITableViewCell",{
     },
     calculateDetailLabelHeight:function(desc){
         var attributeDict = {
-            "NSFont":UIFont.systemFontOfSize(12),
+            "NSFont":UIFont.systemFontOfSize(12)
         };
         var boundWidth = UIScreen.mainScreen().bounds().width - 12 * 2 - 12;
         var size = {width:boundWidth, height: 1000};
@@ -1262,4 +1277,87 @@ defineClass("SWHomeBangumiCell:UITableViewCell",{
         }
         return self;
     }
+})
+
+//用CollectionView开始封装banner
+defineClass('SWBannerCollectionView:UIView <UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate>', {
+            initWithFrame:function(frame) {
+            if(self.ORIGinitWithFrame(frame)){
+            var layout = UICollectionViewFlowLayout.alloc().init();
+            layout.setScrollDirection(1);
+                layout.setMinimumInteritemSpacing = 0.0;
+                var collectionView = UICollectionView.alloc().initWithFrame_collectionViewLayout(frame,layout);
+             collectionView.setPagingEnabled(1);
+            collectionView.setDataSource(self);
+            collectionView.setDelegate(self);
+            self.setProp_forKey(collectionView,"collectionView");
+            collectionView.registerClass_forCellWithReuseIdentifier(SWCollectionViewCell.class(), SWCollectionViewCell.description());
+            self.addSubview(collectionView);
+            }
+            return self;
+            },
+            
+            installData:function(array) {
+            if(array.count() <= 0) {
+            return;
+            }
+            self.setProp_forKey(array,"dataArray");
+            self.getProp("collectionView").reloadData();
+            },
+            
+            collectionView_cellForItemAtIndexPath:function(collectionView,indexPath){
+            var cell = collectionView.dequeueReusableCellWithReuseIdentifier_forIndexPath(SWCollectionViewCell.description(),indexPath);
+            var dataArray = self.getProp("dataArray");
+            var model;
+            if(dataArray.count() > 0) {
+            if(indexPath.section() < dataArray.count()) {
+            model = dataArray.objectAtIndex(indexPath.item());
+            }
+            }
+            cell.installData(model.objectForKey("img"));
+            return cell;
+            },
+            
+            collectionView_numberOfItemsInSection:function(collectionView,section){
+            return self.getProp("dataArray").count();
+            },
+
+            collectionView_layout_sizeForItemAtIndexPath:function(collectionView,collectionViewLayout,indexPath){
+//                return {width:self.bounds().width, height:self.bounds().height};
+
+                return {width:375, height:(375 -24)/3.2};
+           },
+            layoutSubviews:function() {
+            self.super().layoutSubviews();
+            var collectionView = self.getProp("collectionView");
+            collectionView.setFrame(self.bounds());
+            
+            }
+            
+        
+})
+
+defineClass('SWCollectionViewCell:UICollectionViewCell',{
+            initWithFrame:function(frame) {
+            if(self.ORIGinitWithFrame(frame)) {
+            var imageView = UIImageView.new();
+            self.contentView().addSubview(imageView);
+            self.setProp_forKey(imageView,"imageView");
+            }
+            return self;
+            },
+            
+            installData:function(cover) {
+            if(!cover.length()){
+            return;
+            }
+            var urlStr = NSURL.URLWithString(cover);
+            self.getProp("imageView").sd__setImageWithURL(urlStr);
+            },
+            
+            layoutSubviews:function() {
+            self.super().layoutSubviews();
+            self.getProp("imageView").setFrame(self.contentView().bounds());
+            }
+            
 })
