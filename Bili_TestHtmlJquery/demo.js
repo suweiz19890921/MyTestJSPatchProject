@@ -7,6 +7,7 @@ require('JPEngine').addExtensions(['JPMemory']);
 require('SWContainerView,UIScrollView,SWTopBar,SWLabel,SWBannerCollectionView');
 require('SWTableView,SWHomeBangumiCell,NSDateFormatter,NSDate,NSCalendar');
 require('SWHomeBangumiViewController,SWHomeBangumiDidEndCell,SWHomeBangumiNewBangumiLoadCell,SWHomeBangumiNewChangLoadItem,SWHomeBangumiDidEndItem,SWHomeBangumiRecommendCell,SWHomeBangumiUniversalHeadView,UITableViewHeaderFooterView,SWHomeBangumiAllIconImageCell,SWHomeBangumiSmallIconBGView,SWHomeBangumiSmallIconBGViewItem,SWHomeBangumiBigIconBGView,SWHomeBangumiBigIconBGViewItem');
+require('SWCategoryCell');
 var mainColor = UIColor.colorWithRed_green_blue_alpha(251./255,114./255,153./255,1);
 var normalGrayColor = UIColor.colorWithRed_green_blue_alpha(170./255,170./255,170./255,1);
 var bgGrayColor = UIColor.colorWithRed_green_blue_alpha(244./255,244./255,244./255,1);
@@ -579,8 +580,17 @@ defineClass("SWHomeBangumiBigIconBGViewItem:UIView",{
         self.super().layoutSubviews();
         var width = self.bounds().width;
         var height = self.bounds().height;
-        self.getProp("picImage").setFrame({x:6, y:(height - 44)/2, width:47, height:44});
-        self.getProp("titleImage").setFrame({x:width - 48 - 5, y:(height - 16)/2, width:47.5, height:16});
+        var scaleWidth = UIScreen.mainScreen().bounds().width
+        var scaleHeight = UIScreen.mainScreen().bounds().height
+        var scale;
+        if(scaleWidth < scaleHeight){
+           scale = scaleWidth/375;
+        }else{
+            scale = scaleHeight/375;
+        }
+
+        self.getProp("picImage").setFrame({x:6, y:(height - 44)/2, width:47 * scale, height:44 * scale});
+        self.getProp("titleImage").setFrame({x:width - 48 * scale - 5, y:(height - 16)/2, width:47.5 * scale, height:16});
 
     }
 })
@@ -1145,7 +1155,7 @@ defineClass("SWHomeSecondViewController: SWHomeViewController<UITableViewDelegat
 
 //SW分区----------------------//SW分区----------------------//SW分区----------------------//SW分区----------------------//SW分区----------------------//SW分区----------------------//SW分区----------
 
-defineClass("SWCategoryController: SWHomeViewController",{
+defineClass("SWCategoryController: SWBaseViewController<UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UICollectionViewDelegate>",{
     init:function(){
         if(self.ORIGinit()){
             var normalImage = UIImage.imageNamed("home_category_tab");
@@ -1160,14 +1170,118 @@ defineClass("SWCategoryController: SWHomeViewController",{
         }
         return self;
     },
+    viewDidLoad:function(){
+      self.super().viewDidLoad();
+        var navBar = SWLabel.new();
+        self.view().setBackgroundColor(UIColor.whiteColor());
+
+        self.view().addSubview(navBar);
+        navBar.setBackgroundColor(mainColor);
+        navBar.setText("分区");
+        navBar.setTextColor(UIColor.whiteColor());
+        navBar.setTextAlignment(1);
+        navBar.setFont(UIFont.systemFontOfSize(15));
+        navBar.installVerticalAlignment(103);
+        self.setProp_forKey(navBar,"navBar");
+
+        var layout = UICollectionViewFlowLayout.alloc().init();
+        SWBaseViewController.configLayout(layout);
+        layout.setScrollDirection(0);
+        var collectionView = UICollectionView.alloc().initWithFrame_collectionViewLayout(self.view().bounds(),layout);
+        collectionView.setPagingEnabled(1);collectionView.setBackgroundColor(UIColor.whiteColor());
+        collectionView.setDataSource(self);collectionView.setShowsHorizontalScrollIndicator(0);
+        collectionView.setDelegate(self);
+        self.setProp_forKey(collectionView,"collectionView");
+        collectionView.registerClass_forCellWithReuseIdentifier(SWCategoryCell.class(), SWCategoryCell.description());
+        self.view().addSubview(collectionView);
+        var dataArray = [{"title":"直播","imageName":"直播_60.compressed"},{"title":"番剧","imageName":"番剧_60.compressed"},{"title":"动画","imageName":"动画_60.compressed"},{"title":"音乐","imageName":"音乐_60.compressed"},
+            {"title":"舞蹈","imageName":"舞蹈_60.compressed"},{"title":"游戏","imageName":"游戏_60.compressed"},{"title":"科技","imageName":"科技_60.compressed"},{"title":"生活","imageName":"home_region_icon_160"},
+            {"title":"鬼畜","imageName":"鬼畜_60.compressed"},{"title":"时尚","imageName":"hd_bangumi_unfinished"},{"title":"娱乐","imageName":"home_region_icon_155"},{"title":"电影","imageName":"电影_60.compressed"},
+            {"title":"电视剧","imageName":"电视剧_60.compressed"},{"title":"游戏中心","imageName":"people_gameCenter"}];
+        self.setProp_forKey(dataArray,"dataArray");
+
+    },
+    collectionView_cellForItemAtIndexPath:function(collectionView,indexPath){
+        var cell = collectionView.dequeueReusableCellWithReuseIdentifier_forIndexPath(SWCategoryCell.description(),indexPath);
+        var dataArray = self.getProp("dataArray");
+        var dict;
+        if(dataArray.count() > 0) {
+            if(indexPath.item() < dataArray.count()) {
+                dict = dataArray.objectAtIndex(indexPath.item());
+            }
+        }
+        cell.installData(dict,indexPath);
+        return cell;
+    },
+    collectionView_numberOfItemsInSection:function(collectionView,section){
+        return self.getProp("dataArray").count();
+    },
+    collectionView_layout_sizeForItemAtIndexPath:function(collectionView,collectionViewLayout,indexPath){
+        return {width:72, height:76 +20 };
+    },
+
     viewWillAppear:function(animation){
         self.super().viewWillAppear(animation);
-        self.navigationController().setNavigationBarHidden_animated(0,1);
+        self.navigationController().setNavigationBarHidden_animated(1,1);
 
+    },
+    viewWillLayoutSubviews:function(){
+     self.super().viewWillLayoutSubviews();
+        var rect = self.view().bounds();
+        console.log(self.view().bounds());
+        self.getProp("navBar").setFrame({x:0, y:0, width:self.view().bounds().width, height: 64 });
+        console.log(self.getProp("collectionView").contentInset());
+        self.getProp("collectionView").setFrame({x:0, y:64, width:self.view().bounds().width, height:self.view().bounds().height - 64 - 44});
     }
 
 })
 
+defineClass("SWCategoryCell:UICollectionViewCell",{
+    initWithFrame:function(frame){
+        if(self.ORIGinitWithFrame(frame)){
+           var bgImageView = UIImageView.new();
+            self.contentView().addSubview(bgImageView);
+            self.setProp_forKey(bgImageView,"bgImageView");
+            bgImageView.setImage(UIImage.imageNamed("home_subregion_border"));
+
+            var iconImage = UIImageView.new();
+            bgImageView.addSubview(iconImage);
+            self.setProp_forKey(iconImage,"iconImage");
+
+            var titleLabel = UILabel.new();
+            self.contentView().addSubview(titleLabel);
+            titleLabel.setFont(UIFont.systemFontOfSize(14));
+            titleLabel.setTextAlignment(1);
+            self.setProp_forKey(titleLabel,"titleLabel");
+
+
+        }
+        return self;
+    },
+    installData:function(dict,indexPath){
+        if(!dict){
+            return;
+        }
+        if(indexPath.item() == 13){
+            self.getProp("bgImageView").setImage(UIImage.imageNamed("home_subregion_tv_border"));
+        }else{
+            self.getProp("bgImageView").setImage(UIImage.imageNamed("home_subregion_border"));
+        }
+        self.getProp("iconImage").setImage(UIImage.imageNamed(dict.objectForKey("imageName")));
+        self.getProp("titleLabel").setText(dict.objectForKey("title"));
+        if(indexPath.item() == 13){
+            self.getProp("iconImage").setFrame({x:6, y:21, width:60, height:50});
+        }else{
+            self.getProp("iconImage").setFrame({x:6, y:8, width:60, height:60});
+        }
+    },
+    layoutSubviews:function(){
+        self.super().layoutSubviews();
+        self.getProp("bgImageView").setFrame({x:0, y:0, width:72, height:76});
+        self.getProp("titleLabel").setFrame({x:0, y:76, width:self.bounds().width, height:17});
+    }
+
+})
 // SW 关注-------------------------// SW 关注-------------------------// SW 关注-------------------------// SW 关注-------------------------// SW 关注-------------------------// SW 关注-------------------------
 
 defineClass("SWConcernViewController: SWHomeViewController",{
@@ -1439,7 +1553,7 @@ defineClass("SWLabel:UILabel",{
         //103 为垂直居中对齐 这里直接设置居中为默认
         if(self.getProp("verticalAlignment") == 103){
             //下面这个加 1 是临时加上去的 是脏代码。
-            textRect.y = bounds.y +(bounds.height - textRect.height)/2.0 - 1;
+            textRect.y = bounds.y +(bounds.height - textRect.height)/2.0 - 1 ;
             return textRect;
 
         }
