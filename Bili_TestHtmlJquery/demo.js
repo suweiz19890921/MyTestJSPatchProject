@@ -426,6 +426,7 @@ defineClass("SWHomeBangumiViewController:SWBaseViewController<UITableViewDataSou
 defineClass("SWHomeBangumiAllIconImageCell:UITableViewCell",{
     initWithStyle_reuseIdentifier:function(style,reuseIdentifier){
         if(self.ORIGinitWithStyle_reuseIdentifier(style,reuseIdentifier)){
+            self.setSelectionStyle(0);
             var smallIconBGView = SWHomeBangumiSmallIconBGView.new();
             self.contentView().addSubview(smallIconBGView);
             self.setProp_forKey(smallIconBGView,"smallIconBGView");
@@ -1465,7 +1466,7 @@ defineClass('SWBannerCollectionView:UIView <UICollectionViewDataSource,UICollect
             var layout = UICollectionViewFlowLayout.alloc().init();
             layout.setScrollDirection(1);
             var collectionView = UICollectionView.alloc().initWithFrame_collectionViewLayout(frame,layout);
-            collectionView.setPagingEnabled(1);collectionView.setBackgroundColor(UIColor.yellowColor());
+            collectionView.setPagingEnabled(1);collectionView.setBackgroundColor(UIColor.whiteColor());
             collectionView.setDataSource(self);collectionView.setShowsHorizontalScrollIndicator(0);
             collectionView.setDelegate(self);
             self.setProp_forKey(collectionView,"collectionView");
@@ -1518,7 +1519,6 @@ defineClass('SWBannerCollectionView:UIView <UICollectionViewDataSource,UICollect
     },
 
     scrollViewDidEndDragging_willDecelerate:function(scrollView,decelerate){
-        console.log(scrollView);
       self.addTimer();
     },
     scrollViewWillBeginDragging:function(scrollView){
@@ -1596,7 +1596,7 @@ defineClass('SWBannerCollectionView:UIView <UICollectionViewDataSource,UICollect
             
         
 })
-
+//banner 里面的cell
 defineClass('SWCollectionViewCell:UICollectionViewCell',{
             initWithFrame:function(frame) {
             if(self.ORIGinitWithFrame(frame)) {
