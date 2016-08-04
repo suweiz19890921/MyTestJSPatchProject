@@ -41,6 +41,7 @@ defineClass("SWHomeViewController: SWBaseViewController<UITableViewDataSource,UI
             var selectImage = UIImage.imageNamed("home_home_tab_s");
             normalImage = normalImage.imageWithRenderingMode(1);
             selectImage = selectImage.imageWithRenderingMode(1);
+            self.setAutomaticallyAdjustsScrollViewInsets(0);
             self.tabBarItem().setImage(normalImage);
             self.tabBarItem().setSelectedImage(selectImage);
 
@@ -81,6 +82,9 @@ defineClass("SWHomeViewController: SWBaseViewController<UITableViewDataSource,UI
             var vc2 = SWHomeBangumiViewController.alloc().init();
             vc2.setTitle("推荐");
             var vc3 = SWHomeBangumiViewController.alloc().init();
+            sel.addChildViewController(vc1);
+            sel.addChildViewController(vc2);
+            sel.addChildViewController(vc3);
             vc3.setTitle("番剧");
             vc3.view().setBackgroundColor(UIColor.whiteColor());
             contain.installViewControllers(NSArray.arrayWithObjects(vc1,vc2,vc3,null));
@@ -312,10 +316,7 @@ defineClass("SWHomeBangumiViewController:SWBaseViewController<UITableViewDataSou
             }
             return headView;
         }else{
-            var head = UIView.new();
-            head.setBackgroundColor(UIColor.redColor());
-            head.addSubview(self.lazyBannerView());
-            return head;
+            return self.lazyBannerView();
         }
     },
     tableView_heightForHeaderInSection:function(tableView,section){
@@ -326,6 +327,14 @@ defineClass("SWHomeBangumiViewController:SWBaseViewController<UITableViewDataSou
         }
         return 44;
     },
+    //屏幕即将旋转方法重写
+    //willAnimateRotationToInterfaceOrientation_duration:function(toInterfaceOrienation,duration){
+    //    self.lazyBannerView().refreshLayout();
+    //},
+    //用上面的方法接受屏幕旋转通知，会导致系统警告（原因未知）
+    willRotateToInterfaceOrientation_duration:function(toInterfaceOrienation,duration){
+       self.lazyBannerView().refreshLayout();
+    },
     scrollViewDidScroll:function(scrollView){
     },
     viewWillLayoutSubviews:function(){
@@ -333,7 +342,7 @@ defineClass("SWHomeBangumiViewController:SWBaseViewController<UITableViewDataSou
         var tableView = self.getProp("tableView")
         tableView.setFrame(self.view().bounds());
         var width= self.view().bounds().width
-        self.lazyBannerView().setFrame({x:0, y:0, width:width , height:width/3.2});
+        //self.lazyBannerView().setFrame({x:0, y:0, width:width , height:width/3.2});
     },
     lazyBannerView:function(){
         if(!self.getProp("bannerView")){
@@ -1128,7 +1137,6 @@ defineClass("SWContainerView:UIView<UIScrollViewDelegate>",{
             for(var i = 0;i<count; i++){
                 var vc = vcs.objectAtIndex(i);
                 vc.view().setFrame({x:i*viewWidth, y:0, width:viewWidth, height:viewHeight - topBarHeight });
-                //console.log(vc.view().frame());
             }
 
         }
@@ -1290,12 +1298,9 @@ defineClass('SWBannerCollectionView:UIView <UICollectionViewDataSource,UICollect
             if(self.ORIGinitWithFrame(frame)){
             var layout = UICollectionViewFlowLayout.alloc().init();
             layout.setScrollDirection(1);
-
-            layout.setMinimumInteritemSpacing = 0.0;
             var collectionView = UICollectionView.alloc().initWithFrame_collectionViewLayout(frame,layout);
-            collectionView.setPagingEnabled(1);
-                collectionView.setBackgroundColor(UIColor.yellowColor());
-            collectionView.setDataSource(self);
+            collectionView.setPagingEnabled(1);collectionView.setBackgroundColor(UIColor.yellowColor());
+            collectionView.setDataSource(self);collectionView.setShowsHorizontalScrollIndicator(0);
             collectionView.setDelegate(self);
             self.setProp_forKey(collectionView,"collectionView");
             collectionView.registerClass_forCellWithReuseIdentifier(SWCollectionViewCell.class(), SWCollectionViewCell.description());
@@ -1303,7 +1308,9 @@ defineClass('SWBannerCollectionView:UIView <UICollectionViewDataSource,UICollect
             }
             return self;
             },
-            
+            refreshLayout:function(){
+                self.getProp("collectionView").collectionViewLayout().invalidateLayout();
+            },
             installData:function(array) {
             if(array.count() <= 0) {
             return;
@@ -1330,12 +1337,15 @@ defineClass('SWBannerCollectionView:UIView <UICollectionViewDataSource,UICollect
             },
 
             collectionView_layout_sizeForItemAtIndexPath:function(collectionView,collectionViewLayout,indexPath){
-                console.log(self.bounds());
-                var width = UIScreen.mainScreen().width;
-//                return {width:width, height:width/3.2};
-
-                return {width:375, height:(375 -24)/3.2};
+                return {width:self.getProp("collectionView").bounds().width, height:self.getProp("collectionView").bounds().width/3.2 };
            },
+    collectionView_layout_minimumLineSpacingForSectionAtIndex:function(collectionView,layout,section){
+    return 0;
+
+    },
+    collectionView_layout_minimumInteritemSpacingForSectionAtIndex:function(collectionView,layout,section){
+      return 0;
+    },
             layoutSubviews:function() {
             self.super().layoutSubviews();
             var collectionView = self.getProp("collectionView");
@@ -1366,8 +1376,7 @@ defineClass('SWCollectionViewCell:UICollectionViewCell',{
             
             layoutSubviews:function() {
             self.super().layoutSubviews();
-//                console.log(self.bounds());
-            self.getProp("imageView").setFrame(self.bounds());
+            self.getProp("imageView").setFrame(self.contentView().bounds());
             }
             
 })
