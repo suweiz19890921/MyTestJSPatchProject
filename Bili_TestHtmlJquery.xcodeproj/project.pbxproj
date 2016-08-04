@@ -13,8 +13,6 @@
 		4A0649051D350287000D02B4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4A0649031D350287000D02B4 /* LaunchScreen.storyboard */; };
 		4A0649101D350287000D02B4 /* Bili_TestHtmlJqueryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A06490F1D350287000D02B4 /* Bili_TestHtmlJqueryTests.m */; };
 		4A06491B1D350287000D02B4 /* Bili_TestHtmlJqueryUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A06491A1D350287000D02B4 /* Bili_TestHtmlJqueryUITests.m */; };
-		4A0649351D3619FF000D02B4 /* JPEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A0649331D3619FF000D02B4 /* JPEngine.m */; };
-		4A0649361D3619FF000D02B4 /* JSPatch.js in Resources */ = {isa = PBXBuildFile; fileRef = 4A0649341D3619FF000D02B4 /* JSPatch.js */; };
 		4A06495B1D372CAB000D02B4 /* MKAnnotationView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A06493B1D372CAB000D02B4 /* MKAnnotationView+WebCache.m */; };
 		4A06495C1D372CAB000D02B4 /* NSData+ImageContentType.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A06493D1D372CAB000D02B4 /* NSData+ImageContentType.m */; };
 		4A06495D1D372CAB000D02B4 /* SDImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A06493F1D372CAB000D02B4 /* SDImageCache.m */; };
@@ -32,7 +30,6 @@
 		4A0649691D372CAB000D02B4 /* UIImageView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A0649581D372CAB000D02B4 /* UIImageView+WebCache.m */; };
 		4A06496A1D372CAB000D02B4 /* UIView+WebCacheOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A06495A1D372CAB000D02B4 /* UIView+WebCacheOperation.m */; };
 		4A0649C51D38C6B6000D02B4 /* SWBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A0649C41D38C6B6000D02B4 /* SWBaseViewController.m */; };
-		4A0649C71D38DEFB000D02B4 /* demo.js in Resources */ = {isa = PBXBuildFile; fileRef = 4A0649C61D38DEFB000D02B4 /* demo.js */; };
 		4A064A8D1D38F845000D02B4 /* RACEXTRuntimeExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A0649CF1D38F845000D02B4 /* RACEXTRuntimeExtensions.m */; };
 		4A064A8E1D38F845000D02B4 /* MKAnnotationView+RACSignalSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A0649D31D38F845000D02B4 /* MKAnnotationView+RACSignalSupport.m */; };
 		4A064A8F1D38F845000D02B4 /* NSArray+RACSequenceAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A0649D51D38F845000D02B4 /* NSArray+RACSequenceAdditions.m */; };
@@ -124,6 +121,10 @@
 		4A064AE51D38F845000D02B4 /* UITableViewHeaderFooterView+RACSignalSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A064A861D38F845000D02B4 /* UITableViewHeaderFooterView+RACSignalSupport.m */; };
 		4A064AE61D38F845000D02B4 /* UITextField+RACSignalSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A064A881D38F845000D02B4 /* UITextField+RACSignalSupport.m */; };
 		4A064AE71D38F845000D02B4 /* UITextView+RACSignalSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A064A8A1D38F845000D02B4 /* UITextView+RACSignalSupport.m */; };
+		4AA0DF291D5201980099BAA2 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AA0DF281D5201980099BAA2 /* libz.tbd */; };
+		4AA0DF2B1D5202000099BAA2 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AA0DF2A1D5202000099BAA2 /* JavaScriptCore.framework */; };
+		4AA0DF2D1D5203C00099BAA2 /* JSPatch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AA0DF2C1D5203C00099BAA2 /* JSPatch.framework */; };
+		4AA2A7081D522B17001B9283 /* demo.js in Resources */ = {isa = PBXBuildFile; fileRef = 4AA2A7071D522B17001B9283 /* demo.js */; };
 		4AE192FD1D3929F600DFCCDD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4AE192FC1D3929F600DFCCDD /* Images.xcassets */; };
 /* End PBXBuildFile section */
 
@@ -158,10 +159,6 @@
 		4A0649161D350287000D02B4 /* Bili_TestHtmlJqueryUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Bili_TestHtmlJqueryUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A06491A1D350287000D02B4 /* Bili_TestHtmlJqueryUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Bili_TestHtmlJqueryUITests.m; sourceTree = "<group>"; };
 		4A06491C1D350287000D02B4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		4A0649321D3619FF000D02B4 /* JPEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JPEngine.h; sourceTree = "<group>"; };
-		4A0649331D3619FF000D02B4 /* JPEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JPEngine.m; sourceTree = "<group>"; };
-		4A0649341D3619FF000D02B4 /* JSPatch.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = JSPatch.js; sourceTree = "<group>"; };
-		4A0649371D361A43000D02B4 /* demo.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = demo.js; path = ../../../../../demo.js; sourceTree = "<group>"; };
 		4A06493A1D372CAB000D02B4 /* MKAnnotationView+WebCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "MKAnnotationView+WebCache.h"; sourceTree = "<group>"; };
 		4A06493B1D372CAB000D02B4 /* MKAnnotationView+WebCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "MKAnnotationView+WebCache.m"; sourceTree = "<group>"; };
 		4A06493C1D372CAB000D02B4 /* NSData+ImageContentType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+ImageContentType.h"; sourceTree = "<group>"; };
@@ -197,7 +194,6 @@
 		4A06495A1D372CAB000D02B4 /* UIView+WebCacheOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+WebCacheOperation.m"; sourceTree = "<group>"; };
 		4A0649C31D38C6B6000D02B4 /* SWBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWBaseViewController.h; sourceTree = "<group>"; };
 		4A0649C41D38C6B6000D02B4 /* SWBaseViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWBaseViewController.m; sourceTree = "<group>"; };
-		4A0649C61D38DEFB000D02B4 /* demo.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = demo.js; sourceTree = "<group>"; };
 		4A0649CD1D38F845000D02B4 /* RACEXTKeyPathCoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RACEXTKeyPathCoding.h; sourceTree = "<group>"; };
 		4A0649CE1D38F845000D02B4 /* RACEXTRuntimeExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RACEXTRuntimeExtensions.h; sourceTree = "<group>"; };
 		4A0649CF1D38F845000D02B4 /* RACEXTRuntimeExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RACEXTRuntimeExtensions.m; sourceTree = "<group>"; };
@@ -388,6 +384,10 @@
 		4A064A881D38F845000D02B4 /* UITextField+RACSignalSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextField+RACSignalSupport.m"; sourceTree = "<group>"; };
 		4A064A891D38F845000D02B4 /* UITextView+RACSignalSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextView+RACSignalSupport.h"; sourceTree = "<group>"; };
 		4A064A8A1D38F845000D02B4 /* UITextView+RACSignalSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextView+RACSignalSupport.m"; sourceTree = "<group>"; };
+		4AA0DF281D5201980099BAA2 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		4AA0DF2A1D5202000099BAA2 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		4AA0DF2C1D5203C00099BAA2 /* JSPatch.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = JSPatch.framework; sourceTree = "<group>"; };
+		4AA2A7071D522B17001B9283 /* demo.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = demo.js; sourceTree = "<group>"; };
 		4AE192FC1D3929F600DFCCDD /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -396,6 +396,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4AA0DF2D1D5203C00099BAA2 /* JSPatch.framework in Frameworks */,
+				4AA0DF2B1D5202000099BAA2 /* JavaScriptCore.framework in Frameworks */,
+				4AA0DF291D5201980099BAA2 /* libz.tbd in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -419,6 +422,8 @@
 		4A0648E91D350286000D02B4 = {
 			isa = PBXGroup;
 			children = (
+				4AA2A7091D522B25001B9283 /* thirdPart */,
+				4AA2A7061D5229A7001B9283 /* frameworks */,
 				4A0648F41D350286000D02B4 /* Bili_TestHtmlJquery */,
 				4A06490E1D350287000D02B4 /* Bili_TestHtmlJqueryTests */,
 				4A0649191D350287000D02B4 /* Bili_TestHtmlJqueryUITests */,
@@ -443,10 +448,7 @@
 				4A0648F91D350287000D02B4 /* AppDelegate.m */,
 				4A0649C31D38C6B6000D02B4 /* SWBaseViewController.h */,
 				4A0649C41D38C6B6000D02B4 /* SWBaseViewController.m */,
-				4A0649C61D38DEFB000D02B4 /* demo.js */,
-				4A0649C91D38F845000D02B4 /* ReactiveCocoa */,
-				4A0649391D372CAB000D02B4 /* SDWebImage */,
-				4A0649311D3619FF000D02B4 /* JSPatch */,
+				4AA2A7071D522B17001B9283 /* demo.js */,
 				4A0649011D350287000D02B4 /* Assets.xcassets */,
 				4A0649031D350287000D02B4 /* LaunchScreen.storyboard */,
 				4A0649061D350287000D02B4 /* Info.plist */,
@@ -480,17 +482,6 @@
 				4A06491C1D350287000D02B4 /* Info.plist */,
 			);
 			path = Bili_TestHtmlJqueryUITests;
-			sourceTree = "<group>";
-		};
-		4A0649311D3619FF000D02B4 /* JSPatch */ = {
-			isa = PBXGroup;
-			children = (
-				4A0649371D361A43000D02B4 /* demo.js */,
-				4A0649321D3619FF000D02B4 /* JPEngine.h */,
-				4A0649331D3619FF000D02B4 /* JPEngine.m */,
-				4A0649341D3619FF000D02B4 /* JSPatch.js */,
-			);
-			path = JSPatch;
 			sourceTree = "<group>";
 		};
 		4A0649391D372CAB000D02B4 /* SDWebImage */ = {
@@ -530,15 +521,8 @@
 				4A0649591D372CAB000D02B4 /* UIView+WebCacheOperation.h */,
 				4A06495A1D372CAB000D02B4 /* UIView+WebCacheOperation.m */,
 			);
-			path = SDWebImage;
-			sourceTree = "<group>";
-		};
-		4A0649C91D38F845000D02B4 /* ReactiveCocoa */ = {
-			isa = PBXGroup;
-			children = (
-				4A0649CB1D38F845000D02B4 /* ReactiveCocoa */,
-			);
-			path = ReactiveCocoa;
+			name = SDWebImage;
+			path = ../SDWebImage;
 			sourceTree = "<group>";
 		};
 		4A0649CB1D38F845000D02B4 /* ReactiveCocoa */ = {
@@ -746,6 +730,26 @@
 			path = extobjc;
 			sourceTree = "<group>";
 		};
+		4AA2A7061D5229A7001B9283 /* frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				4AA0DF281D5201980099BAA2 /* libz.tbd */,
+				4AA0DF2A1D5202000099BAA2 /* JavaScriptCore.framework */,
+				4AA0DF2C1D5203C00099BAA2 /* JSPatch.framework */,
+			);
+			name = frameworks;
+			sourceTree = "<group>";
+		};
+		4AA2A7091D522B25001B9283 /* thirdPart */ = {
+			isa = PBXGroup;
+			children = (
+				4A0649391D372CAB000D02B4 /* SDWebImage */,
+				4A0649CB1D38F845000D02B4 /* ReactiveCocoa */,
+			);
+			name = thirdPart;
+			path = Bili_TestHtmlJquery/ReactiveCocoa;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -813,6 +817,7 @@
 				TargetAttributes = {
 					4A0648F11D350286000D02B4 = {
 						CreatedOnToolsVersion = 7.3;
+						DevelopmentTeam = 22EVQUJNF7;
 					};
 					4A06490A1D350287000D02B4 = {
 						CreatedOnToolsVersion = 7.3;
@@ -849,11 +854,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4A0649361D3619FF000D02B4 /* JSPatch.js in Resources */,
 				4AE192FD1D3929F600DFCCDD /* Images.xcassets in Resources */,
 				4A0649051D350287000D02B4 /* LaunchScreen.storyboard in Resources */,
-				4A0649C71D38DEFB000D02B4 /* demo.js in Resources */,
 				4A0649021D350287000D02B4 /* Assets.xcassets in Resources */,
+				4AA2A7081D522B17001B9283 /* demo.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -912,7 +916,6 @@
 				4A064A961D38F845000D02B4 /* NSNotificationCenter+RACSupport.m in Sources */,
 				4A064ADA1D38F845000D02B4 /* UIControl+RACSignalSupport.m in Sources */,
 				4A0649631D372CAB000D02B4 /* SDWebImagePrefetcher.m in Sources */,
-				4A0649351D3619FF000D02B4 /* JPEngine.m in Sources */,
 				4A064ADE1D38F845000D02B4 /* UIImagePickerController+RACSignalSupport.m in Sources */,
 				4A064A8D1D38F845000D02B4 /* RACEXTRuntimeExtensions.m in Sources */,
 				4A064A911D38F845000D02B4 /* NSDictionary+RACSequenceAdditions.m in Sources */,
@@ -1124,11 +1127,18 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = Bili_TestHtmlJquery/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.bilibili.www.Bili-TestHtmlJquery";
+				PRODUCT_BUNDLE_IDENTIFIER = com.suweiJSPatch.www;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -1137,11 +1147,18 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "Brand Assets";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = Bili_TestHtmlJquery/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "com.bilibili.www.Bili-TestHtmlJquery";
+				PRODUCT_BUNDLE_IDENTIFIER = com.suweiJSPatch.www;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

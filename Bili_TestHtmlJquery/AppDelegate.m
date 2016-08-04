@@ -7,8 +7,8 @@
 //
 
 #import "AppDelegate.h"
-#import "JPEngine.h"
 #import "SWBaseViewController.h"
+#import <JSPatch/JSPatch.h>
 
 @interface AppDelegate ()
 
@@ -19,10 +19,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    [JPEngine startEngine];
-    NSString *sourcePath = [[NSBundle mainBundle]pathForResource:@"demo.js" ofType:nil];
-    NSString *script = [NSString stringWithContentsOfFile:sourcePath encoding:NSUTF8StringEncoding error:nil];
-    [JPEngine evaluateScript:script];
+    [JSPatch startWithAppKey:@"080bcf68f1962a46"];
+    [JSPatch sync];
     [self configRootView];
     return YES;
 }

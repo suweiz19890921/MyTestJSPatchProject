@@ -8,7 +8,7 @@
 
 #import "SWBaseViewController.h"
 #import "ReactiveCocoa.h"
-@interface SWBaseViewController ()
+@interface SWBaseViewController ()<UITableViewDelegate>
 
 @end
 
@@ -16,18 +16,21 @@
 - (id)init{
     if (self = [super init]) {
         self.tabBarItem.imageInsets = UIEdgeInsetsMake(6, 0, -6, 0);
+        self.automaticallyAdjustsScrollViewInsets = NO;
     }
     return self;
 }
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    self.view.backgroundColor = [UIColor whiteColor];
 }
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
 /*
 #pragma mark - Navigation
 
