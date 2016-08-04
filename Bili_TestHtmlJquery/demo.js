@@ -1,8 +1,8 @@
 /**
  * Created by suwei on 16/7/13.
  */
-require('UIButton,UIWindow,UIView,UICollectionView,UICollectionViewFlowLayout,UIFont,NSMutableAttributedString,NSMutableString,UITapGestureRecognizer,SWBaseViewController,NSMutableArray,SWTabBarController,UINavigationController,SWHomeViewController,SWCategoryController,SWConcernViewController,SWSearchViewController,SWPlayerUserCenterViewController,JPViewController,UITabBarController,NSArray,UITableView,UIScreen,UIViewController,AppDelegate, UIImageView, UIImage, UIScreen,UITableViewCell,UILabel, NSURL, NSURLRequest,NSURLConnection,NSOperationQueue');
-require('UIColor,NSURLResponse,NSData,NSError,NSJSONSerialization,NSDictionary,NSArray, UIViewController,SWTableViewCell');
+require('UIButton,UIWindow,UIView,UICollectionView,UIPageControl,UICollectionViewFlowLayout,UIFont,NSMutableAttributedString,NSMutableString,UITapGestureRecognizer,SWBaseViewController,NSMutableArray,SWTabBarController,UINavigationController,SWHomeViewController,SWCategoryController,SWConcernViewController,SWSearchViewController,SWPlayerUserCenterViewController,JPViewController,UITabBarController,NSArray,UITableView,UIScreen,UIViewController,AppDelegate, UIImageView, UIImage, UIScreen,UITableViewCell,UILabel, NSURL, NSURLRequest,NSURLConnection,NSOperationQueue');
+require('UIColor,NSURLResponse,NSData,NSError,NSIndexPath,NSTimer,NSJSONSerialization,NSDictionary,NSArray, UIViewController,SWTableViewCell');
 require('JPEngine').addExtensions(['JPMemory']);
 require('SWContainerView,UIScrollView,SWTopBar,SWLabel,SWBannerCollectionView');
 require('SWTableView,SWHomeBangumiCell,NSDateFormatter,NSDate,NSCalendar');
@@ -1317,6 +1317,8 @@ defineClass('SWBannerCollectionView:UIView <UICollectionViewDataSource,UICollect
             }
             self.setProp_forKey(array,"dataArray");
             self.getProp("collectionView").reloadData();
+                self.setupPageControll();
+                self.addTimer();
             },
             
             collectionView_cellForItemAtIndexPath:function(collectionView,indexPath){
@@ -1324,14 +1326,16 @@ defineClass('SWBannerCollectionView:UIView <UICollectionViewDataSource,UICollect
             var dataArray = self.getProp("dataArray");
             var model;
             if(dataArray.count() > 0) {
-            if(indexPath.section() < dataArray.count()) {
+            if(indexPath.item() < dataArray.count()) {
             model = dataArray.objectAtIndex(indexPath.item());
             }
             }
             cell.installData(model.objectForKey("img"));
             return cell;
             },
-            
+            numberOfSectionsInCollectionView:function(collectionVew){
+              return 10;
+            },
             collectionView_numberOfItemsInSection:function(collectionView,section){
             return self.getProp("dataArray").count();
             },
@@ -1346,10 +1350,81 @@ defineClass('SWBannerCollectionView:UIView <UICollectionViewDataSource,UICollect
     collectionView_layout_minimumInteritemSpacingForSectionAtIndex:function(collectionView,layout,section){
       return 0;
     },
+
+    scrollViewDidEndDragging_willDecelerate:function(scrollView,decelerate){
+        console.log(scrollView);
+      self.addTimer();
+    },
+    scrollViewWillBeginDragging:function(scrollView){
+      self.removeTimer();
+    },
+    scrollViewDidScroll:function(scrollView){
+    var num = (scrollView.contentOffset().x/scrollView.bounds().width)%self.getProp("dataArray").count();
+        //JS中的取整函数
+       num = Math.round(num);
+    self.getProp("pageControll").setCurrentPage(num);
+    },
+    //pageController配置
+    setupPageControll:function() {
+    var pageControll = UIPageControl.new();
+    //pageControll.backgroundColor = [UIColor redColor];
+        self.addSubview(pageControll);
+        self.setProp_forKey(pageControll,"pageControll");
+        pageControll.setNumberOfPages(self.getProp("dataArray").count());
+        pageControll.setCurrentPageIndicatorTintColor(mainColor);
+        pageControll.setPageIndicatorTintColor(bgGrayColor);
+        if(self.getProp("dataArray").count()<=1){
+            self.pageControll().setHidden(1);
+        }
+},
+    addTimer:function(){
+        self.removeTimer();
+        var timer = NSTimer.scheduledTimerWithTimeInterval_target_selector_userInfo_repeats(3.0,self,"beginScrollBanner",null,1);
+        self.setProp_forKey(timer,"timer");
+
+
+    },
+    removeTimer:function(){
+        self.getProp("timer").invalidate();
+        self.setProp_forKey(null,"timer");
+    },
+    beginScrollBanner:function(){
+        if(self.getProp("dataArray").count() <= 0){
+            return;
+        }
+        var collectionView = self.getProp("collectionView");
+        var cellsArray = collectionView.visibleCells();
+        var firstCell;
+        if(cellsArray.count() >= 1){
+            firstCell = cellsArray.firstObject();
+        }else{
+            return;
+        }
+        var indexPath = self.resetIndexPath();
+        var nextItem = indexPath.item() + 1;
+        var nextSection = indexPath.section();
+        if (nextItem==self.getProp("dataArray").count()) {
+            nextItem = 0;
+            nextSection = nextSection + 1;
+        }
+        var index = NSIndexPath.indexPathForItem_inSection(nextItem,nextSection);
+        collectionView.scrollToItemAtIndexPath_atScrollPosition_animated(index,1<<3,1);
+    },
+    resetIndexPath:function(){
+    //每调用一次这个方法，就会将collectionview滚回到最中间的那组的那个一样的图片
+        var collectionView = self.getProp("collectionView");
+        var indexPaths = collectionView.indexPathsForVisibleItems();
+        var  currenIndexPath = indexPaths.count() >= 1 ? indexPaths.firstObject() : null;
+        var resetIndexPath = NSIndexPath.indexPathForItem_inSection(currenIndexPath.item(),10/2);
+        collectionView.scrollToItemAtIndexPath_atScrollPosition_animated(resetIndexPath,1<<3,0);
+        return resetIndexPath;
+},
             layoutSubviews:function() {
             self.super().layoutSubviews();
+                var rect = self.bounds();
             var collectionView = self.getProp("collectionView");
             collectionView.setFrame(self.bounds());
+                self.getProp("pageControll").setFrame({x:rect.width -rect.width/4, y:rect.height - 25, width:rect.width/4, height:20});
             
             }
             
