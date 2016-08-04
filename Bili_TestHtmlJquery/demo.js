@@ -12,6 +12,7 @@ var normalGrayColor = UIColor.colorWithRed_green_blue_alpha(170./255,170./255,17
 var bgGrayColor = UIColor.colorWithRed_green_blue_alpha(244./255,244./255,244./255,1);
 var bgOtherRedColor = UIColor.colorWithRed_green_blue_alpha(255./255,111./255,111./255,1);
 var bgOtherBlueColor = UIColor.colorWithRed_green_blue_alpha(94./255,190./255,255./255,1);
+var bgOtherYellowColor = UIColor.colorWithRed_green_blue_alpha(255./255,180./255,0./255,1);
 //app代理--------------------------//app代理--------------------------//app代理--------------------------//app代理--------------------------//app代理--------------------------//app代理--------------------------
 defineClass('AppDelegate : UIResponder',{
     configRootView:function(){
@@ -519,16 +520,19 @@ defineClass("SWHomeBangumiBigIconBGView:UIView",{
     initWithFrame:function(frame){
         if(self.ORIGinitWithFrame(frame)){
             var followIcon = SWHomeBangumiBigIconBGViewItem.new();
-            followIcon.setBackgroundColor(UIColor.orangeColor());
+            followIcon.setBackgroundColor(bgOtherYellowColor);
             self.addSubview(followIcon);
+            followIcon.installImage_title("home_bangumi_tableHead_followIcon","home_bangumi_tableHead_followStr");
             self.setProp_forKey(followIcon,"followIcon");
 
             var timeLineIcon = SWHomeBangumiBigIconBGViewItem.new();
+            timeLineIcon.installImage_title("home_bangumi_tableHead_week2","home_bangumi_tableHead_timeList");
             timeLineIcon.setBackgroundColor(bgOtherRedColor);
             self.addSubview(timeLineIcon);
             self.setProp_forKey(timeLineIcon,"timeLineIcon");
 
             var indexIcon = SWHomeBangumiBigIconBGViewItem.new();
+            indexIcon.installImage_title("home_bangumi_tableHead_indexIcon","home_bangumi_tableHead_indexStr");
             indexIcon.setBackgroundColor(bgOtherBlueColor);
             self.addSubview(indexIcon);
             self.setProp_forKey(indexIcon,"indexIcon");
@@ -537,9 +541,12 @@ defineClass("SWHomeBangumiBigIconBGView:UIView",{
     },
     layoutSubviews:function(){
         self.super().layoutSubviews();
-        //self.getProp("followIcon").setFrame({x:12, y:0, width:width, height:itemHeight});;
-        //self.getProp("timeLineIcon").setFrame({x:12, y:0, width:width, height:itemHeight});;
-        //self.getProp("indexIcon").setFrame({x:12, y:0, width:width, height:itemHeight});;
+        var scale = 2.1;
+        var margin = 12;
+        var width = (self.bounds().width - 4 * margin)/3;
+        self.getProp("followIcon").setFrame({x:12, y:0, width:width, height:width/scale});
+        self.getProp("timeLineIcon").setFrame({x:width + 2 * margin, y:0, width:width, height:width/scale});
+        self.getProp("indexIcon").setFrame({x:2 * width + 3 * margin, y:0, width:width, height:width/scale});
 
     }
 })
@@ -547,6 +554,8 @@ defineClass("SWHomeBangumiBigIconBGView:UIView",{
 defineClass("SWHomeBangumiBigIconBGViewItem:UIView",{
     initWithFrame:function(frame){
         if(self.ORIGinitWithFrame(frame)){
+            self.layer().setCornerRadius(5);
+            self.setClipsToBounds(1);
             var picImage =  UIImageView.new();
             self.addSubview(picImage);
             self.setProp_forKey(picImage,"picImage");
@@ -558,11 +567,16 @@ defineClass("SWHomeBangumiBigIconBGViewItem:UIView",{
 
         }
         return self;
+    },installImage_title:function(image,title){
+        self.getProp("picImage").setImage(UIImage.imageNamed(image));
+        self.getProp("titleImage").setImage(UIImage.imageNamed(title));
     },
     layoutSubviews:function(){
         self.super().layoutSubviews();
-        //self.getProp("picImage").setFrame({x:12, y:0, width:width, height:itemHeight});
-        //self.getProp("titleImage").setFrame({x:12, y:0, width:width, height:itemHeight});
+        var width = self.bounds().width;
+        var height = self.bounds().height;
+        self.getProp("picImage").setFrame({x:6, y:(height - 44)/2, width:47, height:44});
+        self.getProp("titleImage").setFrame({x:width - 48 - 5, y:(height - 16)/2, width:47.5, height:16});
 
     }
 })
