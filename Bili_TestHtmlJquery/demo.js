@@ -6,10 +6,12 @@ require('UIColor,NSURLResponse,NSData,NSError,NSIndexPath,NSTimer,NSJSONSerializ
 require('JPEngine').addExtensions(['JPMemory']);
 require('SWContainerView,UIScrollView,SWTopBar,SWLabel,SWBannerCollectionView');
 require('SWTableView,SWHomeBangumiCell,NSDateFormatter,NSDate,NSCalendar');
-require('SWHomeBangumiViewController,SWHomeBangumiDidEndCell,SWHomeBangumiNewBangumiLoadCell,SWHomeBangumiNewChangLoadItem,SWHomeBangumiDidEndItem,SWHomeBangumiRecommendCell,SWHomeBangumiUniversalHeadView,UITableViewHeaderFooterView');
+require('SWHomeBangumiViewController,SWHomeBangumiDidEndCell,SWHomeBangumiNewBangumiLoadCell,SWHomeBangumiNewChangLoadItem,SWHomeBangumiDidEndItem,SWHomeBangumiRecommendCell,SWHomeBangumiUniversalHeadView,UITableViewHeaderFooterView,SWHomeBangumiAllIconImageCell,SWHomeBangumiSmallIconBGView,SWHomeBangumiSmallIconBGViewItem,SWHomeBangumiBigIconBGView,SWHomeBangumiBigIconBGViewItem');
 var mainColor = UIColor.colorWithRed_green_blue_alpha(251./255,114./255,153./255,1);
 var normalGrayColor = UIColor.colorWithRed_green_blue_alpha(170./255,170./255,170./255,1);
 var bgGrayColor = UIColor.colorWithRed_green_blue_alpha(244./255,244./255,244./255,1);
+var bgOtherRedColor = UIColor.colorWithRed_green_blue_alpha(255./255,111./255,111./255,1);
+var bgOtherBlueColor = UIColor.colorWithRed_green_blue_alpha(94./255,190./255,255./255,1);
 //app代理--------------------------//app代理--------------------------//app代理--------------------------//app代理--------------------------//app代理--------------------------//app代理--------------------------
 defineClass('AppDelegate : UIResponder',{
     configRootView:function(){
@@ -252,6 +254,9 @@ defineClass("SWHomeBangumiViewController:SWBaseViewController<UITableViewDataSou
         tableView.registerClass_forCellReuseIdentifier(SWHomeBangumiDidEndCell.class(),SWHomeBangumiDidEndCell.description());
         tableView.registerClass_forCellReuseIdentifier(SWHomeBangumiRecommendCell.class(),SWHomeBangumiRecommendCell.description());
         tableView.registerClass_forHeaderFooterViewReuseIdentifier(SWHomeBangumiUniversalHeadView.class(),SWHomeBangumiUniversalHeadView.description());
+        tableView.registerClass_forCellReuseIdentifier(SWHomeBangumiAllIconImageCell.class(),SWHomeBangumiAllIconImageCell.description());
+
+
         tableView.setDataSource(self);
         tableView.setDelegate(self);
         self.loadAndHandleData();
@@ -289,7 +294,7 @@ defineClass("SWHomeBangumiViewController:SWBaseViewController<UITableViewDataSou
             cell.installData(model);
             return cell;
         }
-        return UITableViewCell.new();
+        return tableView.dequeueReusableCellWithIdentifier(SWHomeBangumiAllIconImageCell.description());;
     },
     tableView_heightForRowAtIndexPath:function(tableView,indexPath){
         if(indexPath.section() == 1){
@@ -304,7 +309,7 @@ defineClass("SWHomeBangumiViewController:SWBaseViewController<UITableViewDataSou
             }
             return SWHomeBangumiRecommendCell.getHeight(model.objectForKey("desc"));
         }else{
-            return 50;
+            return SWHomeBangumiAllIconImageCell.getHeight();
         }
     },
     tableView_viewForHeaderInSection:function(tableView,section){
@@ -416,6 +421,153 @@ defineClass("SWHomeBangumiViewController:SWBaseViewController<UITableViewDataSou
         }));
     }
 })
+//SW 首页番剧中 全是图标的cell
+defineClass("SWHomeBangumiAllIconImageCell:UITableViewCell",{
+    initWithStyle_reuseIdentifier:function(style,reuseIdentifier){
+        if(self.ORIGinitWithStyle_reuseIdentifier(style,reuseIdentifier)){
+            var smallIconBGView = SWHomeBangumiSmallIconBGView.new();
+            self.contentView().addSubview(smallIconBGView);
+            self.setProp_forKey(smallIconBGView,"smallIconBGView");
+
+            var bigIconBGView = SWHomeBangumiBigIconBGView.new();
+            self.contentView().addSubview(bigIconBGView);
+            self.setProp_forKey(bigIconBGView,"bigIconBGView");
+        }
+        return self;
+    },
+    layoutSubviews:function(){
+        self.super().layoutSubviews();
+        var rect = self.bounds();
+        self.getProp("smallIconBGView").setFrame({x:0, y:0, width:rect.width, height:95});
+        self.getProp("bigIconBGView").setFrame({x:0, y:95, width:rect.width, height:50});
+
+    }
+},{
+    getHeight:function(){
+        return 95 + 50;
+    }
+})
+
+//有 4个 图标
+defineClass("SWHomeBangumiSmallIconBGView:UIView",{
+    initWithFrame:function(frame){
+        if(self.ORIGinitWithFrame(frame)){
+            var loadIcon = SWHomeBangumiSmallIconBGViewItem.new();
+            self.addSubview(loadIcon);
+            loadIcon.installImage_title("hd_bangumi_unfinished","连载动画");
+            self.setProp_forKey(loadIcon,"loadIcon");
+            var endIcon = SWHomeBangumiSmallIconBGViewItem.new();
+            endIcon.installImage_title("hd_bangumi_finished","完结动画");
+            self.addSubview(endIcon);
+            self.setProp_forKey(endIcon,"endIcon");
+            var chinaIcon = SWHomeBangumiSmallIconBGViewItem.new();
+            chinaIcon.installImage_title("科技_60.compressed","国产动画");
+            self.addSubview(chinaIcon);
+            self.setProp_forKey(chinaIcon,"chinaIcon");
+            var officerIcon = SWHomeBangumiSmallIconBGViewItem.new();
+            officerIcon.installImage_title("番剧_60.compressed","官方延伸");
+            self.addSubview(officerIcon);
+            self.setProp_forKey(officerIcon,"officerIcon");
+        }
+        return self;
+    },
+    layoutSubviews:function(){
+        self.super().layoutSubviews();
+        var margin = 25;
+        var bothSideMargin = 18;
+        var width = (self.bounds().width -  margin * 3 - 2 * bothSideMargin) / 4;
+        self.getProp("loadIcon").setFrame({x:bothSideMargin, y:12.5, width:width, height:70});
+        self.getProp("endIcon").setFrame({x:width + bothSideMargin + margin, y:12.5, width:width, height:70});
+        self.getProp("chinaIcon").setFrame({x:width *2 + margin * 2 + bothSideMargin, y:12.5, width:width, height:70});
+        self.getProp("officerIcon").setFrame({x:width * 3 + margin * 3 + bothSideMargin, y:12.5, width:width, height:70});
+
+    }
+})
+//有 4 个图标对应的item
+defineClass("SWHomeBangumiSmallIconBGViewItem:UIView",{
+    initWithFrame:function(frame){
+        if(self.ORIGinitWithFrame(frame)){
+
+            var picImage =  UIImageView.new();
+            self.addSubview(picImage);
+            picImage.setImage(UIImage.imageNamed("hd_bangumi_unfinished"));
+            self.setProp_forKey(picImage,"picImage");
+
+            var titleLabel =  UILabel.new();
+            titleLabel.setFont(UIFont.systemFontOfSize(12));
+            titleLabel.setTextAlignment(1);
+            self.addSubview(titleLabel);
+            self.setProp_forKey(titleLabel,"titleLabel");
+        }
+        return self;
+    },
+    installImage_title:function(image,title){
+        self.getProp("picImage").setImage(UIImage.imageNamed(image));
+        self.getProp("titleLabel").setText(title);
+    },
+    layoutSubviews:function(){
+        self.super().layoutSubviews();
+        var height = self.bounds().height;
+        var width = self.bounds().width;
+        self.getProp("picImage").setFrame({x:(width - 40)/2, y:height - 20 - 40, width:40, height:40});
+        self.getProp("titleLabel").setFrame({x:0, y:height - 20, width:width, height:20});
+    }
+})
+
+//有 3 个图标
+defineClass("SWHomeBangumiBigIconBGView:UIView",{
+    initWithFrame:function(frame){
+        if(self.ORIGinitWithFrame(frame)){
+            var followIcon = SWHomeBangumiBigIconBGViewItem.new();
+            followIcon.setBackgroundColor(UIColor.orangeColor());
+            self.addSubview(followIcon);
+            self.setProp_forKey(followIcon,"followIcon");
+
+            var timeLineIcon = SWHomeBangumiBigIconBGViewItem.new();
+            timeLineIcon.setBackgroundColor(bgOtherRedColor);
+            self.addSubview(timeLineIcon);
+            self.setProp_forKey(timeLineIcon,"timeLineIcon");
+
+            var indexIcon = SWHomeBangumiBigIconBGViewItem.new();
+            indexIcon.setBackgroundColor(bgOtherBlueColor);
+            self.addSubview(indexIcon);
+            self.setProp_forKey(indexIcon,"indexIcon");
+        }
+        return self;
+    },
+    layoutSubviews:function(){
+        self.super().layoutSubviews();
+        //self.getProp("followIcon").setFrame({x:12, y:0, width:width, height:itemHeight});;
+        //self.getProp("timeLineIcon").setFrame({x:12, y:0, width:width, height:itemHeight});;
+        //self.getProp("indexIcon").setFrame({x:12, y:0, width:width, height:itemHeight});;
+
+    }
+})
+//有 3 个图标对应的item
+defineClass("SWHomeBangumiBigIconBGViewItem:UIView",{
+    initWithFrame:function(frame){
+        if(self.ORIGinitWithFrame(frame)){
+            var picImage =  UIImageView.new();
+            self.addSubview(picImage);
+            self.setProp_forKey(picImage,"picImage");
+
+            var titleImage =  UIImageView.new();
+            self.addSubview(titleImage);
+            self.setProp_forKey(titleImage,"titleImage");
+
+
+        }
+        return self;
+    },
+    layoutSubviews:function(){
+        self.super().layoutSubviews();
+        //self.getProp("picImage").setFrame({x:12, y:0, width:width, height:itemHeight});
+        //self.getProp("titleImage").setFrame({x:12, y:0, width:width, height:itemHeight});
+
+    }
+})
+
+
 //SW 首页番剧页面中子控件
 //头部无限轮播控件(尽量封装减少耦合性，因为有很多别的地方会用到)
 defineClass("SWCircleView:UIView",{

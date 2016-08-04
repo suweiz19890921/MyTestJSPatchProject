@@ -3,13 +3,9 @@ framework module JSPatch {
 
   export *
   module * { export * }
-  explicit module XXXXXXX {
-      
-      header "JSEngine.h"
-      
-      link "JSEngine"
-      
+  explicit module JPEngine {
+      header "JPEngine.h"
+      link "JPEngine"
       export *
-      
   }
 }
