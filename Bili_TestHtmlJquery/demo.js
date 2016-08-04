@@ -446,7 +446,10 @@ defineClass("SWHomeBangumiAllIconImageCell:UITableViewCell",{
     }
 },{
     getHeight:function(){
-        return 95 + 50;
+        var scale = 2.1;
+        var margin = 12;
+        var width = (UIScreen.mainScreen().bounds().width - 4 * margin)/3;
+        return 95 + width/scale;
     }
 })
 
