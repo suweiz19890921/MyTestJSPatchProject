@@ -1283,7 +1283,7 @@ defineClass("SWCategoryCell:UICollectionViewCell",{
         if(indexPath.item() == 13){
             self.getProp("iconImage").setFrame({x:6, y:21, width:60, height:50});
         }else{
-            self.getProp("iconImage").setFrame({x:6, y:8, width:60, height:60});
+            self.getProp("iconImage").setFrame({x:11, y:10, width:50, height:50});
         }
     },
     layoutSubviews:function(){
