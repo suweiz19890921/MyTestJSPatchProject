@@ -7,6 +7,7 @@ require('JPEngine').addExtensions(['JPMemory']);
 require('SWContainerView,UIScrollView,SWTopBar,SWLabel,SWBannerCollectionView');
 require('SWTableView,SWHomeBangumiCell,NSDateFormatter,NSDate,NSCalendar');
 require('SWHomeBangumiViewController,SWHomeBangumiDidEndCell,SWHomeBangumiNewBangumiLoadCell,SWHomeBangumiNewChangLoadItem,SWHomeBangumiDidEndItem,SWHomeBangumiRecommendCell,SWHomeBangumiUniversalHeadView,UITableViewHeaderFooterView,SWHomeBangumiAllIconImageCell,SWHomeBangumiSmallIconBGView,SWHomeBangumiSmallIconBGViewItem,SWHomeBangumiBigIconBGView,SWHomeBangumiBigIconBGViewItem');
+require('SWHomeRecommendViewController');
 require('SWCategoryCell');
 //扩展结构体
 require('JPEngine').defineStruct({
@@ -88,14 +89,15 @@ defineClass("SWHomeViewController: SWBaseViewController<UITableViewDataSource,UI
             vc1.setTitle("直播");
             vc1.view().setBackgroundColor(UIColor.redColor());
 
-            var vc2 = SWHomeBangumiViewController.alloc().init();
+            var vc2 = SWHomeRecommendViewController.alloc().init();
             vc2.setTitle("推荐");
+
             var vc3 = SWHomeBangumiViewController.alloc().init();
-            sel.addChildViewController(vc1);
-            sel.addChildViewController(vc2);
-            sel.addChildViewController(vc3);
             vc3.setTitle("番剧");
-            vc3.view().setBackgroundColor(UIColor.whiteColor());
+
+        sel.addChildViewController(vc1);
+        sel.addChildViewController(vc2);
+        sel.addChildViewController(vc3);
             contain.installViewControllers(NSArray.arrayWithObjects(vc1,vc2,vc3,null));
             sel.view().addSubview(contain);
         //}));
@@ -182,8 +184,134 @@ defineClass("SWHomeViewController: SWBaseViewController<UITableViewDataSource,UI
     }
 })
 
+//
+defineClass("SWHomeRecommendViewController: SWBaseViewController<UITableViewDataSource,UITableViewDelegate>", {
+    init:function(){
+        if(self.ORIGinit()){
+            self.setProp_forKey("http://app.bilibili.com/x/v2/show?access_key=d19680b060ef8c0f2fd8db23d6fdc0b5&actionKey=appkey&appkey=27eb53fc9058f8c3&build=3480&channel=appstore&device=phone&mobi_app=iphone&plat=1&platform=ios&sign=35589ce4acc17e8a8095608468ffca0d&ts=1470389813&warm=1","recommendUrl");
 
+        }
+        return self;
+    },
+    viewDidLoad:function(){
+        self.super().viewDidLoad();
 
+        var tableView = UITableView.new();
+        self.view().addSubview(tableView);
+        self.setProp_forKey(tableView,"tableView");
+        tableView.setDataSource(self);
+        tableView.setDelegate(self);
+        self.loadAndHandleData();
+    },
+    loadAndHandleData:function(){
+        var url= NSURL.URLWithString(self.getProp('recommendUrl'));
+        var request = NSURLRequest.alloc().initWithURL(url);
+        var sel = self;
+        NSURLConnection.sendAsynchronousRequest_queue_completionHandler(request,NSOperationQueue.mainQueue(),block("NSURLResponse* ,NSData*, NSError*",function(response,data,error) {
+            if(!error){
+
+                var NSJSONReadingMutableContainers = 1 << 0;
+                var dict = NSJSONSerialization.JSONObjectWithData_options_error(data,NSJSONReadingMutableContainers,null);
+                if(dict.isKindOfClass(NSDictionary.class())){
+                    var totalArray = dict.objectForKey("data");
+                    if(totalArray.isKindOfClass(NSArray.class())){
+                        if(totalArray.count() > 0){
+                            sel.lazyBannerView().installData(totalArray.firstObject().objectForKey("banner").objectForKey("top"));
+                        }
+                        sel.setProp_forKey(totalArray,"totalArray");
+                    };
+                }
+               sel.getProp("tableView").reloadData();
+            }else{
+                console.log("请求失败");
+                console.log(error)
+            }
+
+        }));
+    },
+    viewWillLayoutSubviews:function(){
+        self.super().viewWillLayoutSubviews();
+        console.log(self.view().bounds());
+        self.getProp("tableView").setFrame(self.view().bounds());
+    },
+
+    numberOfSectionsInTableView:function(tableView){
+        return self.getProp("totalArray").count();
+    },
+    tableView_numberOfRowsInSection:function(tableView,section){
+        if(section == 0){
+            return 0;
+        }
+        return 1;
+    },
+    tableView_cellForRowAtIndexPath:function(tableView,indexPath){
+        //if(indexPath.section() == 1){
+        //    var cell = tableView.dequeueReusableCellWithIdentifier(SWHomeBangumiNewBangumiLoadCell.description());
+        //    cell.installData(self.getProp("totalArray").objectAtIndex(indexPath.section()));
+        //    return cell;
+        //}else if(indexPath.section() == 2){
+        //    var cell = tableView.dequeueReusableCellWithIdentifier(SWHomeBangumiDidEndCell.description());
+        //    //如果为了解决重影可以直接在此处不去重用cell，直接每次都重新创建
+        //    //var cell = SWHomeBangumiDidEndCell.alloc().initWithStyle_reuseIdentifier(0,SWHomeBangumiDidEndCell.description());
+        //    cell.installData(self.getProp("totalArray").objectAtIndex(indexPath.section()));
+        //    return cell;
+        //}else if(indexPath.section() == 3){
+        //    var recommendArray = self.getProp("totalArray").objectAtIndex(indexPath.section());
+        //    var model;
+        //    if(indexPath.row() < recommendArray.count()){
+        //        model = recommendArray.objectAtIndex(indexPath.row());
+        //    }
+        //    var cell = tableView.dequeueReusableCellWithIdentifier(SWHomeBangumiRecommendCell.description());
+        //
+        //    cell.installData(model);
+        //    return cell;
+        //}
+        //return tableView.dequeueReusableCellWithIdentifier(SWHomeBangumiAllIconImageCell.description());;
+        return UITableViewCell.new();
+    },
+    tableView_heightForRowAtIndexPath:function(tableView,indexPath){
+       return 60;
+    },
+    tableView_viewForHeaderInSection:function(tableView,section){
+        if(section != 0){
+            //var headView = tableView.dequeueReusableHeaderFooterViewWithIdentifier(SWHomeBangumiUniversalHeadView.description());
+            //var dict = self.getProp("dictArray").objectAtIndex(section);
+            //if(dict){
+            //    headView.installData_section(dict,section);
+            //}
+            //return headView;
+            return UIView.new();
+        }else{
+            return self.lazyBannerView();
+        }
+    },
+    tableView_heightForHeaderInSection:function(tableView,section){
+        if(section == 0){
+            var rect = UIScreen.mainScreen().bounds();
+            var width = rect.width ;
+            return width /3.2;
+        }
+        return 44;
+    },
+    lazyBannerView:function(){
+        if(!self.getProp("bannerView")){
+            var bannerView = SWBannerCollectionView.new();
+            self.setProp_forKey(bannerView,"bannerView");
+        }
+        return self.getProp("bannerView");
+    }
+
+})
+
+// 推荐中带有 观看次数 和 弹幕数 但是没有圆角头像的item
+defineClass("SWHomeRecommendDanmakuItem:UIView",{
+
+})
+
+// 直播中带有 带有圆角头像的item （首页推荐中会用 直播中也会用）
+defineClass("SWHomeLiveItem:UIView",{
+
+})
 
 //自定义cell------------------------//自定义cell------------------------//自定义cell------------------------//自定义cell------------------------//自定义cell------------------------
 
@@ -368,32 +496,36 @@ defineClass("SWHomeBangumiViewController:SWBaseViewController<UITableViewDataSou
         var sel = self;
         NSURLConnection.sendAsynchronousRequest_queue_completionHandler(request,NSOperationQueue.mainQueue(),block("NSURLResponse* ,NSData*, NSError*",function(response,data,error) {
             if(!error){
+
                 var totalArray = NSMutableArray.new();
                 var NSJSONReadingMutableContainers = 1 << 0;
                 var dict = NSJSONSerialization.JSONObjectWithData_options_error(data,NSJSONReadingMutableContainers,null);
                 //番剧连载
-                var listArray= dict.objectForKey("result").objectForKey("latestUpdate").objectForKey("list");
-                //banner 封面
-                var bannersArray = dict.objectForKey("result").objectForKey("banners");
-                //完结动画
-                var endsArray = dict.objectForKey("result").objectForKey("ends");
-                totalArray.addObject(bannersArray);
-                totalArray.addObject(listArray);
-                totalArray.addObject(endsArray);
-                sel.setProp_forKey(totalArray,"totalArray");
+                if(dict.isKindOfClass(NSDictionary.class())){
+                    var listArray= dict.objectForKey("result").objectForKey("latestUpdate").objectForKey("list");
+                    //banner 封面
+                    var bannersArray = dict.objectForKey("result").objectForKey("banners");
+                    //完结动画
+                    var endsArray = dict.objectForKey("result").objectForKey("ends");
+                    totalArray.addObject(bannersArray);
+                    totalArray.addObject(listArray);
+                    totalArray.addObject(endsArray);
+                    sel.setProp_forKey(totalArray,"totalArray");
 //                console.log(sel.bannerView());
-                sel.lazyBannerView().installData(bannersArray);
-                sel.setProp_forKey(dict.objectForKey("result").objectForKey("latestUpdate").objectForKey("updateCount"),"updateCount");
-                var dictArray = NSArray.arrayWithObjects({"imageName":" ","title":" ","count":" ","desc":" "},
-                                                        {"imageName":"hd_bangumi_unfinished","title":"新番连载","desc":"今日更新","count":sel.getProp("updateCount")},
-                                                        {"imageName":"hd_bangumi_finished","title":"完结动画","desc":"进去看看","count":" "},
-                                                        {"imageName":"热门推荐","title":"番剧推荐","count":" ","desc":" "},null);
+                    sel.lazyBannerView().installData(bannersArray);
+                    sel.setProp_forKey(dict.objectForKey("result").objectForKey("latestUpdate").objectForKey("updateCount"),"updateCount");
+                    var dictArray = NSArray.arrayWithObjects({"imageName":" ","title":" ","count":" ","desc":" "},
+                        {"imageName":"hd_bangumi_unfinished","title":"新番连载","desc":"今日更新","count":sel.getProp("updateCount")},
+                        {"imageName":"hd_bangumi_finished","title":"完结动画","desc":"进去看看","count":" "},
+                        {"imageName":"热门推荐","title":"番剧推荐","count":" ","desc":" "},null);
 //               JSPatch 支持原生数组 字典 表达方式和OC的区别就是不需要@符号
 //                  var dictArray = [{"imageName":" ","title":" ","count":" ","desc":" "},
 //                                 {"imageName":"hd_bangumi_unfinished","title":"新番连载","desc":"今日更新","desc":"今日更新","count":sel.getProp("updateCount")},
 //                                {"imageName":"hd_bangumi_finished","title":"完结动画","desc":"进去看看","count":" "},
 //                                {"imageName":"热门推荐","title":"番剧推荐","count":" ","desc":" "}];
-                sel.setProp_forKey(dictArray,"dictArray");
+                    sel.setProp_forKey(dictArray,"dictArray");
+                }
+
                 sel.getProp("tableView").reloadData();
                 sel.loadRecommendData();
             }else{
@@ -1104,7 +1236,14 @@ defineClass("SWHomeBangumiUniversalHeadView:UITableViewHeaderFooterView",{
             var totalTitle = desc.toJS() + " " + count.toJS();
             desLabel.setText(totalTitle);
             var attrbuteString = NSMutableAttributedString.alloc().initWithString(desLabel.text());
-            var range = {location:totalTitle.length - 1,length:1};
+            var range;
+            if(count.intValue() >= 10){
+                range = {location:totalTitle.length - 2,length:2};
+            }else{
+                range = {location:totalTitle.length - 1,length:1};
+            }
+
+
             attrbuteString.addAttribute_value_range("NSColor",mainColor,range);
             desLabel.setAttributedText(attrbuteString);
         }else{
@@ -1122,7 +1261,7 @@ defineClass("SWHomeBangumiUniversalHeadView:UITableViewHeaderFooterView",{
         if(section == 2){
             tempX = 60;
         }else{
-            tempX = 75
+            tempX = 85
         }
         self.getProp("descLabel").setFrame({x:rect.width - 12 - 20 - 10 - tempX , y:13, width:tempX, height:18});
         self.getProp("rightRowImage").setFrame({x:rect.width - 12 - 20, y:13, width:20, height:20});
@@ -1625,7 +1764,13 @@ defineClass('SWBannerCollectionView:UIView <UICollectionViewDataSource,UICollect
             model = dataArray.objectAtIndex(indexPath.item());
             }
             }
-            cell.installData(model.objectForKey("img"));
+
+                var imageUrl = model.objectForKey("img");
+                // 模型容错
+                if(!imageUrl){
+                    imageUrl = model.objectForKey("image");
+                }
+            cell.installData(imageUrl);
             return cell;
             },
             numberOfSectionsInCollectionView:function(collectionVew){
