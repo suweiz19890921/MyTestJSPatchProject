@@ -8,6 +8,13 @@ require('SWContainerView,UIScrollView,SWTopBar,SWLabel,SWBannerCollectionView');
 require('SWTableView,SWHomeBangumiCell,NSDateFormatter,NSDate,NSCalendar');
 require('SWHomeBangumiViewController,SWHomeBangumiDidEndCell,SWHomeBangumiNewBangumiLoadCell,SWHomeBangumiNewChangLoadItem,SWHomeBangumiDidEndItem,SWHomeBangumiRecommendCell,SWHomeBangumiUniversalHeadView,UITableViewHeaderFooterView,SWHomeBangumiAllIconImageCell,SWHomeBangumiSmallIconBGView,SWHomeBangumiSmallIconBGViewItem,SWHomeBangumiBigIconBGView,SWHomeBangumiBigIconBGViewItem');
 require('SWCategoryCell');
+//扩展结构体
+require('JPEngine').defineStruct({
+    "name": "UIEdgeInsets",
+    "types": "FFFF",
+    "keys": ["top", "left", "bottom", "right"]
+})
+
 var mainColor = UIColor.colorWithRed_green_blue_alpha(251./255,114./255,153./255,1);
 var normalGrayColor = UIColor.colorWithRed_green_blue_alpha(170./255,170./255,170./255,1);
 var bgGrayColor = UIColor.colorWithRed_green_blue_alpha(244./255,244./255,244./255,1);
@@ -73,9 +80,7 @@ defineClass("SWHomeViewController: SWBaseViewController<UITableViewDataSource,UI
         var btn = UIButton.alloc().initWithFrame({x:100, y:100, width:100, height:100});
         self.view().addSubview(btn);
         btn.setBackgroundColor(UIColor.redColor());
-        btn.rac__signalForControlEvents(1 <<  6).subscribeNext(block("id",function(x){
-
-            console.log("真实吊炸了，也可以直接调用RAC");
+        //btn.rac__signalForControlEvents(1 <<  6).subscribeNext(block("id",function(x){
             var contain = SWContainerView.alloc().init();
             sel.setProp_forKey(contain,"contain");
             contain.setFrame(sel.view().bounds());
@@ -93,10 +98,9 @@ defineClass("SWHomeViewController: SWBaseViewController<UITableViewDataSource,UI
             vc3.view().setBackgroundColor(UIColor.whiteColor());
             contain.installViewControllers(NSArray.arrayWithObjects(vc1,vc2,vc3,null));
             sel.view().addSubview(contain);
-        }));
+        //}));
         var url= NSURL.URLWithString(self.getProp('urlStr'));
         var request = NSURLRequest.alloc().initWithURL(url);
-//        现在JSPatch除了不支持 动态调用C函数 和 一些特殊结构体之外，几乎什么都支持了。
         NSURLConnection.sendAsynchronousRequest_queue_completionHandler(request,NSOperationQueue.mainQueue(),block("NSURLResponse* ,NSData*, NSError*",function(response,data,error) {
             if(!error){
                 var NSJSONReadingMutableContainers = 1 << 0;
@@ -1172,9 +1176,10 @@ defineClass("SWCategoryController: SWBaseViewController<UICollectionViewDataSour
     },
     viewDidLoad:function(){
       self.super().viewDidLoad();
-        var navBar = SWLabel.new();
         self.view().setBackgroundColor(UIColor.whiteColor());
 
+
+        var navBar = SWLabel.new();
         self.view().addSubview(navBar);
         navBar.setBackgroundColor(mainColor);
         navBar.setText("分区");
@@ -1185,7 +1190,7 @@ defineClass("SWCategoryController: SWBaseViewController<UICollectionViewDataSour
         self.setProp_forKey(navBar,"navBar");
 
         var layout = UICollectionViewFlowLayout.alloc().init();
-        SWBaseViewController.configLayout(layout);
+        layout.setSectionInset({top:24, left:30, bottom:24, right:30});
         layout.setScrollDirection(0);
         var collectionView = UICollectionView.alloc().initWithFrame_collectionViewLayout(self.view().bounds(),layout);
         collectionView.setPagingEnabled(1);collectionView.setBackgroundColor(UIColor.whiteColor());
@@ -1219,7 +1224,15 @@ defineClass("SWCategoryController: SWBaseViewController<UICollectionViewDataSour
     collectionView_layout_sizeForItemAtIndexPath:function(collectionView,collectionViewLayout,indexPath){
         return {width:72, height:76 +20 };
     },
+    collectionView_layout_minimumLineSpacingForSectionAtIndex:function(collectionView,layout,section){
+        //layout 方向是横向的时候就是调整横向的间距，如果是竖向的时候就是调竖向的间距
+        return 10;
 
+    },
+    collectionView_layout_minimumInteritemSpacingForSectionAtIndex:function(collectionView,layout,section){
+        //这个明显就是调整上面相反方向间距的。
+        return 30;
+    },
     viewWillAppear:function(animation){
         self.super().viewWillAppear(animation);
         self.navigationController().setNavigationBarHidden_animated(1,1);
@@ -1228,10 +1241,8 @@ defineClass("SWCategoryController: SWBaseViewController<UICollectionViewDataSour
     viewWillLayoutSubviews:function(){
      self.super().viewWillLayoutSubviews();
         var rect = self.view().bounds();
-        console.log(self.view().bounds());
-        self.getProp("navBar").setFrame({x:0, y:0, width:self.view().bounds().width, height: 64 });
-        console.log(self.getProp("collectionView").contentInset());
-        self.getProp("collectionView").setFrame({x:0, y:64, width:self.view().bounds().width, height:self.view().bounds().height - 64 - 44});
+        self.getProp("navBar").setFrame({x:0, y:0, width:rect.width, height: 64 });
+        self.getProp("collectionView").setFrame({x:0, y:64, width:rect.width, height:rect.height - 64 - 44});
     }
 
 })
