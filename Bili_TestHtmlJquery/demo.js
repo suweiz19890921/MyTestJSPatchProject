@@ -7,7 +7,7 @@ require('JPEngine').addExtensions(['JPMemory']);
 require('SWContainerView,UIScrollView,SWTopBar,SWLabel,SWBannerCollectionView');
 require('SWTableView,SWHomeBangumiCell,NSDateFormatter,NSDate,NSCalendar');
 require('SWHomeBangumiViewController,SWHomeBangumiDidEndCell,SWHomeBangumiNewBangumiLoadCell,SWHomeBangumiNewChangLoadItem,SWHomeBangumiDidEndItem,SWHomeBangumiRecommendCell,SWHomeBangumiUniversalHeadView,UITableViewHeaderFooterView,SWHomeBangumiAllIconImageCell,SWHomeBangumiSmallIconBGView,SWHomeBangumiSmallIconBGViewItem,SWHomeBangumiBigIconBGView,SWHomeBangumiBigIconBGViewItem');
-require('SWHomeRecommendViewController');
+require('SWHomeRecommendViewController,SWHomeRecommendHotRecommendCell,SWHomeRecommendDanmakuItem,SWHomeLiveItem');
 require('SWCategoryCell');
 //扩展结构体
 require('JPEngine').defineStruct({
@@ -197,6 +197,8 @@ defineClass("SWHomeRecommendViewController: SWBaseViewController<UITableViewData
         self.super().viewDidLoad();
 
         var tableView = UITableView.new();
+        tableView.registerClass_forCellReuseIdentifier(SWHomeRecommendHotRecommendCell.class(),SWHomeRecommendHotRecommendCell.description());
+
         self.view().addSubview(tableView);
         self.setProp_forKey(tableView,"tableView");
         tableView.setDataSource(self);
@@ -209,15 +211,20 @@ defineClass("SWHomeRecommendViewController: SWBaseViewController<UITableViewData
         var sel = self;
         NSURLConnection.sendAsynchronousRequest_queue_completionHandler(request,NSOperationQueue.mainQueue(),block("NSURLResponse* ,NSData*, NSError*",function(response,data,error) {
             if(!error){
-
+                var totalArray = NSMutableArray.new();
                 var NSJSONReadingMutableContainers = 1 << 0;
                 var dict = NSJSONSerialization.JSONObjectWithData_options_error(data,NSJSONReadingMutableContainers,null);
                 if(dict.isKindOfClass(NSDictionary.class())){
-                    var totalArray = dict.objectForKey("data");
-                    if(totalArray.isKindOfClass(NSArray.class())){
-                        if(totalArray.count() > 0){
-                            sel.lazyBannerView().installData(totalArray.firstObject().objectForKey("banner").objectForKey("top"));
+                    var jsonArray = dict.objectForKey("data");
+                    if(jsonArray.isKindOfClass(NSArray.class())){
+                        if(jsonArray.count() > 0){
+                            var firstObject = jsonArray.firstObject();
+                            if(firstObject.isKindOfClass(NSDictionary.class())){
+                                totalArray.addObject(firstObject);
+                                sel.lazyBannerView().installData(firstObject.objectForKey("banner").objectForKey("top"));
+                            }
                         }
+                        totalArray.addObjectsFromArray(jsonArray);
                         sel.setProp_forKey(totalArray,"totalArray");
                     };
                 }
@@ -231,7 +238,6 @@ defineClass("SWHomeRecommendViewController: SWBaseViewController<UITableViewData
     },
     viewWillLayoutSubviews:function(){
         self.super().viewWillLayoutSubviews();
-        console.log(self.view().bounds());
         self.getProp("tableView").setFrame(self.view().bounds());
     },
 
@@ -245,10 +251,11 @@ defineClass("SWHomeRecommendViewController: SWBaseViewController<UITableViewData
         return 1;
     },
     tableView_cellForRowAtIndexPath:function(tableView,indexPath){
-        //if(indexPath.section() == 1){
-        //    var cell = tableView.dequeueReusableCellWithIdentifier(SWHomeBangumiNewBangumiLoadCell.description());
-        //    cell.installData(self.getProp("totalArray").objectAtIndex(indexPath.section()));
-        //    return cell;
+        if(indexPath.section() == 1) {
+            var cell = tableView.dequeueReusableCellWithIdentifier(SWHomeRecommendHotRecommendCell.description());
+            cell.installData(self.getProp("totalArray").objectAtIndex(indexPath.section()));
+            return cell;
+        }
         //}else if(indexPath.section() == 2){
         //    var cell = tableView.dequeueReusableCellWithIdentifier(SWHomeBangumiDidEndCell.description());
         //    //如果为了解决重影可以直接在此处不去重用cell，直接每次都重新创建
@@ -270,6 +277,9 @@ defineClass("SWHomeRecommendViewController: SWBaseViewController<UITableViewData
         return UITableViewCell.new();
     },
     tableView_heightForRowAtIndexPath:function(tableView,indexPath){
+        if(indexPath.section()== 1){
+            return SWHomeRecommendHotRecommendCell.getHeight();
+        }
        return 60;
     },
     tableView_viewForHeaderInSection:function(tableView,section){
@@ -303,9 +313,216 @@ defineClass("SWHomeRecommendViewController: SWBaseViewController<UITableViewData
 
 })
 
+defineClass("SWHomeRecommendHotRecommendCell:UITableViewCell",{
+    initWithStyle_reuseIdentifier:function(style,reuseIdentifier){
+
+        if(self = self.ORIGinitWithStyle_reuseIdentifier(style,reuseIdentifier)){
+            var itemArray = NSMutableArray.new();
+
+            var itemOne = SWHomeRecommendDanmakuItem.new();
+            self.contentView().addSubview(itemOne);
+            itemArray.addObject(itemOne);
+            self.setProp_forKey(itemOne,"itemOne");
+
+            var itemTwo = SWHomeRecommendDanmakuItem.new();
+            self.contentView().addSubview(itemTwo);
+            itemArray.addObject(itemTwo);
+            self.setProp_forKey(itemTwo,"itemTwo");
+
+
+            var itemThree = SWHomeRecommendDanmakuItem.new();
+            self.contentView().addSubview(itemThree);
+            itemArray.addObject(itemThree);
+            self.setProp_forKey(itemThree,"itemThree");
+
+
+            var itemFour = SWHomeRecommendDanmakuItem.new();
+            self.contentView().addSubview(itemFour);
+            itemArray.addObject(itemFour);
+            self.setProp_forKey(itemFour,"itemFour");
+
+
+            var itemFive = SWHomeRecommendDanmakuItem.new();
+            self.contentView().addSubview(itemFive);
+            itemArray.addObject(itemFive);
+            self.setProp_forKey(itemFive,"itemFive");
+
+
+            var itemSix = SWHomeRecommendDanmakuItem.new();
+            self.contentView().addSubview(itemSix);
+            itemArray.addObject(itemSix);
+            self.setProp_forKey(itemSix,"itemSix");
+
+
+            self.setProp_forKey(itemArray,"itemArray");
+        }
+        return self;
+    },
+    installData:function(dict){
+        if(!dict){
+            return;
+        }
+        if(!dict.isKindOfClass(NSDictionary.class())){
+            return;
+        }
+        var bodyArray = dict.objectForKey("body");
+        if(!bodyArray.isKindOfClass(NSArray.class())){
+            return;
+        }
+        var itemArray = self.getProp("itemArray");
+        for(var i = 0; i < itemArray.count(); i++){
+            if(i < bodyArray.count()){
+                var item = itemArray.objectAtIndex(i);
+                var model = bodyArray.objectAtIndex(i);
+                var isLast;
+                if(i == self.getProp("itemArray").count() - 1){
+                    isLast = 1;
+                }else{
+                    isLast = 0;
+                }
+                item.installData(model,isLast);
+            }
+        }
+    },
+    layoutSubviews:function(){
+        self.super().layoutSubviews();
+        var margin = 12;
+        var width = UIScreen.mainScreen().bounds().width;
+        var itemWidth = (width - 3 * margin)/2;
+        var height = SWHomeRecommendDanmakuItem.getHeight();
+        self.getProp("itemOne").setFrame({x:12, y:0, width:itemWidth, height:height});
+        self.getProp("itemTwo").setFrame({x:itemWidth + 2 * margin, y:0, width:itemWidth, height:height});
+        self.getProp("itemThree").setFrame({x:12, y:height, width:itemWidth, height:height});
+        self.getProp("itemFour").setFrame({x:itemWidth + 2 * margin, y:height, width:itemWidth, height:height});
+        self.getProp("itemFive").setFrame({x:12, y:height * 2, width:itemWidth, height:height});
+        self.getProp("itemSix").setFrame({x:itemWidth + 2 * margin, y:height * 2, width:itemWidth, height:height});
+
+    }
+},{
+    getHeight:function(){
+        return SWHomeRecommendDanmakuItem.getHeight() * 3
+    }
+})
 // 推荐中带有 观看次数 和 弹幕数 但是没有圆角头像的item
 defineClass("SWHomeRecommendDanmakuItem:UIView",{
+    initWithFrame:function(frame){
+        if(self.ORIGinitWithFrame(frame)){
+            var coverImage = UIImageView.new();
+            self.addSubview(coverImage);
+            self.setProp_forKey(coverImage,"coverImage");
+            coverImage.layer().setCornerRadius(5);
+            coverImage.setClipsToBounds(1);
 
+            var shadowImage = UIImageView.new();
+            shadowImage.setImage(UIImage.imageNamed("shadow_1_30_gradual_line"));
+            coverImage.addSubview(shadowImage);
+            self.setProp_forKey(shadowImage,"shadowImage");
+
+            var titleLabel = UILabel.new();
+            self.addSubview(titleLabel);
+            titleLabel.setFont(UIFont.systemFontOfSize(14));
+            self.setProp_forKey(titleLabel,"titleLabel");
+            titleLabel.setNumberOfLines(2);
+
+            var watchCountImage = UIImageView.new();
+            coverImage.addSubview(watchCountImage);
+            watchCountImage.setImage(UIImage.imageNamed("misc_playCount_new"));
+            self.setProp_forKey(watchCountImage,"watchCountImage");
+
+            var watchCountLabel = SWLabel.new();
+            watchCountLabel.setTextColor(UIColor.whiteColor());
+            self.setProp_forKey(watchCountLabel,"watchCountLabel");
+            watchCountLabel.setFont(UIFont.systemFontOfSize(12));
+            coverImage.addSubview(watchCountLabel);
+
+            var danmakuCountImage = UIImageView.new();
+            coverImage.addSubview(danmakuCountImage);
+            danmakuCountImage.setImage(UIImage.imageNamed("misc_danmakuCount_new"));
+            self.setProp_forKey(danmakuCountImage,"danmakuCountImage");
+
+            var danmakuCountLabel = SWLabel.new();
+            danmakuCountLabel.setTextColor(UIColor.whiteColor());
+            self.setProp_forKey(danmakuCountLabel,"danmakuCountLabel");
+            danmakuCountLabel.setFont(UIFont.systemFontOfSize(12));
+            coverImage.addSubview(danmakuCountLabel);
+
+            var refreshImage = UIImageView.new();
+            self.addSubview(refreshImage);
+            self.setProp_forKey(refreshImage,"refreshImage");
+            refreshImage.setImage(UIImage.imageNamed("home_refresh_new"));
+
+
+
+        }
+        return self;
+    },
+    installData:function(model,isLast){
+        if(!model){
+            return;
+        }
+        if(!model.isKindOfClass(NSDictionary.class())) {
+            return;
+        }
+
+        self.getProp("coverImage").sd__setImageWithURL(NSURL.URLWithString(model.objectForKey("cover")));
+        var titleLabel = self.getProp("titleLabel");
+            titleLabel.setText(model.objectForKey("title"));
+        var scale = 1.57;
+        var margin = 12;
+        var width = (UIScreen.mainScreen().bounds().width - 3 * margin)/2;
+        var height = width / scale;
+        if(isLast){
+            console.log(isLast);
+            self.getProp("refreshImage").setHidden(0);
+            self.getProp("titleLabel").setFrame({x:0, y:height + 6, width:width - 68, height:34});
+
+        }else{
+            self.getProp("refreshImage").setHidden(1);
+            self.getProp("titleLabel").setFrame({x:0, y:height + 6, width:width, height:34});
+
+        }
+        var play = model.objectForKey("play");
+        var danmaku = model.objectForKey("danmaku");
+        if(play > 9999){
+            play = (play/10000).toFixed(1) + "万";
+        }else{
+            play = play + "";
+        }
+        if(danmaku > 10000){
+            danmaku = (danmaku /10000).toFixed(1) + "万";
+        }else{
+            danmaku = danmaku + "";
+        }
+        self.getProp("watchCountLabel").setText(play);
+        self.getProp("danmakuCountLabel").setText(danmaku);
+
+    },
+    layoutSubviews:function(){
+        self.super().layoutSubviews();
+        var margin = 12;
+        var scale = 1.57;
+        var width = (UIScreen.mainScreen().bounds().width - 3 * margin)/2;
+        var height = width / scale;
+// 6 为小控件之间的间距  14 为小图片的宽度 10为小图片的高度  2.25为因为文字高度要大于小图片高度为了看上去居中 需要将wtchlabel向上移动2.25 14.5为watchLabel的高度  60 为watchLabel的宽度
+//        28 为 refresh高度的以titleLabel的Y值为基础像上移动 22 底部漏出去 12
+        self.getProp("coverImage").setFrame({x:0, y:0, width:width, height:height});
+        self.getProp("watchCountImage").setFrame({x:6, y:height - 6 - 10, width:14, height:10});
+        self.getProp("watchCountLabel").setFrame({x:6 + 14 + 6, y:height - 6 - 10 - 2.25, width:60, height:14.5});
+        self.getProp("danmakuCountImage").setFrame({x:6 + 14 + 6 + 60, y:height - 6 - 10, width:14, height:10});
+        self.getProp("danmakuCountLabel").setFrame({x:6 + 14 + 6 + 60 + 14 + 6, y:height - 6 - 10 - 2.25, width:60, height:14.5});
+        self.getProp("shadowImage").setFrame({x:0, y:height -30, width:width, height:30});
+        self.getProp("refreshImage").setFrame({x:width - 68, y:height + 6 - 22, width:68, height:68});
+    }
+},{
+    getHeight:function(){
+        var margin = 12;
+        var scale = 1.57;
+        var width = (UIScreen.mainScreen().bounds().width - 3 * margin)/2;
+        var height = width / scale;
+// 6 为小控件之间的间距  34为titlelabel的高度 12 为底部默认间距。
+
+        return height + 6 + 34 + 12;
+    }
 })
 
 // 直播中带有 带有圆角头像的item （首页推荐中会用 直播中也会用）
