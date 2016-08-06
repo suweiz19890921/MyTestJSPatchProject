@@ -278,25 +278,8 @@ defineClass("SWHomeRecommendViewController: SWBaseViewController<UITableViewData
             cell.installData(self.getProp("totalArray").objectAtIndex(indexPath.section()));
             return cell;
         }
-        //}else if(indexPath.section() == 2){
-        //    var cell = tableView.dequeueReusableCellWithIdentifier(SWHomeBangumiDidEndCell.description());
-        //    //如果为了解决重影可以直接在此处不去重用cell，直接每次都重新创建
-        //    //var cell = SWHomeBangumiDidEndCell.alloc().initWithStyle_reuseIdentifier(0,SWHomeBangumiDidEndCell.description());
-        //    cell.installData(self.getProp("totalArray").objectAtIndex(indexPath.section()));
-        //    return cell;
-        //}else if(indexPath.section() == 3){
-        //    var recommendArray = self.getProp("totalArray").objectAtIndex(indexPath.section());
-        //    var model;
-        //    if(indexPath.row() < recommendArray.count()){
-        //        model = recommendArray.objectAtIndex(indexPath.row());
-        //    }
-        //    var cell = tableView.dequeueReusableCellWithIdentifier(SWHomeBangumiRecommendCell.description());
-        //
-        //    cell.installData(model);
-        //    return cell;
-        //}
-        //return tableView.dequeueReusableCellWithIdentifier(SWHomeBangumiAllIconImageCell.description());;
         return UITableViewCell.new();
+
     },
     tableView_heightForRowAtIndexPath:function(tableView,indexPath){
         var totalArray = self.getProp("totalArray");
@@ -788,7 +771,6 @@ defineClass("SWHomeLiveItem:UIView",{
             return;
       }
         self.getProp("coverImage").sd__setImageWithURL(NSURL.URLWithString(model.objectForKey("cover")));
-        console.log(model.objectForKey("face"));
         self.getProp("iconImage").sd__setImageWithURL(NSURL.URLWithString(model.objectForKey("face")));
         var titleLabel = self.getProp("titleLabel");
         var nameLabel = self.getProp("nameLabel");
