@@ -7,7 +7,7 @@ require('JPEngine').addExtensions(['JPMemory']);
 require('SWContainerView,UIScrollView,SWTopBar,SWLabel,SWBannerCollectionView');
 require('SWTableView,SWHomeBangumiCell,NSDateFormatter,NSDate,NSCalendar');
 require('SWHomeBangumiViewController,SWHomeBangumiDidEndCell,SWHomeBangumiNewBangumiLoadCell,SWHomeBangumiNewChangLoadItem,SWHomeBangumiDidEndItem,SWHomeBangumiRecommendCell,SWHomeBangumiUniversalHeadView,UITableViewHeaderFooterView,SWHomeBangumiAllIconImageCell,SWHomeBangumiSmallIconBGView,SWHomeBangumiSmallIconBGViewItem,SWHomeBangumiBigIconBGView,SWHomeBangumiBigIconBGViewItem');
-require('SWHomeRecommendViewController,SWHomeRecommendHotRecommendCell,SWHomeRecommendDanmakuItem,SWHomeLiveItem');
+require('SWHomeRecommendViewController,SWHomeRecommendHotRecommendCell,SWHomeRecommendDanmakuItem,SWHomeLiveCell,SWHomeLiveItem');
 require('SWCategoryCell');
 //扩展结构体
 require('JPEngine').defineStruct({
@@ -22,6 +22,8 @@ var bgGrayColor = UIColor.colorWithRed_green_blue_alpha(244./255,244./255,244./2
 var bgOtherRedColor = UIColor.colorWithRed_green_blue_alpha(255./255,111./255,111./255,1);
 var bgOtherBlueColor = UIColor.colorWithRed_green_blue_alpha(94./255,190./255,255./255,1);
 var bgOtherYellowColor = UIColor.colorWithRed_green_blue_alpha(255./255,180./255,0./255,1);
+var liveGrayColor = UIColor.colorWithRed_green_blue_alpha(231./255,231./255,231./255,1);
+
 //app代理--------------------------//app代理--------------------------//app代理--------------------------//app代理--------------------------//app代理--------------------------//app代理--------------------------
 defineClass('AppDelegate : UIResponder',{
     configRootView:function(){
@@ -198,6 +200,7 @@ defineClass("SWHomeRecommendViewController: SWBaseViewController<UITableViewData
 
         var tableView = UITableView.new();
         tableView.registerClass_forCellReuseIdentifier(SWHomeRecommendHotRecommendCell.class(),SWHomeRecommendHotRecommendCell.description());
+        tableView.registerClass_forCellReuseIdentifier(SWHomeLiveCell.class(),SWHomeLiveCell.description());
 
         self.view().addSubview(tableView);
         self.setProp_forKey(tableView,"tableView");
@@ -251,8 +254,16 @@ defineClass("SWHomeRecommendViewController: SWBaseViewController<UITableViewData
         return 1;
     },
     tableView_cellForRowAtIndexPath:function(tableView,indexPath){
+        if(indexPath.section()== 0){
+            return null;
+        }
         if(indexPath.section() == 1) {
             var cell = tableView.dequeueReusableCellWithIdentifier(SWHomeRecommendHotRecommendCell.description());
+            cell.installData(self.getProp("totalArray").objectAtIndex(indexPath.section()));
+            return cell;
+        }
+        if(indexPath.section() == 2) {
+            var cell = tableView.dequeueReusableCellWithIdentifier(SWHomeLiveCell.description());
             cell.installData(self.getProp("totalArray").objectAtIndex(indexPath.section()));
             return cell;
         }
@@ -279,6 +290,9 @@ defineClass("SWHomeRecommendViewController: SWBaseViewController<UITableViewData
     tableView_heightForRowAtIndexPath:function(tableView,indexPath){
         if(indexPath.section()== 1){
             return SWHomeRecommendHotRecommendCell.getHeight();
+        }
+        if(indexPath.section()== 2){
+            return SWHomeLiveCell.getHeight();
         }
        return 60;
     },
@@ -472,7 +486,6 @@ defineClass("SWHomeRecommendDanmakuItem:UIView",{
         var width = (UIScreen.mainScreen().bounds().width - 3 * margin)/2;
         var height = width / scale;
         if(isLast){
-            console.log(isLast);
             self.getProp("refreshImage").setHidden(0);
             self.getProp("titleLabel").setFrame({x:0, y:height + 6, width:width - 68, height:34});
 
@@ -525,9 +538,194 @@ defineClass("SWHomeRecommendDanmakuItem:UIView",{
     }
 })
 
+// 首页推荐中的正在直播cell （首页的直播模块中也会用到）。
+defineClass("SWHomeLiveCell:UITableViewCell",{
+    initWithStyle_reuseIdentifier:function(style,reuseIdentifier){
+
+        if(self = self.ORIGinitWithStyle_reuseIdentifier(style,reuseIdentifier)){
+            var itemArray = NSMutableArray.new();
+
+            var itemOne = SWHomeLiveItem.new();
+            self.contentView().addSubview(itemOne);
+            itemArray.addObject(itemOne);
+            self.setProp_forKey(itemOne,"itemOne");
+
+            var itemTwo = SWHomeLiveItem.new();
+            self.contentView().addSubview(itemTwo);
+            itemArray.addObject(itemTwo);
+            self.setProp_forKey(itemTwo,"itemTwo");
+
+
+            var itemThree = SWHomeLiveItem.new();
+            self.contentView().addSubview(itemThree);
+            itemArray.addObject(itemThree);
+            self.setProp_forKey(itemThree,"itemThree");
+
+
+            var itemFour = SWHomeLiveItem.new();
+            self.contentView().addSubview(itemFour);
+            itemArray.addObject(itemFour);
+            self.setProp_forKey(itemFour,"itemFour");
+
+
+            self.setProp_forKey(itemArray,"itemArray");
+        }
+        return self;
+    },
+    installData:function(dict){
+        if(!dict){
+            return;
+        }
+        if(!dict.isKindOfClass(NSDictionary.class())){
+            return;
+        }
+        var bodyArray = dict.objectForKey("body");
+        if(!bodyArray.isKindOfClass(NSArray.class())){
+            return;
+        }
+        var itemArray = self.getProp("itemArray");
+        for(var i = 0; i < itemArray.count(); i++){
+            if(i < bodyArray.count()){
+                var item = itemArray.objectAtIndex(i);
+                var model = bodyArray.objectAtIndex(i);
+                var isLast;
+                if(i == self.getProp("itemArray").count() - 1){
+                    isLast = 1;
+                }else{
+                    isLast = 0;
+                }
+                item.installData(model,isLast);
+            }
+        }
+    },
+    layoutSubviews:function(){
+        self.super().layoutSubviews();
+        var margin = 12;
+        var width = UIScreen.mainScreen().bounds().width;
+        var itemWidth = (width - 3 * margin)/2;
+        var height = SWHomeLiveItem.getHeight();
+        self.getProp("itemOne").setFrame({x:12, y:0, width:itemWidth, height:height});
+        self.getProp("itemTwo").setFrame({x:itemWidth + 2 * margin, y:0, width:itemWidth, height:height});
+        self.getProp("itemThree").setFrame({x:12, y:height, width:itemWidth, height:height});
+        self.getProp("itemFour").setFrame({x:itemWidth + 2 * margin, y:height, width:itemWidth, height:height});
+
+    }
+},{
+    getHeight:function(){
+        return SWHomeLiveItem.getHeight() * 2
+    }
+})
 // 直播中带有 带有圆角头像的item （首页推荐中会用 直播中也会用）
 defineClass("SWHomeLiveItem:UIView",{
+    initWithFrame:function(frame){
+        if(self.ORIGinitWithFrame(frame)){
 
+            var coverImage = UIImageView.new();
+            self.addSubview(coverImage);
+            self.setProp_forKey(coverImage,"coverImage");
+            coverImage.layer().setCornerRadius(5);
+            coverImage.setClipsToBounds(1);
+
+            var nameLabel = UILabel.new();
+            self.addSubview(nameLabel);
+            nameLabel.setFont(UIFont.systemFontOfSize(14));
+            self.setProp_forKey(nameLabel,"nameLabel");
+
+            var titleLabel = UILabel.new();
+            self.addSubview(titleLabel);
+            titleLabel.setFont(UIFont.systemFontOfSize(12));
+            titleLabel.setTextColor(normalGrayColor);
+            self.setProp_forKey(titleLabel,"titleLabel");
+//            titleLabel.setNumberOfLines(2);
+
+            var iconImage = UIImageView.new();
+            self.addSubview(iconImage);
+            self.setProp_forKey(iconImage,"iconImage");
+            iconImage.layer().setCornerRadius(25);
+            iconImage.setClipsToBounds(1);
+
+            var watchCountLabel = SWLabel.new();
+            watchCountLabel.setTextAlignment(1);
+            watchCountLabel.layer().setCornerRadius(3);
+            watchCountLabel.setClipsToBounds(1);
+            watchCountLabel.installVerticalAlignment(103);
+            watchCountLabel.setBackgroundColor(liveGrayColor);
+            watchCountLabel.setTextColor(UIColor.blackColor());
+            self.setProp_forKey(watchCountLabel,"watchCountLabel");
+            watchCountLabel.setFont(UIFont.systemFontOfSize(12));
+            self.addSubview(watchCountLabel);
+
+            var refreshImage = UIImageView.new();
+            self.addSubview(refreshImage);
+            self.setProp_forKey(refreshImage,"refreshImage");
+            refreshImage.setImage(UIImage.imageNamed("home_refresh_new"));
+
+        }
+        return self;
+    },
+    installData:function(model,isLast){
+      if(!model){
+          return;
+      }
+      if(!model.isKindOfClass(NSDictionary.class())){
+            return;
+      }
+        self.getProp("coverImage").sd__setImageWithURL(NSURL.URLWithString(model.objectForKey("cover")));
+        console.log(model.objectForKey("face"));
+        self.getProp("iconImage").sd__setImageWithURL(NSURL.URLWithString(model.objectForKey("face")));
+        var titleLabel = self.getProp("titleLabel");
+        var nameLabel = self.getProp("nameLabel");
+        titleLabel.setText(model.objectForKey("title"));
+        nameLabel.setText(model.objectForKey("name"));
+        var scale = 1.57;
+        var margin = 12;
+        var width = (UIScreen.mainScreen().bounds().width - 3 * margin)/2;
+        var height = width / scale;
+        if(isLast){
+            self.getProp("refreshImage").setHidden(0);
+//            6.5为本身应该是6，是为了使titleLabel和watchLabel看上去是对齐而向下移0.5。
+            self.getProp("titleLabel").setFrame({x:6 + 50 + 6, y:height + 6 + 17 + 6.5 , width:width - 6 - 50 - 6 - 60, height:14.5});
+
+        }else{
+            self.getProp("refreshImage").setHidden(1);
+            self.getProp("titleLabel").setFrame({x:6 + 50 + 6, y:height + 6 + 17 + 6.5 , width:width - 6 - 50 - 6 , height:14.5});
+
+        }
+        var online = model.objectForKey("online");
+        if(online > 9999){
+            online = (online/10000).toFixed(1) + "万";
+        }else{
+            online = online + "";
+        }
+
+        self.getProp("watchCountLabel").setText(online);
+
+    },
+    layoutSubviews:function(){
+        self.super().layoutSubviews();
+        var margin = 12;
+        var scale = 1.57;
+        var width = (UIScreen.mainScreen().bounds().width - 3 * margin)/2;
+        var height = width / scale;
+// 6 为小控件之间的间距  14 为小图片的宽度 25为头像的高度的一半，50为头像的高度  watchLabel的高度15.5为因为文字高度本身为14.5为了使图片看上去是上下都有一点间距因此加了1的高度 14.5为watchLabel的高度  17 为labelLabel的高度
+//        6.5为本身应该是6，是为了使titleLabel和watchLabel看上去是对齐而向下移动了0.5。 17.5为使刷图片在最下方漏出去12的高度计算出来的
+        self.getProp("coverImage").setFrame({x:0, y:0, width:width, height:height});
+        self.getProp("iconImage").setFrame({x:6, y:height - 25, width:50, height:50});
+        self.getProp("watchCountLabel").setFrame({x:6, y:height + 6 + 17 + 6, width:50, height:15.5});
+        self.getProp("nameLabel").setFrame({x:6 + 50 + 6, y:height + 6, width:width - 6 - 50 - 6, height:17});
+        self.getProp("refreshImage").setFrame({x:width - 68, y:height + 6 - 18.5, width:68, height:68});
+    }
+},{
+    getHeight:function(){
+        var margin = 12;
+        var scale = 1.57;
+        var width = (UIScreen.mainScreen().bounds().width - 3 * margin)/2;
+        var height = width / scale;
+
+// 6 为小控件之间的间距  ，  watchLabel的高度15.5为因为文字高度本身为14.5为了使图片看上去是上下都有一点间距因此加了1的高度   17 为labelLabel的高度
+//        6.5为本身应该是6，是为了使titleLabel和watchLabel看上去是对齐的。
+        return height + 6 + 17 + 6 + 15.5 + 12;
+    }
 })
 
 //自定义cell------------------------//自定义cell------------------------//自定义cell------------------------//自定义cell------------------------//自定义cell------------------------
