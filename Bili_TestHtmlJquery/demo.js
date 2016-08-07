@@ -7,7 +7,7 @@ require('JPEngine').addExtensions(['JPMemory']);
 require('SWContainerView,UIScrollView,SWTopBar,SWLabel,SWBannerCollectionView');
 require('SWTableView,SWHomeBangumiCell,NSDateFormatter,NSDate,NSCalendar');
 require('SWHomeBangumiViewController,SWHomeBangumiDidEndCell,SWHomeBangumiNewBangumiLoadCell,SWHomeBangumiNewChangLoadItem,SWHomeBangumiDidEndItem,SWHomeBangumiRecommendCell,SWHomeBangumiUniversalHeadView,UITableViewHeaderFooterView,SWHomeBangumiAllIconImageCell,SWHomeBangumiSmallIconBGView,SWHomeBangumiSmallIconBGViewItem,SWHomeBangumiBigIconBGView,SWHomeBangumiBigIconBGViewItem');
-require('SWHomeRecommendViewController,SWHomeRecommendHotRecommendCell,SWHomeRecommendDanmakuItem,SWHomeLiveCell,SWHomeRecommendBottomBannerCell,SWHomeLiveItem,SWHomeRecommendBangumiRecommendItem,SWHomeRecommendBangumiRecommendCell');
+require('SWHomeRecommendViewController,SWHomeRecommendHotRecommendCell,SWHomeRecommendNormalCell,SWHomeRecommendDanmakuItem,SWHomeLiveCell,SWHomeRecommendBottomBannerCell,SWHomeLiveItem,SWHomeRecommendBangumiRecommendItem,SWHomeRecommendBangumiRecommendCell');
 require('SWCategoryCell');
 //扩展结构体
 require('JPEngine').defineStruct({
@@ -202,6 +202,7 @@ defineClass("SWHomeRecommendViewController: SWBaseViewController<UITableViewData
         tableView.registerClass_forCellReuseIdentifier(SWHomeRecommendHotRecommendCell.class(),SWHomeRecommendHotRecommendCell.description());
         tableView.registerClass_forCellReuseIdentifier(SWHomeLiveCell.class(),SWHomeLiveCell.description());
         tableView.registerClass_forCellReuseIdentifier(SWHomeRecommendBottomBannerCell.class(),SWHomeRecommendBottomBannerCell.description());
+        tableView.registerClass_forCellReuseIdentifier(SWHomeRecommendNormalCell.class(),SWHomeRecommendNormalCell.description());
 
         self.view().addSubview(tableView);
         self.setProp_forKey(tableView,"tableView");
@@ -265,8 +266,8 @@ defineClass("SWHomeRecommendViewController: SWBaseViewController<UITableViewData
             }
             return cell;
         }
-        if(indexPath.section()== 0){
-            return null;
+        if(model.objectForKey("type").isEqualToString("bangumi")){
+           return UITableViewCell.new();
         }
         if(indexPath.section() == 1) {
             var cell = tableView.dequeueReusableCellWithIdentifier(SWHomeRecommendHotRecommendCell.description());
@@ -278,7 +279,9 @@ defineClass("SWHomeRecommendViewController: SWBaseViewController<UITableViewData
             cell.installData(self.getProp("totalArray").objectAtIndex(indexPath.section()));
             return cell;
         }
-        return UITableViewCell.new();
+        var cell = tableView.dequeueReusableCellWithIdentifier(SWHomeRecommendNormalCell.description());
+        cell.installData(self.getProp("totalArray").objectAtIndex(indexPath.section()));
+        return cell;
 
     },
     tableView_heightForRowAtIndexPath:function(tableView,indexPath){
@@ -294,8 +297,11 @@ defineClass("SWHomeRecommendViewController: SWBaseViewController<UITableViewData
         if(indexPath.section()== 2){
             return SWHomeLiveCell.getHeight();
         }
+        if(model.objectForKey("type").isEqualToString("bangumi")){
+            return 60;
+        }
 
-       return 60;
+       return SWHomeRecommendNormalCell.getHeight();
     },
     tableView_viewForHeaderInSection:function(tableView,section){
         if(section != 0){
@@ -326,6 +332,86 @@ defineClass("SWHomeRecommendViewController: SWBaseViewController<UITableViewData
         return self.getProp("bannerView");
     }
 
+})
+
+// 首页推荐中 只是简单的带有4个SWHomeRecommendDanmakuItem的item
+defineClass("SWHomeRecommendNormalCell:UITableViewCell",{
+    initWithStyle_reuseIdentifier:function(style,reuseIdentifier) {
+
+        if (self = self.ORIGinitWithStyle_reuseIdentifier(style, reuseIdentifier)) {
+            self.setSelectionStyle(0);
+
+            var itemArray = NSMutableArray.new();
+
+            var itemOne = SWHomeRecommendDanmakuItem.new();
+            self.contentView().addSubview(itemOne);
+            itemArray.addObject(itemOne);
+            self.setProp_forKey(itemOne,"itemOne");
+
+            var itemTwo = SWHomeRecommendDanmakuItem.new();
+            self.contentView().addSubview(itemTwo);
+            itemArray.addObject(itemTwo);
+            self.setProp_forKey(itemTwo,"itemTwo");
+
+
+            var itemThree = SWHomeRecommendDanmakuItem.new();
+            self.contentView().addSubview(itemThree);
+            itemArray.addObject(itemThree);
+            self.setProp_forKey(itemThree,"itemThree");
+
+
+            var itemFour = SWHomeRecommendDanmakuItem.new();
+            self.contentView().addSubview(itemFour);
+            itemArray.addObject(itemFour);
+            self.setProp_forKey(itemFour,"itemFour");
+
+            self.setProp_forKey(itemArray,"itemArray");
+
+        }
+        return self;
+    },
+    installData:function(dict){
+        if(!dict){
+            return;
+        }
+        if(!dict.isKindOfClass(NSDictionary.class())){
+            return;
+        }
+        var bodyArray = dict.objectForKey("body");
+        if(!bodyArray.isKindOfClass(NSArray.class())){
+            return;
+        }
+        var itemArray = self.getProp("itemArray");
+        for(var i = 0; i < itemArray.count(); i++){
+            if(i < bodyArray.count()){
+                var item = itemArray.objectAtIndex(i);
+                var model = bodyArray.objectAtIndex(i);
+                var isLast;
+                if(i == self.getProp("itemArray").count() - 1){
+                    isLast = 1;
+                }else{
+                    isLast = 0;
+                }
+                item.installData(model,isLast);
+            }
+        }
+    },
+    layoutSubviews:function(){
+        self.super().layoutSubviews();
+        var margin = 12;
+        var width = UIScreen.mainScreen().bounds().width;
+        var itemWidth = (width - 3 * margin)/2;
+        var height = SWHomeRecommendDanmakuItem.getHeight();
+        self.getProp("itemOne").setFrame({x:12, y:0, width:itemWidth, height:height});
+        self.getProp("itemTwo").setFrame({x:itemWidth + 2 * margin, y:0, width:itemWidth, height:height});
+        self.getProp("itemThree").setFrame({x:12, y:height, width:itemWidth, height:height});
+        self.getProp("itemFour").setFrame({x:itemWidth + 2 * margin, y:height, width:itemWidth, height:height});
+
+    }
+}, {
+    getHeight: function () {
+        return SWHomeRecommendDanmakuItem.getHeight() * 2
+    }
 })
 // 首页推荐中带有 4个 SWHomeRecommendDanmakuItem item 底部有一个banner的cell
 defineClass("SWHomeRecommendBottomBannerCell:UITableViewCell",{
@@ -423,7 +509,7 @@ defineClass("SWHomeRecommendBottomBannerCell:UITableViewCell",{
 
 })
 
-// 首页推荐中的番剧推荐cell 里面的item可以继承首页番剧中的Item 重写一些方法就可以了
+// 首页推荐中的番剧推荐cell 里面的item可以继承首页番剧中的Item 重写一些方法就可以了(但是发现视图之间的继承有问题 控制器之间的继承没有问题)
 defineClass("SWHomeRecommendBangumiRecommendCell:UITableViewCell",{
     initWithStyle_reuseIdentifier:function(style,reuseIdentifier){
 
