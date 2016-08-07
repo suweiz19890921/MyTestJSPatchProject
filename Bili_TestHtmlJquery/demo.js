@@ -7,7 +7,7 @@ require('JPEngine').addExtensions(['JPMemory']);
 require('SWContainerView,UIScrollView,SWTopBar,SWLabel,SWBannerCollectionView');
 require('SWTableView,SWHomeBangumiCell,NSDateFormatter,NSDate,NSCalendar');
 require('SWHomeBangumiViewController,SWHomeBangumiDidEndCell,SWHomeBangumiNewBangumiLoadCell,SWHomeBangumiNewChangLoadItem,SWHomeBangumiDidEndItem,SWHomeBangumiRecommendCell,SWHomeBangumiUniversalHeadView,UITableViewHeaderFooterView,SWHomeBangumiAllIconImageCell,SWHomeBangumiSmallIconBGView,SWHomeBangumiSmallIconBGViewItem,SWHomeBangumiBigIconBGView,SWHomeBangumiBigIconBGViewItem');
-require('SWHomeRecommendViewController,SWHomeRecommendHotRecommendCell,SWHomeRecommendDanmakuItem,SWHomeLiveCell,SWHomeRecommendBottomBannerCell,SWHomeLiveItem');
+require('SWHomeRecommendViewController,SWHomeRecommendHotRecommendCell,SWHomeRecommendDanmakuItem,SWHomeLiveCell,SWHomeRecommendBottomBannerCell,SWHomeLiveItem,SWHomeRecommendBangumiRecommendItem,SWHomeRecommendBangumiRecommendCell');
 require('SWCategoryCell');
 //扩展结构体
 require('JPEngine').defineStruct({
@@ -420,6 +420,47 @@ defineClass("SWHomeRecommendBottomBannerCell:UITableViewCell",{
         // 12 为间距
         return SWHomeRecommendDanmakuItem.getHeight() * 2 + 12 + width/bannerScale + 12;
     }
+
+})
+
+// 首页推荐中的番剧推荐cell 里面的item可以继承首页番剧中的Item 重写一些方法就可以了
+defineClass("SWHomeRecommendBangumiRecommendCell:UITableViewCell",{
+    initWithStyle_reuseIdentifier:function(style,reuseIdentifier){
+
+        if(self = self.ORIGinitWithStyle_reuseIdentifier(style,reuseIdentifier)){
+            self.setSelectionStyle(0);
+
+            var itemArray = NSMutableArray.new();
+
+            var itemOne = SWHomeRecommendBangumiRecommendItem.new();
+            self.contentView().addSubview(itemOne);
+            itemArray.addObject(itemOne);
+            self.setProp_forKey(itemOne,"itemOne");
+
+            var itemTwo = SWHomeRecommendBangumiRecommendItem.new();
+            self.contentView().addSubview(itemTwo);
+            itemArray.addObject(itemTwo);
+            self.setProp_forKey(itemTwo,"itemTwo");
+
+
+            var itemThree = SWHomeRecommendBangumiRecommendItem.new();
+            self.contentView().addSubview(itemThree);
+            itemArray.addObject(itemThree);
+            self.setProp_forKey(itemThree,"itemThree");
+
+
+            var itemFour = SWHomeRecommendBangumiRecommendItem.new();
+            self.contentView().addSubview(itemFour);
+            itemArray.addObject(itemFour);
+            self.setProp_forKey(itemFour,"itemFour");
+
+
+            self.setProp_forKey(itemArray,"itemArray");
+        }
+        return self;
+    }
+})
+defineClass("SWHomeRecommendBangumiRecommendItem:UIView",{
 
 })
 
@@ -1331,14 +1372,7 @@ defineClass("SWHomeBangumiNewBangumiLoadCell:UITableViewCell",{
 },
     {
         getHeight:function(){
-            var margin = 12;
-            var totalWidth = UIScreen.mainScreen().bounds().width;
-            var width = (totalWidth - (3 * margin))/2;
-            var coverImageScale = 108/174;
-            var coverImageHeight = width * coverImageScale;
-            //coverImage为封面图片高度， 17 为titleLable的高度 6为titleLabel和timeLabel的间距  14.5 为下面的timeLabel的高度 12为底部默认留的间距
-            var itemHeight = coverImageHeight + 17 + 12 + 14.5 + 6 + 12;
-            return itemHeight * 3;
+            return SWHomeBangumiNewChangLoadItem.getHeight() * 3;
         }
     })
 //SW 首页番剧中watchCount 的item  新番连载视图中的item
@@ -1376,6 +1410,12 @@ defineClass("SWHomeBangumiNewChangLoadItem:UIView",{
         return self;
     },
     installData:function(model){
+        if(!model){
+            return;
+        }
+        if(!model.isKindOfClass(NSDictionary.class())){
+            return;
+        }
         var urlStr = model.objectForKey("cover");
         var title = model.objectForKey("title");
         var timeStr = self.handleTimetemp_index(model.objectForKey("last_time"),model.objectForKey("newest_ep_index"));
@@ -1467,6 +1507,17 @@ defineClass("SWHomeBangumiNewChangLoadItem:UIView",{
         self.getProp("timeLabel").setFrame({x:0, y:coverImageHeight + 6 + 17 + 12, width:width, height:14.5});
     }
 
+},{
+    getHeight:function(){
+        var margin = 12;
+        var totalWidth = UIScreen.mainScreen().bounds().width;
+        var width = (totalWidth - (3 * margin))/2;
+        var coverImageScale = 108/174;
+        var coverImageHeight = width * coverImageScale;
+        //coverImage为封面图片高度， 17 为titleLable的高度 6为titleLabel和timeLabel的间距  14.5 为下面的timeLabel的高度 12为底部默认留的间距
+        var itemHeight = coverImageHeight + 17 + 12 + 14.5 + 6 + 12;
+        return itemHeight;
+    }
 })
 
 //SW 首页番剧中的完结动画cell SWHomeBangumiDidEndCell (有可以滚动的item) 完结动画
