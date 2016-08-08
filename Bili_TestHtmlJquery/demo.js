@@ -551,7 +551,7 @@ defineClass("SWHomeRecommendBangumiRecommendCell:UITableViewCell",{
             self.contentView().addSubview(timeLineImage);
             timeLineImage.layer().setCornerRadius(5);
             self.setProp_forKey(timeLineImage,"timeLineImage");
-            timeLineImage.setImage(UIImage.imageNamed("hd_home_bangumi_timeline_new"));
+            timeLineImage.setImage(UIImage.imageNamed("hd_home_bangumi_timeline"));
             timeLineImage.setClipsToBounds(1);
 
             var indexImage = UIImageView.new();
