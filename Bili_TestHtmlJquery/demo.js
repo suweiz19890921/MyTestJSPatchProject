@@ -2123,6 +2123,9 @@ defineClass("SWHomeBangumiUniversalHeadView:UITableViewHeaderFooterView",{
         }else if(title.isEqualToString("科技区")){
             iconImage.setImage(UIImage.imageNamed("科技_60.compressed"));
         }else if(title.isEqualToString("活动中心")){
+            if(title.length() >= 2){
+                desLabel.setText("更多" + title.substringToIndex(title.length() - 2).toJS());
+            }
             iconImage.setImage(UIImage.imageNamed("home_region_icon_160"));
         }else if(title.isEqualToString("生活区")){
             iconImage.setImage(UIImage.imageNamed("home_region_icon_160"));
