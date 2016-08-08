@@ -24,6 +24,7 @@ var bgOtherRedColor = UIColor.colorWithRed_green_blue_alpha(255./255,111./255,11
 var bgOtherBlueColor = UIColor.colorWithRed_green_blue_alpha(94./255,190./255,255./255,1);
 var bgOtherYellowColor = UIColor.colorWithRed_green_blue_alpha(255./255,180./255,0./255,1);
 var liveGrayColor = UIColor.colorWithRed_green_blue_alpha(231./255,231./255,231./255,1);
+var normalblackColor = UIColor.colorWithRed_green_blue_alpha(33./255,33./255,33./255,1);
 
 //app代理--------------------------//app代理--------------------------//app代理--------------------------//app代理--------------------------//app代理--------------------------//app代理--------------------------
 defineClass('AppDelegate : UIResponder',{
@@ -625,6 +626,7 @@ defineClass("SWHomeRecommendBangumiRecommendItem:UIView",{
             self.setProp_forKey(shadowImage,"shadowImage");
 
             var titleLabel = SWLabel.new();
+            titleLabel.setTextColor(normalblackColor);
             titleLabel.installVerticalAlignment(101);
             self.addSubview(titleLabel);
             titleLabel.setFont(UIFont.systemFontOfSize(14));
@@ -853,6 +855,7 @@ defineClass("SWHomeRecommendDanmakuItem:UIView",{
             self.setProp_forKey(shadowImage,"shadowImage");
 
             var titleLabel = UILabel.new();
+            titleLabel.setTextColor(normalblackColor);
             self.addSubview(titleLabel);
             titleLabel.setFont(UIFont.systemFontOfSize(14));
             self.setProp_forKey(titleLabel,"titleLabel");
@@ -1070,6 +1073,8 @@ defineClass("SWHomeLiveItem:UIView",{
             watchCountLabel.setTextAlignment(1);
             watchCountLabel.layer().setCornerRadius(3);
             watchCountLabel.setClipsToBounds(1);
+            watchCountLabel.layer().setBorderWidth(0.5);
+            watchCountLabel.layer().setBorderColor(normalGrayColor.CGColor());
             watchCountLabel.installVerticalAlignment(103);
             watchCountLabel.setBackgroundColor(liveGrayColor);
             watchCountLabel.setTextColor(UIColor.blackColor());
