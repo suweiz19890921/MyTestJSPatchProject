@@ -124,6 +124,7 @@
 		4AA0DF291D5201980099BAA2 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AA0DF281D5201980099BAA2 /* libz.tbd */; };
 		4AA0DF2B1D5202000099BAA2 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AA0DF2A1D5202000099BAA2 /* JavaScriptCore.framework */; };
 		4AA0DF2D1D5203C00099BAA2 /* JSPatch.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AA0DF2C1D5203C00099BAA2 /* JSPatch.framework */; };
+		4AA0DFD01D5884240099BAA2 /* SWJSPatchNotSupportTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 4AA0DFCF1D5884240099BAA2 /* SWJSPatchNotSupportTool.m */; };
 		4AA2A7081D522B17001B9283 /* demo.js in Resources */ = {isa = PBXBuildFile; fileRef = 4AA2A7071D522B17001B9283 /* demo.js */; };
 		4AE192FD1D3929F600DFCCDD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4AE192FC1D3929F600DFCCDD /* Images.xcassets */; };
 /* End PBXBuildFile section */
@@ -387,6 +388,8 @@
 		4AA0DF281D5201980099BAA2 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		4AA0DF2A1D5202000099BAA2 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		4AA0DF2C1D5203C00099BAA2 /* JSPatch.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = JSPatch.framework; sourceTree = "<group>"; };
+		4AA0DFCE1D5884240099BAA2 /* SWJSPatchNotSupportTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SWJSPatchNotSupportTool.h; path = Bili_TestHtmlJquery/SWJSPatchNotSupportTool.h; sourceTree = "<group>"; };
+		4AA0DFCF1D5884240099BAA2 /* SWJSPatchNotSupportTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SWJSPatchNotSupportTool.m; path = Bili_TestHtmlJquery/SWJSPatchNotSupportTool.m; sourceTree = "<group>"; };
 		4AA2A7071D522B17001B9283 /* demo.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = demo.js; sourceTree = "<group>"; };
 		4AE192FC1D3929F600DFCCDD /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -422,6 +425,7 @@
 		4A0648E91D350286000D02B4 = {
 			isa = PBXGroup;
 			children = (
+				4AA0DFD61D5885D30099BAA2 /* tool */,
 				4AA2A7091D522B25001B9283 /* thirdPart */,
 				4AA2A7061D5229A7001B9283 /* frameworks */,
 				4A0648F41D350286000D02B4 /* Bili_TestHtmlJquery */,
@@ -730,6 +734,15 @@
 			path = extobjc;
 			sourceTree = "<group>";
 		};
+		4AA0DFD61D5885D30099BAA2 /* tool */ = {
+			isa = PBXGroup;
+			children = (
+				4AA0DFCE1D5884240099BAA2 /* SWJSPatchNotSupportTool.h */,
+				4AA0DFCF1D5884240099BAA2 /* SWJSPatchNotSupportTool.m */,
+			);
+			name = tool;
+			sourceTree = "<group>";
+		};
 		4AA2A7061D5229A7001B9283 /* frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -957,6 +970,7 @@
 				4A064AB01D38F845000D02B4 /* RACEmptySequence.m in Sources */,
 				4A064A981D38F845000D02B4 /* NSObject+RACDescription.m in Sources */,
 				4A064AD71D38F845000D02B4 /* UIBarButtonItem+RACCommandSupport.m in Sources */,
+				4AA0DFD01D5884240099BAA2 /* SWJSPatchNotSupportTool.m in Sources */,
 				4A064AA11D38F845000D02B4 /* NSString+RACSupport.m in Sources */,
 				4A064A971D38F845000D02B4 /* NSObject+RACDeallocating.m in Sources */,
 				4A064ACA1D38F845000D02B4 /* RACSubject.m in Sources */,
