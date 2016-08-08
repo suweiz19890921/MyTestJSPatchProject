@@ -9,6 +9,7 @@ require('SWContainerView,UIScrollView,SWTopBar,SWLabel,SWBannerCollectionView');
 require('SWTableView,SWHomeBangumiCell,NSAttributedString,NSTextAttachment,NSDateFormatter,NSDate,NSCalendar');
 require('SWHomeBangumiViewController,SWHomeBangumiDidEndCell,SWHomeBangumiNewBangumiLoadCell,SWHomeBangumiNewChangLoadItem,SWHomeBangumiDidEndItem,SWHomeBangumiRecommendCell,SWHomeBangumiUniversalHeadView,UITableViewHeaderFooterView,SWHomeBangumiAllIconImageCell,SWHomeBangumiSmallIconBGView,SWHomeBangumiSmallIconBGViewItem,SWHomeBangumiBigIconBGView,SWHomeBangumiBigIconBGViewItem');
 require('SWHomeRecommendViewController,SWHomeRecommendHotRecommendCell,SWHomeRecommendNormalCell,SWHomeRecommendDanmakuItem,SWHomeLiveCell,SWHomeRecommendBottomBannerCell,SWHomeLiveItem,SWHomeRecommendBangumiRecommendItem,SWHomeRecommendBangumiRecommendCell');
+require('SWHomeViewController,SWHomeLiveMainCell')
 require('SWCategoryCell');
 //扩展结构体
 require('JPEngine').defineStruct({
@@ -188,7 +189,111 @@ defineClass("SWHomeViewController: SWBaseViewController<UITableViewDataSource,UI
     }
 })
 
-//
+// 首页直播模块控制器。
+defineClass("SWHomeLiveController:SWBaseViewController",{
+
+})
+
+// 首页直播模块 带有4个 live item 和底部 一个 查看更多按钮 和一个动态刷新 图片 的cell
+defineClass("SWHomeLiveMainCell:UITableViewCell",{
+    initWithStyle_reuseIdentifier:function(style,reuseIdentifier){
+
+        if(self = self.ORIGinitWithStyle_reuseIdentifier(style,reuseIdentifier)){
+            self.setSelectionStyle(0);
+
+            var itemArray = NSMutableArray.new();
+
+            var itemOne = SWHomeLiveItem.new();
+            self.contentView().addSubview(itemOne);
+            itemArray.addObject(itemOne);
+            self.setProp_forKey(itemOne,"itemOne");
+
+            var itemTwo = SWHomeLiveItem.new();
+            self.contentView().addSubview(itemTwo);
+            itemArray.addObject(itemTwo);
+            self.setProp_forKey(itemTwo,"itemTwo");
+
+
+            var itemThree = SWHomeLiveItem.new();
+            self.contentView().addSubview(itemThree);
+            itemArray.addObject(itemThree);
+            self.setProp_forKey(itemThree,"itemThree");
+
+
+            var itemFour = SWHomeLiveItem.new();
+            self.contentView().addSubview(itemFour);
+            itemArray.addObject(itemFour);
+            self.setProp_forKey(itemFour,"itemFour");
+
+            var seeMoreButton = UIButton.new();
+            self.contentView().addSubview(seeMoreButton);
+            seeMoreButton.setContentVerticalAlignment(0);
+            seeMoreButton.setContentHorizontalAlignment(0);
+            self.setProp_forKey(seeMoreButton,"seeMoreButton");
+            seeMoreButton.layer().setBorderWidth(0.5);
+            seeMoreButton.layer().setBorderColor(normalGrayColor.CGColor());
+            seeMoreButton.setTitleColor_forState(normalGrayColor,0);
+
+            var dynamicLabel = UILabel.new();
+            dynamicLabel.setFont(UIFont.systemFontOfSize(12));
+            dynamicLabel.setTextAlignment(0);
+            self.contentView().addSubview(dynamicLabel);
+            self.setProp_forKey(dynamicLabel,"dynamicLabel");
+
+            var smallRefreshImage = UIImageView.new();
+            self.contentView().addSubview(smallRefreshImage);
+            smallRefreshImage.setImage(UIImage.imageNamed("home_refresh_new"));
+            self.setProp_forKey(smallRefreshImage,"smallRefreshImage");
+
+
+            self.setProp_forKey(itemArray,"itemArray");
+        }
+        return self;
+    },
+    installData:function(dict){
+        if(!dict){
+            return;
+        }
+        if(!dict.isKindOfClass(NSDictionary.class())){
+            return;
+        }
+        var bodyArray = dict.objectForKey("body");
+        if(!bodyArray.isKindOfClass(NSArray.class())){
+            return;
+        }
+        var itemArray = self.getProp("itemArray");
+        for(var i = 0; i < itemArray.count(); i++){
+            if(i < bodyArray.count()){
+                var item = itemArray.objectAtIndex(i);
+                var model = bodyArray.objectAtIndex(i);
+                item.installData(model,0);
+            }
+        }
+    },
+    layoutSubviews:function(){
+        self.super().layoutSubviews();
+        var margin = 12;
+        var width = UIScreen.mainScreen().bounds().width;
+        var itemWidth = (width - 3 * margin)/2;
+        var height = SWHomeLiveItem.getHeight();
+        self.getProp("itemOne").setFrame({x:12, y:0, width:itemWidth, height:height});
+        self.getProp("itemTwo").setFrame({x:itemWidth + 2 * margin, y:0, width:itemWidth, height:height});
+        self.getProp("itemThree").setFrame({x:12, y:height, width:itemWidth, height:height});
+        self.getProp("itemFour").setFrame({x:itemWidth + 2 * margin, y:height, width:itemWidth, height:height});
+
+        var moreButtonScale = 3.81;
+        self.getProp("seeMoreButton").setFrame({x: margin, y:height + 12, width:42 * moreButtonScale, height:42});
+        self.getProp("dynamicLabel").setFrame({x:width - margin - 17 - 6 - 200, y:height + 12 +13.75, width:200, height:14.5});
+        self.getProp("smallRefreshImage").setFrame({x:width - margin - 17, y:height + 12 + 12.5, width:17, height:17});
+        self.getProp("seeMoreButton").setTitle_forState("查看更多",0);
+    }
+},{
+    getHeight:function(){
+        return SWHomeLiveItem.getHeight() * 2 + 12 + 42 + 12;
+    }
+})
+
+// 首页推荐 模块控制器
 defineClass("SWHomeRecommendViewController: SWBaseViewController<UITableViewDataSource,UITableViewDelegate>", {
     init:function(){
         if(self.ORIGinit()){
