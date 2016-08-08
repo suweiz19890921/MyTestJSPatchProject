@@ -748,7 +748,7 @@ defineClass("SWHomeRecommendDanmakuItem:UIView",{
         self.getProp("watchCountLabel").setFrame({x:6 + 14 + 6, y:height - 6 - 10 - 2.25, width:60, height:14.5});
         self.getProp("danmakuCountImage").setFrame({x:6 + 14 + 6 + 60, y:height - 6 - 10, width:14, height:10});
         self.getProp("danmakuCountLabel").setFrame({x:6 + 14 + 6 + 60 + 14 + 6, y:height - 6 - 10 - 2.25, width:60, height:14.5});
-        self.getProp("shadowImage").setFrame({x:0, y:height -30, width:width, height:30});
+        self.getProp("shadowImage").setFrame({x:0, y:height - 0.5 * height, width:width, height:0.5 * height});
         self.getProp("refreshImage").setFrame({x:width - 68, y:height + 6 - 22, width:68, height:68});
     }
 },{
