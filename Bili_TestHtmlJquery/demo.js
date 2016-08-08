@@ -2089,7 +2089,7 @@ defineClass("SWHomeBangumiUniversalHeadView:UITableViewHeaderFooterView",{
             var attrbuteString = NSMutableAttributedString.alloc().initWithString(" 排行榜");
             attrbuteString.insertAttributedString_atIndex(atributeText,0);
             desLabel.setAttributedText(attrbuteString);
-            iconImage.setImage(UIImage.imageNamed("recommend_compressed"));
+            iconImage.setImage(UIImage.imageNamed("recommend.compressed"));
             self.getProp("titleLable").setText("热门推荐");
         }else if(title.isEqualToString("热门直播")){
             // 直播的descLabel宽度要做处理
