@@ -191,7 +191,16 @@ defineClass("SWHomeViewController: SWBaseViewController<UITableViewDataSource,UI
 
 // 首页直播模块控制器。
 defineClass("SWHomeLiveController:SWBaseViewController",{
+    init:function(){
+        if(self.ORIGinit()){
 
+        }
+        return self;
+    },
+    viewDidLoad:function(){
+        self.super().viewDidLoad();
+        
+    }
 })
 
 // 首页直播模块 带有4个 live item 和底部 一个 查看更多按钮 和一个动态刷新 图片 的cell
@@ -2188,12 +2197,14 @@ defineClass("SWHomeBangumiUniversalHeadView:UITableViewHeaderFooterView",{
         desLabel.setTextColor(normalGrayColor);
         if(title.isEqualToString("热门焦点")){
             // 热门推荐的descLabel也要做改变
+            //为label以富文本的方式添加图片
+
             desLabel.setTextColor(bgOtherYellowColor);
            var attachment = NSTextAttachment.new();
             attachment.setBounds({x:0, y:-3, width:20, height:16.5});
             var image = UIImage.imageNamed("bangumi_rank_ico");
            image = SWJSPatchNotSupportTool.imageWithColor_image(bgOtherYellowColor,image);
-            console.log(image);
+
             attachment.setImage(image);
             var atributeText = NSAttributedString.attributedStringWithAttachment(attachment);
             var attrbuteString = NSMutableAttributedString.alloc().initWithString(" 排行榜");
