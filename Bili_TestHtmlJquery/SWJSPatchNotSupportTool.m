@@ -28,4 +28,14 @@
     UIGraphicsEndImageContext();
     return newImage;
 }
+
+// 这个方法是给view固定方向 添加圆角的方法， 因为在JSPatch中只要创建CAShapeLayer就会崩溃，只能在 OC中完成。
++ (void)clipCornerRadusWithView:(UIView *)view size:(CGSize)size direct:(UIRectCorner)direct rect:(CGRect)rect
+{
+    UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:view.bounds byRoundingCorners:direct cornerRadii:size];
+    CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+    maskLayer.frame = view.bounds;
+    maskLayer.path = maskPath.CGPath;
+    view.layer.mask = maskLayer;
+}
 @end

@@ -1,15 +1,15 @@
 /**
  * Created by suwei on 16/7/13.
  */
-require('UIButton,UIWindow,UIView,UICollectionView,UIPageControl,UICollectionViewFlowLayout,UIFont,NSMutableAttributedString,NSMutableString,UITapGestureRecognizer,SWBaseViewController,NSMutableArray,SWTabBarController,UINavigationController,SWHomeViewController,SWCategoryController,SWConcernViewController,SWSearchViewController,SWPlayerUserCenterViewController,JPViewController,UITabBarController,NSArray,UITableView,UIScreen,UIViewController,AppDelegate, UIImageView, UIImage, UIScreen,UITableViewCell,UILabel, NSURL, NSURLRequest,NSURLConnection,NSOperationQueue');
-require('UIColor,NSURLResponse,NSData,NSError,NSIndexPath,NSTimer,NSJSONSerialization,NSDictionary,NSArray, UIViewController,SWTableViewCell');
+require('UIButton,UIWindow,UIBezierPath,UIView,UICollectionView,UIPageControl,UICollectionViewFlowLayout,UIFont,NSMutableAttributedString,NSMutableString,UITapGestureRecognizer,SWBaseViewController,NSMutableArray,SWTabBarController,UINavigationController,SWHomeViewController,SWCategoryController,SWConcernViewController,SWSearchViewController,SWPlayerUserCenterViewController,JPViewController,UITabBarController,NSArray,UITableView,UIScreen,UIViewController,AppDelegate, UIImageView, UIImage, UIScreen,UITableViewCell,UILabel, NSURL, NSURLRequest,NSURLConnection,NSOperationQueue');
+require('UIColor,NSURLResponse,NSData,NSError,NSIndexPath,CAShapeLayer,NSTimer,NSJSONSerialization,NSDictionary,NSArray, UIViewController,SWTableViewCell');
 require('JPEngine').addExtensions(['JPMemory']);
 require('SWJSPatchNotSupportTool')
 require('SWContainerView,UIScrollView,SWTopBar,SWLabel,SWBannerCollectionView');
 require('SWTableView,SWHomeBangumiCell,NSAttributedString,NSTextAttachment,NSDateFormatter,NSDate,NSCalendar');
 require('SWHomeBangumiViewController,SWHomeBangumiDidEndCell,SWHomeBangumiNewBangumiLoadCell,SWHomeBangumiNewChangLoadItem,SWHomeBangumiDidEndItem,SWHomeBangumiRecommendCell,SWHomeBangumiUniversalHeadView,UITableViewHeaderFooterView,SWHomeBangumiAllIconImageCell,SWHomeBangumiSmallIconBGView,SWHomeBangumiSmallIconBGViewItem,SWHomeBangumiBigIconBGView,SWHomeBangumiBigIconBGViewItem');
 require('SWHomeRecommendViewController,SWHomeRecommendHotRecommendCell,SWHomeRecommendNormalCell,SWHomeRecommendDanmakuItem,SWHomeLiveCell,SWHomeRecommendBottomBannerCell,SWHomeLiveItem,SWHomeRecommendBangumiRecommendItem,SWHomeRecommendBangumiRecommendCell');
-require('SWHomeViewController,SWHomeLiveMainCell')
+require('SWHomeViewController,SWHomeLiveMainCell,SWHomeLiveSmallView,SWHomeLiveBigView,SWHomeLiveTopNormalCell,SWHomeLiveSmallIconView,SWHomeLiveBigIconView')
 require('SWCategoryCell');
 //扩展结构体
 require('JPEngine').defineStruct({
@@ -203,6 +203,7 @@ defineClass("SWHomeLiveController:SWBaseViewController<UITableViewDataSource,UIT
         var tableView = SWTableView.new();
         tableView.setBackgroundColor(bgGrayColor);
         tableView.registerClass_forCellReuseIdentifier(SWHomeLiveMainCell.class(),SWHomeLiveMainCell.description());
+        tableView.registerClass_forCellReuseIdentifier(SWHomeLiveTopNormalCell.class(),SWHomeLiveTopNormalCell.description());
 
         self.view().addSubview(tableView);
         self.setProp_forKey(tableView,"tableView");
@@ -211,6 +212,14 @@ defineClass("SWHomeLiveController:SWBaseViewController<UITableViewDataSource,UIT
         self.loadAndHandleData();
         
     },
+    //屏幕即将旋转方法重写
+    //willAnimateRotationToInterfaceOrientation_duration:function(toInterfaceOrienation,duration){
+    //    self.lazyBannerView().refreshLayout();
+    //},
+    //用上面的方法接受屏幕旋转通知，会导致系统警告（原因未知）
+    willRotateToInterfaceOrientation_duration:function(toInterfaceOrienation,duration){
+    self.lazyBannerView().refreshLayout();
+},
     loadAndHandleData:function(){
         var url= NSURL.URLWithString(self.getProp('liveUrl'));
         var request = NSURLRequest.alloc().initWithURL(url);
@@ -221,6 +230,7 @@ defineClass("SWHomeLiveController:SWBaseViewController<UITableViewDataSource,UIT
                 var NSJSONReadingMutableContainers = 1 << 0;
                 var dict = NSJSONSerialization.JSONObjectWithData_options_error(data,NSJSONReadingMutableContainers,null);
                 if(dict.isKindOfClass(NSDictionary.class())){
+
                     var dataDict = dict.objectForKey("data");
 
                     if(dataDict.isKindOfClass(NSDictionary.class())){
@@ -269,12 +279,13 @@ defineClass("SWHomeLiveController:SWBaseViewController<UITableViewDataSource,UIT
             return count ;
     },
     tableView_numberOfRowsInSection:function(tableView,section){
-        if(section == 0){
-            return 0;
-        }
         return 1;
     },
     tableView_cellForRowAtIndexPath:function(tableView,indexPath){
+        if(indexPath.section() == 0){
+            var cell = tableView.dequeueReusableCellWithIdentifier(SWHomeLiveTopNormalCell.description());
+            return cell;
+        }
         var count = self.getProp("liveTotalArray").count();
         var model;
         var cell = tableView.dequeueReusableCellWithIdentifier(SWHomeLiveMainCell.description());
@@ -286,6 +297,9 @@ defineClass("SWHomeLiveController:SWBaseViewController<UITableViewDataSource,UIT
 
     },
     tableView_heightForRowAtIndexPath:function(tableView,indexPath){
+        if(indexPath.section() == 0){
+            return SWHomeLiveTopNormalCell.getHeight();
+        }
         return SWHomeLiveMainCell.getHeight();
     },
     tableView_viewForHeaderInSection:function(tableView,section){
@@ -316,6 +330,300 @@ defineClass("SWHomeLiveController:SWBaseViewController<UITableViewDataSource,UIT
         }
         return self.getProp("bannerView");
     }
+})
+// 首页模块中Banner下面对应的全是图标的 cell 包括上下两个部分，上面试小图标，下面是 粉红色的长图标。cell
+defineClass("SWHomeLiveTopNormalCell:UITableViewCell",{
+    initWithStyle_reuseIdentifier:function(style,reuseIdentifier) {
+
+        if (self = self.ORIGinitWithStyle_reuseIdentifier(style, reuseIdentifier)) {
+            self.setSelectionStyle(0);
+            var smallIconView = SWHomeLiveSmallView.new();
+            self.contentView().addSubview(smallIconView);
+            self.setProp_forKey(smallIconView,"smallIconView");
+
+            var bigIconView = SWHomeLiveBigView.new();
+            self.contentView().addSubview(bigIconView);
+            self.setProp_forKey(bigIconView,"bigIconView");
+        }
+        return self;
+    },
+    layoutSubviews:function(){
+        self.super().layoutSubviews();
+        var width = UIScreen.mainScreen().bounds().width;
+        self.getProp("smallIconView").setFrame({x:0, y:0, width:width ,height:SWHomeLiveSmallView.getHeight()});
+        self.getProp("bigIconView").setFrame({x:0, y:SWHomeLiveSmallView.getHeight(), width:width ,height:58});
+    }
+},{
+    getHeight:function(){
+        return SWHomeLiveSmallView.getHeight() + SWHomeLiveBigView.getHeight();
+    }
+})
+// liveNormalCell中上面有8个小图标的中的小图标视图
+defineClass("SWHomeLiveSmallView:UIView",{
+    initWithFrame:function(frame){
+        if(self.ORIGinitWithFrame(frame)){
+            var iconArray = NSMutableArray.new();
+
+           var iconOne = SWHomeLiveSmallIconView.new();
+            self.addSubview(iconOne);
+            iconArray.addObject(iconOne);
+            self.setProp_forKey(iconOne,"iconOne");
+
+            var iconTwo = SWHomeLiveSmallIconView.new();
+            self.addSubview(iconTwo);
+            iconArray.addObject(iconTwo);
+            self.setProp_forKey(iconTwo,"iconTwo");
+
+            var iconThree = SWHomeLiveSmallIconView.new();
+            self.setProp_forKey(iconThree,"iconThree");
+            self.addSubview(iconThree);
+            iconArray.addObject(iconThree);
+
+            var iconFour = SWHomeLiveSmallIconView.new();
+            self.setProp_forKey(iconFour,"iconFour");
+            self.addSubview(iconFour);
+            iconArray.addObject(iconFour);
+
+
+            var iconFive = SWHomeLiveSmallIconView.new();
+            self.setProp_forKey(iconFive,"iconFive");
+            self.addSubview(iconFive);
+            iconArray.addObject(iconFive);
+
+            var iconSix = SWHomeLiveSmallIconView.new();
+            self.addSubview(iconSix);
+            self.setProp_forKey(iconSix,"iconSix");
+            iconArray.addObject(iconSix);
+
+            var iconSeven = SWHomeLiveSmallIconView.new();
+            self.setProp_forKey(iconSeven,"iconSeven");
+            self.addSubview(iconSeven);
+            iconArray.addObject(iconSeven);
+
+            var iconEight = SWHomeLiveSmallIconView.new();
+            self.setProp_forKey(iconEight,"iconEight");
+            self.addSubview(iconEight);
+            iconArray.addObject(iconEight);
+
+
+
+            self.setProp_forKey(iconArray,"iconArray");
+
+            var dictArray = NSArray.arrayWithObjects({"imageName":"live_partitionEntrance11","title":"手机直播"},{"imageName":"live_partitionEntrance9","title":"绘画专区"},{"imageName":"live_partitionEntrance8","title":"萌宅推荐"},{"imageName":"live_partitionEntrance3","title":"网络游戏"},
+                {"imageName":"live_partitionEntrance1","title":"单机联机"},{"imageName":"live_partitionEntrance4","title":"电子竞技"},{"imageName":"live_partitionEntrance-1","title":"全部分类"},{"imageName":"live_partitionEntrance0","title":"全部直播"},null);
+
+            self.setProp_forKey(dictArray,"dictArray");
+            self.installData(dictArray);
+
+        }
+        return self;
+    },
+    installData:function(dictArray){
+        if(!dictArray.isKindOfClass(NSArray.class())||!dictArray){
+            return;
+        }
+        var iconArray = self.getProp("iconArray");
+        for(var i = 0; i < iconArray.count(); i++){
+            if(i < dictArray.count()){
+                var dict = dictArray.objectAtIndex(i);
+                var icon = iconArray.objectAtIndex(i);
+                icon.installData(dict);
+            }
+        }
+    },
+    layoutSubviews:function(){
+        self.super().layoutSubviews();
+        var iconHeight = SWHomeLiveSmallIconView.getHeight();
+        var iconWidth = 50;
+        var bothSideMargin = 25;
+        var verticalMargin = 25;
+        var verticalTopMargin = 18;
+        var iconMargin = (UIScreen.mainScreen().bounds().width - 2 * bothSideMargin - 4 * iconWidth)/3;
+
+        self.getProp("iconOne").setFrame({x:bothSideMargin, y:verticalTopMargin, width:iconWidth ,height:iconHeight});
+        self.getProp("iconTwo").setFrame({x:iconWidth + bothSideMargin + iconMargin, y:verticalTopMargin, width:iconWidth ,height:iconHeight});
+        self.getProp("iconThree").setFrame({x:2 * iconWidth + 2 * iconMargin + bothSideMargin, y:verticalTopMargin, width:iconWidth ,height:iconHeight});
+        self.getProp("iconFour").setFrame({x:3 * iconWidth + 3 * iconMargin + bothSideMargin, y:verticalTopMargin, width:iconWidth ,height:iconHeight});
+
+        var secondIconY = verticalTopMargin + verticalMargin + iconHeight;
+        self.getProp("iconFive").setFrame({x:bothSideMargin, y:secondIconY, width:iconWidth ,height:iconHeight});
+        self.getProp("iconSix").setFrame({x:iconWidth + bothSideMargin + iconMargin, y:secondIconY, width:iconWidth ,height:iconHeight});
+        self.getProp("iconSeven").setFrame({x:2 * iconWidth + 2 * iconMargin + bothSideMargin, y:secondIconY, width:iconWidth ,height:iconHeight});
+        self.getProp("iconEight").setFrame({x:3 * iconWidth + 3 * iconMargin + bothSideMargin, y:secondIconY, width:iconWidth ,height:iconHeight});
+
+    }
+},{
+    getHeight:function(){
+        // 18为顶部间距 25为图标垂直方向上的间距 12为底部间距
+        return 18 + SWHomeLiveSmallIconView.getHeight() * 2 + 25 + 12;
+    }
+})
+// 8个小图标中单个小图标视图
+defineClass("SWHomeLiveSmallIconView:UIView",{
+    initWithFrame:function(frame){
+        if(self.ORIGinitWithFrame(frame)){
+
+            var iconArray = NSMutableArray.new();
+
+            var iconImage = UIImageView.new();
+            self.addSubview(iconImage);
+            iconImage.layer().setCornerRadius(25);
+            iconImage.setClipsToBounds(1);
+            self.setProp_forKey(iconImage,"iconImage");
+
+            var titleLabel = UILabel.new();
+            self.addSubview(titleLabel);
+            titleLabel.setFont(UIFont.systemFontOfSize(12));
+            titleLabel.setTextAlignment(1);
+            self.setProp_forKey(titleLabel,"titleLabel");
+
+            self.setProp_forKey(iconArray,"iconArray");
+        }
+        return self;
+    },
+    installData:function(dict){
+        if(!dict||!dict.isKindOfClass(NSDictionary.class())){
+            return;
+        }
+
+        var image = UIImage.imageNamed((dict.objectForKey("imageName")));
+        self.getProp("iconImage").setImage(image);
+        self.getProp("titleLabel").setText(dict.objectForKey("title"));
+    },
+    layoutSubviews:function(){
+        self.super().layoutSubviews();
+        self.getProp("iconImage").setFrame({x:0, y:0, width:50 ,height:50});
+        self.getProp("titleLabel").setFrame({x:0, y:50 + 3, width:50, height:17});
+    }
+},{
+    getHeight:function(){
+        return 50 + 3 + 17;
+    }
+})
+//normalCell中的下面有三个长图标的的视图
+defineClass("SWHomeLiveBigView:UIView",{
+    initWithFrame:function(frame){
+        if(self.ORIGinitWithFrame(frame)){
+
+            var iconArray = NSMutableArray.new();
+
+            var iconOne = SWHomeLiveBigIconView.new();
+            self.addSubview(iconOne);
+            iconArray.addObject(iconOne);
+            self.setProp_forKey(iconOne,"iconOne");
+
+            var iconTwo = SWHomeLiveBigIconView.new();
+            self.addSubview(iconTwo);
+            iconArray.addObject(iconTwo);
+            self.setProp_forKey(iconTwo,"iconTwo");
+
+            var iconThree = SWHomeLiveBigIconView.new();
+            self.addSubview(iconThree);
+            iconArray.addObject(iconThree);
+            self.setProp_forKey(iconThree,"iconThree");
+
+            self.setProp_forKey(iconArray,"iconArray");
+
+            var lineLeftView = UIView.new();
+            self.addSubview(lineLeftView);
+            self.setProp_forKey(lineLeftView,"lineLeftView");
+            lineLeftView.setBackgroundColor(normalGrayColor);
+
+            var lineRightView = UIView.new();
+            self.addSubview(lineRightView);
+            self.setProp_forKey(lineRightView,"lineRightView");
+            lineRightView.setBackgroundColor(normalGrayColor);
+
+            var dictArray = NSArray.arrayWithObjects({"imageName":"live_follow_ico","title":"关注主播"},{"imageName":"live_center_ico","title":"直播中心"},{"imageName":"live_search_ico","title":"搜索直播"},null);
+            self.installData(dictArray);
+
+
+        }
+        return self;
+    },
+    installData:function(dictArray){
+        if(!dictArray.isKindOfClass(NSArray.class())||!dictArray){
+            return;
+        }
+        var iconArray = self.getProp("iconArray");
+        for(var i = 0; i < iconArray.count(); i++){
+            if(i < dictArray.count()){
+                var dict = dictArray.objectAtIndex(i);
+                var icon = iconArray.objectAtIndex(i);
+                icon.installData(dict);
+            }
+        }
+    },
+    layoutSubviews:function(){
+        self.super().layoutSubviews();
+        var bothSideMargin = 8;
+        var height = SWHomeLiveBigIconView.getHeight();
+        var width = (UIScreen.mainScreen().bounds().width - 2 * bothSideMargin )/3;
+        self.getProp("iconOne").setFrame({x:bothSideMargin, y:0, width:width ,height:height});
+        self.getProp("iconTwo").setFrame({x:width + bothSideMargin , y:0, width:width ,height:height});
+        self.getProp("iconThree").setFrame({x:2 * width  + bothSideMargin, y:0, width:width ,height:height});
+
+
+
+        //var maskPath = UIBezierPath.bezierPathWithRoundedRect_byRoundingCorners_cornerRadii(self.getProp("iconOne").bounds(),1 << 0||1 << 1,{width:5,height:5});
+        //var maskLayer = CAShapeLayer.alloc().init();
+        //maskLayer.setFrame(self.getProp("iconOne").bounds());
+        //maskLayer.setPath(maskPath.CGPath())  ;
+        //self.getProp("iconOne").layer().setMask(maskLayer) ;
+        SWJSPatchNotSupportTool.clipCornerRadusWithView_size_direct_rect(self.getProp("iconOne"),{width:5, height:5},1 << 0|1 << 2,self.getProp("iconOne").frame());
+
+
+        SWJSPatchNotSupportTool.clipCornerRadusWithView_size_direct_rect(self.getProp("iconThree"),{width:5, height:5},1 << 1|1 << 3,self.getProp("iconThree").bounds());
+
+
+        self.getProp("lineLeftView").setFrame({x:width + bothSideMargin , y:0, width:0.5 ,height:height});
+        self.getProp("lineRightView").setFrame({x:2 * width  + bothSideMargin, y:0, width:0.5 ,height:height});
+    }
+
+},{
+    getHeight:function(){
+        // 58为icon本身的高度 12为底部预留间距
+        return SWHomeLiveBigIconView.getHeight() + 12;
+    }
+})
+//三个长图标视图中的一个小视图
+defineClass("SWHomeLiveBigIconView:UIView",{
+    initWithFrame:function(frame){
+        if(self.ORIGinitWithFrame(frame)){
+            self.setBackgroundColor(mainColor);
+
+            var iconImage = UIImageView.new();
+            self.addSubview(iconImage);
+            self.setProp_forKey(iconImage,"iconImage");
+
+            var titleLabel = UILabel.new();
+            self.addSubview(titleLabel);
+            titleLabel.setFont(UIFont.systemFontOfSize(14));
+            titleLabel.setTextColor(UIColor.whiteColor());
+            self.setProp_forKey(titleLabel,"titleLabel");
+        }
+        return self;
+    },
+    installData:function(dict){
+        if(!dict||!dict.isKindOfClass(NSDictionary.class())){
+            return;
+        }
+
+        var image = UIImage.imageNamed((dict.objectForKey("imageName")));
+        self.getProp("iconImage").setImage(image);
+        self.getProp("titleLabel").setText(dict.objectForKey("title"));
+    },
+    layoutSubviews:function(){
+        self.super().layoutSubviews();
+        var width = self.bounds().width;
+        self.getProp("iconImage").setFrame({x:15, y:15, width:18 ,height:18});
+        self.getProp("titleLabel").setFrame({x:15 + 18 + 6, y:15.5, width:width - 15 - 18 - 6, height:17});
+    }
+},{
+        getHeight:function(){
+            // 15为上下间距 18为图标高度
+            return 15 + 15 + 18;
+        }
 })
 
 // 首页直播模块 带有4个 live item 和底部 一个 查看更多按钮 和一个动态刷新 图片 的cell
@@ -491,7 +799,14 @@ defineClass("SWHomeRecommendViewController: SWBaseViewController<UITableViewData
         self.super().viewWillLayoutSubviews();
         self.getProp("tableView").setFrame(self.view().bounds());
     },
-
+    //屏幕即将旋转方法重写
+    //willAnimateRotationToInterfaceOrientation_duration:function(toInterfaceOrienation,duration){
+    //    self.lazyBannerView().refreshLayout();
+    //},
+    //用上面的方法接受屏幕旋转通知，会导致系统警告（原因未知）
+    willRotateToInterfaceOrientation_duration:function(toInterfaceOrienation,duration){
+    self.lazyBannerView().refreshLayout();
+},
     numberOfSectionsInTableView:function(tableView){
         return self.getProp("totalArray").count();
     },
@@ -2342,6 +2657,10 @@ defineClass("SWHomeBangumiUniversalHeadView:UITableViewHeaderFooterView",{
 
         }
         return self;
+    },
+    //这个方法是兼容首页直播模块中的live的  sectionHeadView
+    installLiveModel:function(){
+
     },
     installModel:function(model){
         // 这个方法是为了兼容 首页推荐页面中用这个header
