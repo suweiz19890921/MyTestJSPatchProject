@@ -90,7 +90,7 @@ defineClass("SWHomeViewController: SWBaseViewController<UITableViewDataSource,UI
             var contain = SWContainerView.alloc().init();
             sel.setProp_forKey(contain,"contain");
             contain.setFrame(sel.view().bounds());
-            var vc1 = SWHomeBangumiViewController.alloc().init();
+            var vc1 = SWHomeLiveController.alloc().init();
             vc1.setTitle("直播");
             vc1.view().setBackgroundColor(UIColor.redColor());
 
@@ -190,16 +190,131 @@ defineClass("SWHomeViewController: SWBaseViewController<UITableViewDataSource,UI
 })
 
 // 首页直播模块控制器。
-defineClass("SWHomeLiveController:SWBaseViewController",{
+defineClass("SWHomeLiveController:SWBaseViewController<UITableViewDataSource,UITableViewDelegate>",{
     init:function(){
         if(self.ORIGinit()){
+            self.setProp_forKey("http://live.bilibili.com/AppIndex/home?access_key=d19680b060ef8c0f2fd8db23d6fdc0b5&actionKey=appkey&appkey=27eb53fc9058f8c3&build=3480&device=phone&mobi_app=iphone&platform=ios&scale=2&sign=d6b3287c1020110b206f69ef13a457ea&ts=1470708566","liveUrl");
 
         }
         return self;
     },
     viewDidLoad:function(){
         self.super().viewDidLoad();
+        var tableView = SWTableView.new();
+        tableView.setBackgroundColor(bgGrayColor);
+        tableView.registerClass_forCellReuseIdentifier(SWHomeLiveMainCell.class(),SWHomeLiveMainCell.description());
+
+        self.view().addSubview(tableView);
+        self.setProp_forKey(tableView,"tableView");
+        tableView.setDataSource(self);
+        tableView.setDelegate(self);
+        self.loadAndHandleData();
         
+    },
+    loadAndHandleData:function(){
+        var url= NSURL.URLWithString(self.getProp('liveUrl'));
+        var request = NSURLRequest.alloc().initWithURL(url);
+        var sel = self;
+        NSURLConnection.sendAsynchronousRequest_queue_completionHandler(request,NSOperationQueue.mainQueue(),block("NSURLResponse* ,NSData*, NSError*",function(response,data,error) {
+            if(!error){
+                var totalArray = NSMutableArray.new();
+                var NSJSONReadingMutableContainers = 1 << 0;
+                var dict = NSJSONSerialization.JSONObjectWithData_options_error(data,NSJSONReadingMutableContainers,null);
+                if(dict.isKindOfClass(NSDictionary.class())){
+                    var dataDict = dict.objectForKey("data");
+
+                    if(dataDict.isKindOfClass(NSDictionary.class())){
+                        var bannerArray = dataDict.objectForKey("banner");
+
+                        if(bannerArray.count() > 0 && bannerArray.isKindOfClass(NSArray.class())){
+                            sel.lazyBannerView().installData(bannerArray);
+                        }
+                        var entranceIconsArray = dataDict.objectForKey("entranceIcons");
+
+                        if(entranceIconsArray.count() > 0 && entranceIconsArray.isKindOfClass(NSArray.class())){
+                                totalArray.addObject(entranceIconsArray);
+                        }
+                        var partitionsArray = dataDict.objectForKey("partitions");
+                        if(partitionsArray.count() > 0 && partitionsArray.isKindOfClass(NSArray.class())){
+                            totalArray.addObject(partitionsArray);
+                            var emptyArray = NSArray.new();
+                            var liveTotalArray = NSMutableArray.new();
+                            liveTotalArray.addObject(emptyArray);
+                            liveTotalArray.addObjectsFromArray(partitionsArray);
+                            sel.setProp_forKey(liveTotalArray,"liveTotalArray");
+                        }
+
+                        var recommendDataDict = dataDict.objectForKey("recommend_data");
+                        if(recommendDataDict.isKindOfClass(NSDictionary.class())){
+                            totalArray.addObject(recommendDataDict);
+                        }
+                        sel.setProp_forKey(totalArray,"totalArray");
+                    };
+                }
+                sel.getProp("tableView").reloadData();
+            }else{
+                console.log("请求失败");
+                console.log(error)
+            }
+
+        }));
+    },
+    viewWillLayoutSubviews:function(){
+        self.super().viewWillLayoutSubviews();
+        self.getProp("tableView").setFrame(self.view().bounds());
+    },
+    numberOfSectionsInTableView:function(tableView){
+        // 因为在这整个工程中 我把头顶的banner一直都是当一个sectionHead来写 我是希望代码风格统一 方便管理 ，然后不是必要情况我不会去用tableHeadview
+        var count = self.getProp("liveTotalArray").count();
+            return count ;
+    },
+    tableView_numberOfRowsInSection:function(tableView,section){
+        if(section == 0){
+            return 0;
+        }
+        return 1;
+    },
+    tableView_cellForRowAtIndexPath:function(tableView,indexPath){
+        var count = self.getProp("liveTotalArray").count();
+        var model;
+        var cell = tableView.dequeueReusableCellWithIdentifier(SWHomeLiveMainCell.description());
+        if(indexPath.section() < count){
+            model = self.getProp("liveTotalArray").objectAtIndex(indexPath.section());
+        }
+        cell.installData(model);
+        return cell;
+
+    },
+    tableView_heightForRowAtIndexPath:function(tableView,indexPath){
+        return SWHomeLiveMainCell.getHeight();
+    },
+    tableView_viewForHeaderInSection:function(tableView,section){
+        if(section != 0){
+            //var headView = tableView.dequeueReusableHeaderFooterViewWithIdentifier(SWHomeBangumiUniversalHeadView.description());
+            //var model = self.getProp("totalArray").objectAtIndex(section);
+            //if(model){
+            //    headView.installModel(model);
+            //}
+            //return headView;
+            return UIView.new();
+        }else{
+            return self.lazyBannerView();
+        }
+    },
+    tableView_heightForHeaderInSection:function(tableView,section){
+        if(section == 0){
+            var rect = UIScreen.mainScreen().bounds();
+            var width = rect.width ;
+            return width /3.2;
+        }
+        return 44;
+    },
+    lazyBannerView:function(){
+        if(!self.getProp("bannerView")){
+            var bannerView = SWBannerCollectionView.new();
+            self.setProp_forKey(bannerView,"bannerView");
+        }
+        return self.getProp("bannerView");
     }
 })
 
@@ -239,13 +354,15 @@ defineClass("SWHomeLiveMainCell:UITableViewCell",{
             seeMoreButton.setContentVerticalAlignment(0);
             seeMoreButton.setContentHorizontalAlignment(0);
             self.setProp_forKey(seeMoreButton,"seeMoreButton");
+            seeMoreButton.layer().setCornerRadius(5);
+            seeMoreButton.setClipsToBounds(1);
             seeMoreButton.layer().setBorderWidth(0.5);
             seeMoreButton.layer().setBorderColor(normalGrayColor.CGColor());
             seeMoreButton.setTitleColor_forState(normalGrayColor,0);
 
             var dynamicLabel = UILabel.new();
             dynamicLabel.setFont(UIFont.systemFontOfSize(12));
-            dynamicLabel.setTextAlignment(0);
+            dynamicLabel.setTextAlignment(2);
             self.contentView().addSubview(dynamicLabel);
             self.setProp_forKey(dynamicLabel,"dynamicLabel");
 
@@ -266,18 +383,24 @@ defineClass("SWHomeLiveMainCell:UITableViewCell",{
         if(!dict.isKindOfClass(NSDictionary.class())){
             return;
         }
-        var bodyArray = dict.objectForKey("body");
-        if(!bodyArray.isKindOfClass(NSArray.class())){
+        var livesArray = dict.objectForKey("lives");
+        if(!livesArray.isKindOfClass(NSArray.class())){
             return;
         }
         var itemArray = self.getProp("itemArray");
         for(var i = 0; i < itemArray.count(); i++){
-            if(i < bodyArray.count()){
+            if(i < livesArray.count()){
                 var item = itemArray.objectAtIndex(i);
-                var model = bodyArray.objectAtIndex(i);
-                item.installData(model,0);
+                var model = livesArray.objectAtIndex(i);
+                item.installLiveModel(model);
             }
         }
+        var partition  = dict.objectForKey("partition");
+        var dynamicCount
+        if(partition.isKindOfClass(NSDictionary.class())){
+            dynamicCount = partition.objectForKey("count");
+        }
+        self.getProp("dynamicLabel").setText(dynamicCount +"条动态，点击刷新");
     },
     layoutSubviews:function(){
         self.super().layoutSubviews();
@@ -291,9 +414,12 @@ defineClass("SWHomeLiveMainCell:UITableViewCell",{
         self.getProp("itemFour").setFrame({x:itemWidth + 2 * margin, y:height, width:itemWidth, height:height});
 
         var moreButtonScale = 3.81;
-        self.getProp("seeMoreButton").setFrame({x: margin, y:height + 12, width:42 * moreButtonScale, height:42});
-        self.getProp("dynamicLabel").setFrame({x:width - margin - 17 - 6 - 200, y:height + 12 +13.75, width:200, height:14.5});
-        self.getProp("smallRefreshImage").setFrame({x:width - margin - 17, y:height + 12 + 12.5, width:17, height:17});
+        var seeMoreButtonHeight = 42;
+        var seeMoreButtonWidth = seeMoreButtonHeight * moreButtonScale
+        var dynamicWidth = width - 20 - margin - margin - seeMoreButtonWidth -margin;
+        self.getProp("seeMoreButton").setFrame({x: margin, y:height * 2 + 12, width:seeMoreButtonWidth, height:seeMoreButtonHeight});
+        self.getProp("dynamicLabel").setFrame({x:margin + seeMoreButtonWidth + 12, y:height * 2 + 12 +13.75, width:dynamicWidth, height:14.5});
+        self.getProp("smallRefreshImage").setFrame({x:width - margin - 17, y:height * 2 + 12 + 11, width:20, height:20});
         self.getProp("seeMoreButton").setTitle_forState("查看更多",0);
     }
 },{
@@ -1204,6 +1330,42 @@ defineClass("SWHomeLiveItem:UIView",{
         }
         return self;
     },
+    //兼容 首页直播模块中的mianCell的数据结构
+    installLiveModel:function(model){
+        if(!model){
+            return;
+        }
+        if(!model.isKindOfClass(NSDictionary.class())){
+            return;
+        }
+
+        self.getProp("coverImage").sd__setImageWithURL(NSURL.URLWithString(model.objectForKey("cover").objectForKey("src")));
+        self.getProp("iconImage").sd__setImageWithURL(NSURL.URLWithString(model.objectForKey("owner").objectForKey("face")));
+        var titleLabel = self.getProp("titleLabel");
+        var nameLabel = self.getProp("nameLabel");
+        titleLabel.setText(model.objectForKey("title"));
+        nameLabel.setText(model.objectForKey("owner").objectForKey("name"));
+        self.getProp("refreshImage").setHidden(1);
+
+        var scale = 1.57;
+        var margin = 12;
+        var width = (UIScreen.mainScreen().bounds().width - 3 * margin)/2;
+        var height = width / scale;
+        self.getProp("titleLabel").setFrame({x:6 + 50 + 6, y:height + 6 + 17 + 6.5 , width:width - 6 - 50 - 6 , height:14.5});
+
+        var online = model.objectForKey("online");
+        if(online > 9999){
+            online = (online/10000).toFixed(1) + "万";
+        }else{
+            online = online + "";
+        }
+
+        self.getProp("watchCountLabel").setText(online);
+
+    },
+
+
+    //兼容 首页推荐模块中的普通cell 的数据结构
     installData:function(model,isLast){
       if(!model){
           return;
@@ -2210,7 +2372,7 @@ defineClass("SWHomeBangumiUniversalHeadView:UITableViewHeaderFooterView",{
             var attrbuteString = NSMutableAttributedString.alloc().initWithString(" 排行榜");
             attrbuteString.insertAttributedString_atIndex(atributeText,0);
             desLabel.setAttributedText(attrbuteString);
-            iconImage.setImage(UIImage.imageNamed("recommend.compressed"));
+            iconImage.setImage(UIImage.imageNamed("recommend_compressed"));
             self.getProp("titleLable").setText("热门推荐");
         }else if(title.isEqualToString("热门直播")){
             // 直播的descLabel宽度要做处理
