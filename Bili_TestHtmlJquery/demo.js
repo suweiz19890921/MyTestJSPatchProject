@@ -204,6 +204,7 @@ defineClass("SWHomeLiveController:SWBaseViewController<UITableViewDataSource,UIT
         tableView.setBackgroundColor(bgGrayColor);
         tableView.registerClass_forCellReuseIdentifier(SWHomeLiveMainCell.class(),SWHomeLiveMainCell.description());
         tableView.registerClass_forCellReuseIdentifier(SWHomeLiveTopNormalCell.class(),SWHomeLiveTopNormalCell.description());
+        tableView.registerClass_forHeaderFooterViewReuseIdentifier(SWHomeBangumiUniversalHeadView.class(),SWHomeBangumiUniversalHeadView.description());
 
         self.view().addSubview(tableView);
         self.setProp_forKey(tableView,"tableView");
@@ -304,13 +305,13 @@ defineClass("SWHomeLiveController:SWBaseViewController<UITableViewDataSource,UIT
     },
     tableView_viewForHeaderInSection:function(tableView,section){
         if(section != 0){
-            //var headView = tableView.dequeueReusableHeaderFooterViewWithIdentifier(SWHomeBangumiUniversalHeadView.description());
-            //var model = self.getProp("totalArray").objectAtIndex(section);
-            //if(model){
-            //    headView.installModel(model);
-            //}
-            //return headView;
-            return UIView.new();
+            var headView = tableView.dequeueReusableHeaderFooterViewWithIdentifier(SWHomeBangumiUniversalHeadView.description());
+            var model
+                if(section < self.getProp("liveTotalArray").count()){
+                    model = self.getProp("liveTotalArray").objectAtIndex(section);
+                }
+                headView.installLiveModel(model);
+            return headView;
         }else{
             return self.lazyBannerView();
         }
@@ -563,16 +564,10 @@ defineClass("SWHomeLiveBigView:UIView",{
         self.getProp("iconTwo").setFrame({x:width + bothSideMargin , y:0, width:width ,height:height});
         self.getProp("iconThree").setFrame({x:2 * width  + bothSideMargin, y:0, width:width ,height:height});
 
-
-
-        //var maskPath = UIBezierPath.bezierPathWithRoundedRect_byRoundingCorners_cornerRadii(self.getProp("iconOne").bounds(),1 << 0||1 << 1,{width:5,height:5});
-        //var maskLayer = CAShapeLayer.alloc().init();
-        //maskLayer.setFrame(self.getProp("iconOne").bounds());
-        //maskLayer.setPath(maskPath.CGPath())  ;
-        //self.getProp("iconOne").layer().setMask(maskLayer) ;
+// 在 iconOne 的左上 和 左下添加圆角
         SWJSPatchNotSupportTool.clipCornerRadusWithView_size_direct_rect(self.getProp("iconOne"),{width:5, height:5},1 << 0|1 << 2,self.getProp("iconOne").frame());
 
-
+// 在 iconThree 的右上 和 右下添加圆角
         SWJSPatchNotSupportTool.clipCornerRadusWithView_size_direct_rect(self.getProp("iconThree"),{width:5, height:5},1 << 1|1 << 3,self.getProp("iconThree").bounds());
 
 
@@ -2659,7 +2654,60 @@ defineClass("SWHomeBangumiUniversalHeadView:UITableViewHeaderFooterView",{
         return self;
     },
     //这个方法是兼容首页直播模块中的live的  sectionHeadView
-    installLiveModel:function(){
+    installLiveModel:function(model){
+        if(!model ||! model.isKindOfClass(NSDictionary.class())){
+            return;
+        }
+        var partition = model.objectForKey("partition");
+        if(!partition.isKindOfClass(NSDictionary.class())){
+            return;
+        }
+        var title = partition.objectForKey("name");
+        var count = partition.objectForKey("count");
+
+         var titleLabel = self.getProp("titleLable")
+        var iconImage = self.getProp("iconImage");
+        var desLabel = self.getProp("descLabel");
+
+        titleLabel.setText(title);
+    //
+    //    // 直播的descLabel宽度要做处理
+        if(count > 9999){
+            count = (count/10000).toFixed(1) + "万";
+        }else{
+            count = count + "";
+        }
+
+        var totalTitle = "当前" + count + "个直播，" +"进去看看";
+        desLabel.setText(totalTitle);
+        var attrbuteString = NSMutableAttributedString.alloc().initWithString(desLabel.text());
+        if(totalTitle.length > 2 + 1 + count.length){
+            //防止越界
+            var range = {location:2,length:count.length};
+        }
+        attrbuteString.addAttribute_value_range("NSColor",mainColor,range);
+        desLabel.setAttributedText(attrbuteString);
+
+         if(title.isEqualToString("绘画专区")){
+            iconImage.setImage(UIImage.imageNamed("live_categories_ico_9"));
+        }else if(title.isEqualToString("手机直播")){
+            iconImage.setImage(UIImage.imageNamed("live_categories_ico_11"));
+        }else if(title.isEqualToString("唱见舞见")){
+            iconImage.setImage(UIImage.imageNamed("live_categories_ico_10"));
+        }else if(title.isEqualToString("手游直播")){
+            iconImage.setImage(UIImage.imageNamed("live_categories_ico_12"));
+        }else if(title.isEqualToString("单机联机")){
+            iconImage.setImage(UIImage.imageNamed("live_categories_ico_1"));
+        }else if(title.isEqualToString("网络游戏")){
+            iconImage.setImage(UIImage.imageNamed("live_categories_ico_3"));
+        }else if(title.isEqualToString("电子竞技")){
+            iconImage.setImage(UIImage.imageNamed("live_categories_ico_4"));
+        }else if(title.isEqualToString("御宅文化")){
+            iconImage.setImage(UIImage.imageNamed("live_categories_ico_2"));
+        }else if(title.isEqualToString("放映厅")){
+             iconImage.setImage(UIImage.imageNamed("live_categories_ico_7"));
+        }
+
 
     },
     installModel:function(model){
@@ -2699,7 +2747,7 @@ defineClass("SWHomeBangumiUniversalHeadView:UITableViewHeaderFooterView",{
                 var totalTitle = "当前" + number + "个直播，" +"进去看看";
                 desLabel.setText(totalTitle);
                 var attrbuteString = NSMutableAttributedString.alloc().initWithString(desLabel.text());
-            if(totalTitle.length > 2 + number.length){
+            if(totalTitle.length > 2 + 1 + number.length){
                 var range = {location:2,length:number.length};
             }
                 attrbuteString.addAttribute_value_range("NSColor",mainColor,range);
@@ -2779,11 +2827,13 @@ defineClass("SWHomeBangumiUniversalHeadView:UITableViewHeaderFooterView",{
     layoutSubviews:function(){
         self.super().layoutSubviews();
         var rect = self.bounds();
+        //36为titleLabel的x值， 75为titleLable的宽度 12 为 desc 和 title的间距 后面12为箭头到右边的间距  20为箭头的宽度
+        var descWidth = rect.width - 36 - 75 - 12 - 12 - 20 - 12  ;
         self.getProp("iconImage").setFrame({x:12, y:12, width:20, height:20});
         self.getProp("titleLable").setFrame({x:36, y:13, width:75, height:18});
         var section = self.getProp("section");
-        self.getProp("descLabel").setFrame({x:rect.width - 12 - 20 - 10 - 200 , y:13, width:200, height:18});
-        self.getProp("rightRowImage").setFrame({x:rect.width - 12 - 20, y:13, width:20, height:20});
+        self.getProp("descLabel").setFrame({x:36 + 75 + 12 , y:13, width:descWidth, height:18});
+        self.getProp("rightRowImage").setFrame({x:rect.width - 20 - 12, y:13, width:20, height:20});
     }
 })
 
