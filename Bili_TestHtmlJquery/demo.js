@@ -305,7 +305,7 @@ defineClass("SWHomeLiveController:SWBaseViewController<UITableViewDataSource,UIT
         if(section == 0){
             var rect = UIScreen.mainScreen().bounds();
             var width = rect.width ;
-            return width /3.2;
+            return width /3.4;
         }
         return 44;
     },
@@ -567,7 +567,7 @@ defineClass("SWHomeRecommendViewController: SWBaseViewController<UITableViewData
         if(section == 0){
             var rect = UIScreen.mainScreen().bounds();
             var width = rect.width ;
-            return width /3.2;
+            return width /3.4;
         }
         return 44;
     },
@@ -735,7 +735,7 @@ defineClass("SWHomeRecommendBottomBannerCell:UITableViewCell",{
     layoutSubviews:function(){
         self.super().layoutSubviews();
         var margin = 12;
-        var bannerScale = 3.2;
+        var bannerScale = 3.4;
         var width = UIScreen.mainScreen().bounds().width;
         var itemWidth = (width - 3 * margin)/2;
         var height = SWHomeRecommendDanmakuItem.getHeight();
@@ -743,13 +743,13 @@ defineClass("SWHomeRecommendBottomBannerCell:UITableViewCell",{
         self.getProp("itemTwo").setFrame({x:itemWidth + 2 * margin, y:0, width:itemWidth, height:height});
         self.getProp("itemThree").setFrame({x:12, y:height, width:itemWidth, height:height});
         self.getProp("itemFour").setFrame({x:itemWidth + 2 * margin, y:height, width:itemWidth, height:height});
-        self.getProp("bottomBanner").setFrame({x:0, y:height * 2 + 12, width:width, height:width/3.2});
+        self.getProp("bottomBanner").setFrame({x:0, y:height * 2 + 12, width:width, height:width/3.4});
 
     }
 },{
     getHeight:function(){
         var width = UIScreen.mainScreen().bounds().width;
-        var bannerScale = 3.2;
+        var bannerScale = 3.4;
         // 12 为间距
         return SWHomeRecommendDanmakuItem.getHeight() * 2 + 12 + width/bannerScale + 12;
     }
@@ -1579,7 +1579,7 @@ defineClass("SWHomeBangumiViewController:SWBaseViewController<UITableViewDataSou
         if(section == 0){
            var rect = UIScreen.mainScreen().bounds();
            var width = rect.width ;
-            return width /3.2;
+            return width /3.4;
         }
         return 44;
     },
@@ -1598,7 +1598,6 @@ defineClass("SWHomeBangumiViewController:SWBaseViewController<UITableViewDataSou
         var tableView = self.getProp("tableView")
         tableView.setFrame(self.view().bounds());
         var width= self.view().bounds().width
-        //self.lazyBannerView().setFrame({x:0, y:0, width:width , height:width/3.2});
     },
     lazyBannerView:function(){
         if(!self.getProp("bannerView")){
@@ -2258,10 +2257,10 @@ defineClass("SWHomeBangumiRecommendCell:UITableViewCell",{
         if(!model) {
             return;
         }
-        var scale = 3.2;
+        var scale = 3.4;
         //12为两边的间距
         var width = UIScreen.mainScreen().bounds().width - 12 * 2;
-        var coverHeight = width /3.2;
+        var coverHeight = width /scale;
         var detailHeight = self.calculateDetailLabelHeight(model.objectForKey("desc"));
         self.getProp("coverImage").setFrame({x:0, y:0, width:width, height:coverHeight});
         self.getProp("newIconImage").setFrame({x:width - 20 - 44, y:0, width:44, height:22.5});
@@ -2298,13 +2297,13 @@ defineClass("SWHomeBangumiRecommendCell:UITableViewCell",{
 
 },{
     getHeight:function(desc){
-        var scale = 3.2;
+        var scale = 3.4;
         //12为两边的间距
         var attributeDict = {
             "NSFont":UIFont.systemFontOfSize(12),
         };
         var width = UIScreen.mainScreen().bounds().width - 12 * 2;
-        var coverHeight = width /3.2;
+        var coverHeight = width /scale;
         var boundWidth = UIScreen.mainScreen().bounds().width - 12 * 2 - 12;
         var size = {width:boundWidth, height: 1000};
         var height = desc.boundingRectWithSize_options_attributes_context(size,1 << 0,attributeDict,null).height ;
@@ -2982,7 +2981,7 @@ defineClass('SWBannerCollectionView:UIView <UICollectionViewDataSource,UICollect
             },
 
             collectionView_layout_sizeForItemAtIndexPath:function(collectionView,collectionViewLayout,indexPath){
-                return {width:self.getProp("collectionView").bounds().width, height:self.getProp("collectionView").bounds().width/3.2 };
+                return {width:self.getProp("collectionView").bounds().width, height:self.getProp("collectionView").bounds().width/3.4 };
            },
     collectionView_layout_minimumLineSpacingForSectionAtIndex:function(collectionView,layout,section){
     return 0;
