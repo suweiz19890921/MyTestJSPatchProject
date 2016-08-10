@@ -11,6 +11,7 @@ require('SWHomeBangumiViewController,SWHomeBangumiDidEndCell,SWHomeBangumiNewBan
 require('SWHomeRecommendViewController,SWHomeRecommendHotRecommendCell,SWHomeRecommendNormalCell,SWHomeRecommendDanmakuItem,SWHomeLiveCell,SWHomeRecommendBottomBannerCell,SWHomeLiveItem,SWHomeRecommendBangumiRecommendItem,SWHomeRecommendBangumiRecommendCell');
 require('SWHomeViewController,SWHomeLiveMainCell,SWHomeLiveSmallView,SWHomeLiveBigView,SWHomeLiveTopNormalCell,SWHomeLiveSmallIconView,SWHomeLiveBigIconView')
 require('SWCategoryCell');
+require('SWBasicViewController');
 //扩展结构体
 require('JPEngine').defineStruct({
     "name": "UIEdgeInsets",
@@ -27,6 +28,8 @@ var bgOtherYellowColor = UIColor.colorWithRed_green_blue_alpha(255./255,180./255
 var liveGrayColor = UIColor.colorWithRed_green_blue_alpha(231./255,231./255,231./255,1);
 var normalblackColor = UIColor.colorWithRed_green_blue_alpha(33./255,33./255,33./255,1);
 
+var mainNavigator ;
+
 //app代理--------------------------//app代理--------------------------//app代理--------------------------//app代理--------------------------//app代理--------------------------//app代理--------------------------
 defineClass('AppDelegate : UIResponder',{
     configRootView:function(){
@@ -35,6 +38,8 @@ defineClass('AppDelegate : UIResponder',{
         self.setWindow(UIWindow.alloc().initWithFrame(UIScreen.mainScreen().bounds()));
         var tab = SWTabBarController.alloc().init();
         var nav = UINavigationController.alloc().initWithRootViewController(tab);
+        nav.navigationBar().setBarTintColor(mainColor);
+        mainNavigator = nav;
         self.window().setRootViewController(nav)  ;
         self.window().makeKeyAndVisible();
     }
@@ -48,34 +53,19 @@ defineClass('SWTabBarController:UITabBarController',{
         }
         })
 
-// SW 首页------------------------------------------// SW 首页------------------------------------------// SW 首页------------------------------------------// SW 首页------------------------------------------
+// SW 基类做一些基础设置
+defineClass("SWBasicViewController:SWBaseViewController<UITableViewDataSource,UITableViewDelegate>",{
 
-
-defineClass("SWHomeViewController: SWBaseViewController<UITableViewDataSource,UITableViewDelegate>", {
     init:function(){
         if(self.ORIGinit()){
-            var normalImage = UIImage.imageNamed("home_home_tab");
-            var selectImage = UIImage.imageNamed("home_home_tab_s");
-            normalImage = normalImage.imageWithRenderingMode(1);
-            selectImage = selectImage.imageWithRenderingMode(1);
-            self.setAutomaticallyAdjustsScrollViewInsets(0);
-            self.tabBarItem().setImage(normalImage);
-            self.tabBarItem().setSelectedImage(selectImage);
-
-            self.setProp_forKey("http://bangumi.bilibili.com/sponsor/rank/get_sponsor_week_list?access_key=5e0df12c70fcf9a5b20a2a8dcb956ca1&actionKey=appkey&appkey=27eb53fc9058f8c3&build=3445&device=phone&mobi_app=iphone&page=1&pagesize=100&platform=ios&season_id=5027&sign=6dfbe4193ec84aed0ef3e38d1f810ec4&ts=1468406428",'urlStr');
-
+            self.setProp_forKey("http://bangumi.bilibili.com/sponsor/rank/get_sponsor_total?access_key=5e0df12c70fcf9a5b20a2a8dcb956ca1&actionKey=appkey&appkey=27eb53fc9058f8c3&build=3445&device=phone&mobi_app=iphone&page=1&pagesize=100&platform=ios&season_id=5027&sign=6dfbe4193ec84aed0ef3e38d1f810ec4&ts=1468406428",'urlStr');
         }
         return self;
     },
     viewDidLoad:function(){
         self.super().viewDidLoad();
-        button = UIButton.alloc().init();
-        self.view().setBackgroundColor(mainColor);
-        button.setBackgroundColor(UIColor.redColor());
-        button.setFrame({x:20, y:64, width:100, height:100});
-        button.addTarget_action_forControlEvents(self,'click:',1<<6);
-        button.setTag(1);
-        var tableView = UITableView.alloc().initWithFrame(UIScreen.mainScreen().bounds());
+
+        var tableView = UITableView.alloc().initWithFrame({x:0,y:64,width:UIScreen.mainScreen().bounds().width,height:UIScreen.mainScreen().bounds().height});
         self.view().addSubview(tableView);
         tableView.setRowHeight(80);
         tableView.setDataSource(self);
@@ -83,29 +73,7 @@ defineClass("SWHomeViewController: SWBaseViewController<UITableViewDataSource,UI
         tableView.registerClass_forCellReuseIdentifier(SWTableViewCell.class(),"cell");
         self.setProp_forKey(tableView,"tableView");
         var sel = self;
-        var btn = UIButton.alloc().initWithFrame({x:100, y:100, width:100, height:100});
-        self.view().addSubview(btn);
-        btn.setBackgroundColor(UIColor.redColor());
-        //btn.rac__signalForControlEvents(1 <<  6).subscribeNext(block("id",function(x){
-            var contain = SWContainerView.alloc().init();
-            sel.setProp_forKey(contain,"contain");
-            contain.setFrame(sel.view().bounds());
-            var vc1 = SWHomeLiveController.alloc().init();
-            vc1.setTitle("直播");
-            vc1.view().setBackgroundColor(UIColor.redColor());
 
-            var vc2 = SWHomeRecommendViewController.alloc().init();
-            vc2.setTitle("推荐");
-
-            var vc3 = SWHomeBangumiViewController.alloc().init();
-            vc3.setTitle("番剧");
-
-        sel.addChildViewController(vc1);
-        sel.addChildViewController(vc2);
-        sel.addChildViewController(vc3);
-            contain.installViewControllers(NSArray.arrayWithObjects(vc1,vc2,vc3,null));
-            sel.view().addSubview(contain);
-        //}));
         var url= NSURL.URLWithString(self.getProp('urlStr'));
         var request = NSURLRequest.alloc().initWithURL(url);
         NSURLConnection.sendAsynchronousRequest_queue_completionHandler(request,NSOperationQueue.mainQueue(),block("NSURLResponse* ,NSData*, NSError*",function(response,data,error) {
@@ -125,11 +93,11 @@ defineClass("SWHomeViewController: SWBaseViewController<UITableViewDataSource,UI
             }
 
         }));
-    },
-    viewWillAppear:function(animation){
-        self.super().viewWillAppear(animation);
-        self.navigationController().setNavigationBarHidden_animated(1,1);
 
+    },
+    viewWillAppear:function(animated){
+        self.super().viewWillAppear(animated);
+        self.navigationController().setNavigationBarHidden_animated(0,0);
     },
     tableView_didSelectRowAtIndexPath: function (tableView, indexPath) {
         tableView.deselectRowAtIndexPath_animated(indexPath,1);
@@ -154,38 +122,62 @@ defineClass("SWHomeViewController: SWBaseViewController<UITableViewDataSource,UI
         }
         return cell;
     },
-    lazyImageView:function(){
-        var imageView = UIImageView.alloc().initWithFrame({x:0, y:0, width:375, height:UIScreen.mainScreen().bounds().height });
-        imageView.setUserInteractionEnabled(1);
-        var tap = require('UITapGestureRecognizer').alloc().initWithTarget_action(self,'tapClick:');
-        imageView.addGestureRecognizer(tap);
-        imageView.setContentMode(1);
-        imageView.setBackgroundColor(UIColor.blackColor());
-        return imageView;
+})
+
+// SW 首页------------------------------------------// SW 首页------------------------------------------// SW 首页------------------------------------------// SW 首页------------------------------------------
+
+
+defineClass("SWHomeViewController: SWBaseViewController", {
+    init:function(){
+        if(self.ORIGinit()){
+            var normalImage = UIImage.imageNamed("home_home_tab");
+            var selectImage = UIImage.imageNamed("home_home_tab_s");
+            normalImage = normalImage.imageWithRenderingMode(1);
+            selectImage = selectImage.imageWithRenderingMode(1);
+            self.tabBarItem().setImage(normalImage);
+            self.tabBarItem().setSelectedImage(selectImage);
+            self.setProp_forKey("http://bangumi.bilibili.com/sponsor/rank/get_sponsor_week_list?access_key=5e0df12c70fcf9a5b20a2a8dcb956ca1&actionKey=appkey&appkey=27eb53fc9058f8c3&build=3445&device=phone&mobi_app=iphone&page=1&pagesize=100&platform=ios&season_id=5027&sign=6dfbe4193ec84aed0ef3e38d1f810ec4&ts=1468406428",'urlStr');
+        }
+        return self;
+    },
+    viewDidLoad:function(){
+        self.super().viewDidLoad();
+        self.view().setBackgroundColor(normalGrayColor);
+        //self.view().addSubview(UIView.new());
+        //JSPatch 调用  RAC
+        //btn.rac__signalForControlEvents(1 <<  6).subscribeNext(block("id",function(x){
+            var contain = SWContainerView.alloc().init();
+        self.view().addSubview(contain);
+        contain.setFrame(self.view().bounds());
+            self.setProp_forKey(contain,"contain");
+            var vc1 = SWHomeLiveController.alloc().init();
+            vc1.setTitle("直播");
+            vc1.view().setBackgroundColor(UIColor.redColor());
+
+            var vc2 = SWHomeRecommendViewController.alloc().init();
+            vc2.setTitle("推荐");
+
+            var vc3 = SWHomeBangumiViewController.alloc().init();
+            vc3.setTitle("番剧");
+        contain.installViewControllers(NSArray.arrayWithObjects(vc1,vc2,vc3,null));
+
+        self.addChildViewController(vc1);
+        self.addChildViewController(vc2);
+        self.addChildViewController(vc3);
+
+        //}));
+
+    },
+    viewWillAppear:function(animation){
+        self.super().viewWillAppear(animation);
+        self.navigationController().setNavigationBarHidden_animated(1,1);
+
     },
     viewWillLayoutSubviews:function(){
         self.super().viewWillLayoutSubviews();
         var rect = self.view().bounds();
         var contain = self.getProp("contain");
         contain.setFrame({x:0, y:0, width:rect.width, height:rect.height - 44 });
-        var tableView = self.getProp("tableView");
-        tableView.setFrame(rect);
-    },
-    click:function(btn){
-        //console.log(btn);
-        if(btn.tag() == 1){
-            self.view().setBackgroundColor(UIColor.whiteColor());
-            button.setBackgroundColor(UIColor.redColor());
-            btn.setTag(2);
-        }else{
-            self.view().setBackgroundColor(UIColor.yellowColor());
-            //button.setBackgroundColor(UIColor.blueColor());
-            btn.setTag(1);
-        }
-    },
-    tapClick:function(tap){
-        tap.view().removeFromSuperview();
-
     }
 })
 
@@ -272,6 +264,7 @@ defineClass("SWHomeLiveController:SWBaseViewController<UITableViewDataSource,UIT
     },
     viewWillLayoutSubviews:function(){
         self.super().viewWillLayoutSubviews();
+        console.log("recommend");
         self.getProp("tableView").setFrame(self.view().bounds());
     },
     numberOfSectionsInTableView:function(tableView){
@@ -498,6 +491,7 @@ defineClass("SWHomeLiveSmallIconView:UIView",{
     }
 },{
     getHeight:function(){
+        // 50为图标的高度 3为图标和title的间距 17为titleLabel的高度
         return 50 + 3 + 17;
     }
 })
@@ -1483,6 +1477,12 @@ defineClass("SWHomeRecommendDanmakuItem:UIView",{
         self.getProp("danmakuCountLabel").setText(danmaku);
 
     },
+    touchesBegan_withEvent:function(touches,event){
+        var vc = SWBasicViewController.alloc().init();
+        vc.view().setBackgroundColor(mainColor);
+        mainNavigator.pushViewController_animated(vc,1);
+    }
+    ,
     layoutSubviews:function(){
         self.super().layoutSubviews();
         var margin = 12;
@@ -3067,9 +3067,17 @@ defineClass("SWPlayerUserCenterViewController: SWHomeViewController",{
 
 //public element 自己手动封装一些公共控件--------------------------------------//public element 自己手动封装一些公共控件--------------------------------------//public element 自己手动封装一些公共控件--------------------------------------
 defineClass("SWContainerView:UIView<UIScrollViewDelegate>",{
-    init:function(){
-        if(self.ORIGinit()){
+    initWithFrame:function(frame){
+        if(self.ORIGinitWithFrame(frame)){
             //初始化子控件
+            var topBar = SWTopBar.alloc().init();
+            topBar.setProp_forKey(self,"delegate");
+            topBar.setBackgroundColor(mainColor);
+            self.setProp_forKey(topBar,"topBar");
+            self.addSubview(topBar);
+            self.setUserInteractionEnabled(1);
+            self.setProp_forKey(64,"topBarHeight");
+
             var scrollView = UIScrollView.alloc().init();
             scrollView.setShowsVerticalScrollIndicator(0);
             scrollView.setShowsHorizontalScrollIndicator(0);
@@ -3080,13 +3088,6 @@ defineClass("SWContainerView:UIView<UIScrollViewDelegate>",{
             self.setProp_forKey(scrollView,"scrollView");
             self.addSubview(scrollView);
 
-            var topBar = SWTopBar.alloc().init();
-            topBar.setProp_forKey(self,"delegate");
-            topBar.setBackgroundColor(mainColor);
-            self.setProp_forKey(topBar,"topBar");
-            self.addSubview(topBar);
-            self.setUserInteractionEnabled(1);
-            self.setProp_forKey(64,"topBarHeight");
 
         }
         return self;
@@ -3108,7 +3109,7 @@ defineClass("SWContainerView:UIView<UIScrollViewDelegate>",{
         self.getProp("topBar").changeSelectIndex(selectIndex);
     },
     scrollViewDidScroll:function(scrollView){
-        self.getProp("topBar").slowChangeIndicatorViewFrame(scrollView.contentOffset().x/scrollView.frame().width);
+        //self.getProp("topBar").slowChangeIndicatorViewFrame(scrollView.contentOffset().x/scrollView.frame().width);
     },
     installViewControllers:function(array){
       self.setProp_forKey(array,"vcArray");
@@ -3122,13 +3123,13 @@ defineClass("SWContainerView:UIView<UIScrollViewDelegate>",{
             scrollView.addSubview(vc.view());
         }
         self.getProp("topBar").installTitles(titles);
+        self.setNeedsDisplay();
 
     },
     layoutSubviews:function(){
         self.super().layoutSubviews();
         var topBarHeight = self.getProp("topBarHeight");
         var scrollView = self.getProp("scrollView");
-        scrollView.setFrame(self.bounds());
         var rect = self.bounds();
         var viewWidth = rect.width;
         var viewHeight = rect.height;
@@ -3143,15 +3144,16 @@ defineClass("SWContainerView:UIView<UIScrollViewDelegate>",{
             }
 
         }
-        scrollView.setContentSize({width:viewWidth*count,height:viewHeight - topBarHeight });
+        scrollView.setContentSize({width:viewWidth*count,height:0 });
+        var scrollView = self.getProp("scrollView");
     }
 
 })
 
 // 封装的container的子控件topBar
 defineClass("SWTopBar:UIView",{
-    init:function(){
-      if(self.ORIGinit()){
+    initWithFrame:function(frame){
+      if(self.ORIGinitWithFrame(frame)){
       }
         return self;
     },
@@ -3197,9 +3199,9 @@ defineClass("SWTopBar:UIView",{
         }
     },
     slowChangeIndicatorViewFrame:function(scaleProgress){
-        if(scaleProgress!=scaleProgress){
-            return;
-        }
+        //if(scaleProgress!=scaleProgress){
+        //    return;
+        //}
     },
     tapClick:function(tap){
         var tag = tap.view().tag();
