@@ -264,7 +264,6 @@ defineClass("SWHomeLiveController:SWBaseViewController<UITableViewDataSource,UIT
     },
     viewWillLayoutSubviews:function(){
         self.super().viewWillLayoutSubviews();
-        console.log("recommend");
         self.getProp("tableView").setFrame(self.view().bounds());
     },
     numberOfSectionsInTableView:function(tableView){
@@ -1713,6 +1712,11 @@ defineClass("SWHomeLiveItem:UIView",{
         self.getProp("watchCountLabel").setText(online);
 
     },
+    touchesBegan_withEvent:function(touches,event){
+    var vc = SWBasicViewController.alloc().init();
+    vc.view().setBackgroundColor(mainColor);
+    mainNavigator.pushViewController_animated(vc,1);
+    },
     layoutSubviews:function(){
         self.super().layoutSubviews();
         var margin = 12;
@@ -2312,6 +2316,10 @@ defineClass("SWHomeBangumiNewChangLoadItem:UIView",{
         //coverImage为封面图片高度， 17 为titleLable的高度 6为titleLabel和timeLabel的间距  14.5 为下面的timeLabel的高度 12为底部默认留的间距
         self.getProp("timeLabel").setText(timeStr);
 
+    },touchesBegan_withEvent:function(touches,event){
+        var vc = SWBasicViewController.alloc().init();
+        vc.view().setBackgroundColor(mainColor);
+        mainNavigator.pushViewController_animated(vc,1);
     },
     layoutSubviews:function(){
         self.super().layoutSubviews();
@@ -2490,6 +2498,11 @@ defineClass("SWHomeBangumiDidEndItem:UIView",{
         self.getProp("titleLabel").setText( model.objectForKey("title"));
         self.getProp("epLabel").setText(epTitle.toJS() +"话全");
     },
+    touchesBegan_withEvent:function(touches,event){
+        var vc = SWBasicViewController.alloc().init();
+        vc.view().setBackgroundColor(mainColor);
+        mainNavigator.pushViewController_animated(vc,1);
+    },
     layoutSubviews:function(){
         self.super().layoutSubviews();
         var width;
@@ -2592,6 +2605,11 @@ defineClass("SWHomeBangumiRecommendCell:UITableViewCell",{
         }
 
     },
+    touchesBegan_withEvent:function(touches,event){
+        var vc = SWBasicViewController.alloc().init();
+        vc.view().setBackgroundColor(mainColor);
+        mainNavigator.pushViewController_animated(vc,1);
+    },
     calculateDetailLabelHeight:function(desc){
         var attributeDict = {
             "NSFont":UIFont.systemFontOfSize(12)
@@ -2652,6 +2670,11 @@ defineClass("SWHomeBangumiUniversalHeadView:UITableViewHeaderFooterView",{
 
         }
         return self;
+    },
+    touchesBegan_withEvent:function(touches,event){
+        var vc = SWBasicViewController.alloc().init();
+        vc.view().setBackgroundColor(mainColor);
+        mainNavigator.pushViewController_animated(vc,1);
     },
     //这个方法是兼容首页直播模块中的live的  sectionHeadView
     installLiveModel:function(model){
@@ -3384,11 +3407,15 @@ defineClass('SWBannerCollectionView:UIView <UICollectionViewDataSource,UICollect
         pageControll.setCurrentPageIndicatorTintColor(mainColor);
         pageControll.setPageIndicatorTintColor(bgGrayColor);
         if(self.getProp("dataArray").count()<=1){
-            self.pageControll().setHidden(1);
+            console.log(pageControll);
+            pageControll.setHidden(1);
         }
 },
     addTimer:function(){
         self.removeTimer();
+        if(self.getProp("dataArray").count() <= 1){
+            return;
+        }
         var timer = NSTimer.scheduledTimerWithTimeInterval_target_selector_userInfo_repeats(3.0,self,"beginScrollBanner",null,1);
         self.setProp_forKey(timer,"timer");
 
