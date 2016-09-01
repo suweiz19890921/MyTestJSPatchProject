@@ -146,6 +146,9 @@ defineClass("SWHomeViewController: SWBaseViewController", {
         }
         return self;
     },
+    preferredStatusBarStyle:function (){
+            return 1;
+            },
     viewDidLoad:function(){
         self.super().viewDidLoad();
         self.view().setBackgroundColor(normalGrayColor);
