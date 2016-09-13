@@ -18,6 +18,7 @@ require('SWHomeRecommendViewController,SWHomeRecommendHotRecommendCell,SWHomeRec
 require('SWHomeViewController,SWHomeLiveMainCell,SWHomeLiveSmallView,SWHomeLiveBigView,SWHomeLiveTopNormalCell,SWHomeLiveSmallIconView,SWHomeLiveBigIconView')
 require('SWCategoryCell');
 require('SWBasicViewController');
+require('SWBaseItemView');
 //扩展结构体
 require('JPEngine').defineStruct({
     "name": "UIEdgeInsets",
@@ -48,6 +49,22 @@ defineClass('AppDelegate : UIResponder',{
         mainNavigator = nav;
         self.window().setRootViewController(nav)  ;
         self.window().makeKeyAndVisible();
+    }
+})
+defineClass('SWBaseItemView : UIView',{
+    initWithFrame:function(frame){
+        if(self.ORIGinitWithFrame(frame)){
+            var tap = require('UITapGestureRecognizer').alloc().initWithTarget_action(self,'tapClick:');
+            self.addGestureRecognizer(tap);
+        }
+        return self;
+    },
+    tapClick:function(tap){
+    if(tap.state() == 3){
+        var vc = SWBasicViewController.alloc().init();
+        vc.view().setBackgroundColor(mainColor);
+        mainNavigator.pushViewController_animated(vc,1);
+    }
     }
 })
 //自定义tabbarVC-----------------------//自定义tabbarVC-----------------------//自定义tabbarVC-----------------------//自定义tabbarVC-----------------------//自定义tabbarVC-----------------------
@@ -1162,9 +1179,9 @@ defineClass("SWHomeRecommendBangumiRecommendCell:UITableViewCell",{
         return SWHomeRecommendBangumiRecommendItem.getHeight() * 2 +  3 * margin + itemWidth / 4.56 + margin;
     }
 })
-defineClass("SWHomeRecommendBangumiRecommendItem:UIView",{
+defineClass("SWHomeRecommendBangumiRecommendItem:SWBaseItemView",{
     initWithFrame:function(frame){
-        if(self.ORIGinitWithFrame(frame)){
+        if(self.super().initWithFrame(frame)){
 
             var coverImage = UIImageView.new();
             self.addSubview(coverImage);
@@ -1392,9 +1409,9 @@ defineClass("SWHomeRecommendHotRecommendCell:UITableViewCell",{
     }
 })
 // 推荐中带有 观看次数 和 弹幕数 但是没有圆角头像的item
-defineClass("SWHomeRecommendDanmakuItem:UIView",{
+defineClass("SWHomeRecommendDanmakuItem:SWBaseItemView",{
     initWithFrame:function(frame){
-        if(self.ORIGinitWithFrame(frame)){
+        if(self.super().initWithFrame(frame)){
             var coverImage = UIImageView.new();
             self.addSubview(coverImage);
             self.setProp_forKey(coverImage,"coverImage");
@@ -1485,12 +1502,6 @@ defineClass("SWHomeRecommendDanmakuItem:UIView",{
         self.getProp("danmakuCountLabel").setText(danmaku);
 
     },
-    touchesBegan_withEvent:function(touches,event){
-        var vc = SWBasicViewController.alloc().init();
-        vc.view().setBackgroundColor(mainColor);
-        mainNavigator.pushViewController_animated(vc,1);
-    }
-    ,
     layoutSubviews:function(){
         self.super().layoutSubviews();
         var margin = 12;
@@ -1599,9 +1610,9 @@ defineClass("SWHomeLiveCell:UITableViewCell",{
     }
 })
 // 直播中带有 带有圆角头像的item （首页推荐中会用 直播中也会用）
-defineClass("SWHomeLiveItem:UIView",{
+defineClass("SWHomeLiveItem:SWBaseItemView",{
     initWithFrame:function(frame){
-        if(self.ORIGinitWithFrame(frame)){
+        if(self.super().initWithFrame(frame)){
 
             var coverImage = UIImageView.new();
             self.addSubview(coverImage);
@@ -1720,11 +1731,6 @@ defineClass("SWHomeLiveItem:UIView",{
 
         self.getProp("watchCountLabel").setText(online);
 
-    },
-    touchesBegan_withEvent:function(touches,event){
-    var vc = SWBasicViewController.alloc().init();
-    vc.view().setBackgroundColor(mainColor);
-    mainNavigator.pushViewController_animated(vc,1);
     },
     layoutSubviews:function(){
         self.super().layoutSubviews();
@@ -2260,9 +2266,9 @@ defineClass("SWHomeBangumiNewBangumiLoadCell:UITableViewCell",{
         }
     })
 //SW 首页番剧中watchCount 的item  新番连载视图中的item
-defineClass("SWHomeBangumiNewChangLoadItem:UIView",{
-    init:function(){
-      if(self.ORIGinit()){
+defineClass("SWHomeBangumiNewChangLoadItem:SWBaseItemView",{
+    initWithFrame:function(frame){
+      if(self.super().initWithFrame(frame)){
         var coverImage = UIImageView.new();
           self.addSubview(coverImage);
           coverImage.layer().setCornerRadius(5);
@@ -2325,10 +2331,6 @@ defineClass("SWHomeBangumiNewChangLoadItem:UIView",{
         //coverImage为封面图片高度， 17 为titleLable的高度 6为titleLabel和timeLabel的间距  14.5 为下面的timeLabel的高度 12为底部默认留的间距
         self.getProp("timeLabel").setText(timeStr);
 
-    },touchesBegan_withEvent:function(touches,event){
-        var vc = SWBasicViewController.alloc().init();
-        vc.view().setBackgroundColor(mainColor);
-        mainNavigator.pushViewController_animated(vc,1);
     },
     layoutSubviews:function(){
         self.super().layoutSubviews();
@@ -2470,9 +2472,9 @@ defineClass("SWHomeBangumiDidEndCell:UITableViewCell",{
 })
 
 // SW 首页番剧中的完结动画cell中的item  完结动画item
-defineClass("SWHomeBangumiDidEndItem:UIView",{
-    init:function(){
-      if(self.ORIGinit()){
+defineClass("SWHomeBangumiDidEndItem:SWBaseItemView",{
+    initWithFrame:function(frame){
+      if(self.super().initWithFrame(frame)){
           var coverImage = UIImageView.new();
           self.setProp_forKey(coverImage,"coverImage");
           coverImage.layer().setCornerRadius(5);
@@ -2506,11 +2508,6 @@ defineClass("SWHomeBangumiDidEndItem:UIView",{
         self.getProp("coverImage").sd__setImageWithURL(url);
         self.getProp("titleLabel").setText( model.objectForKey("title"));
         self.getProp("epLabel").setText(epTitle.toJS() +"话全");
-    },
-    touchesBegan_withEvent:function(touches,event){
-        var vc = SWBasicViewController.alloc().init();
-        vc.view().setBackgroundColor(mainColor);
-        mainNavigator.pushViewController_animated(vc,1);
     },
     layoutSubviews:function(){
         self.super().layoutSubviews();
@@ -2581,7 +2578,8 @@ defineClass("SWHomeBangumiRecommendCell:UITableViewCell",{
             detailLabel.setTextColor(normalGrayColor);
             bgView.addSubview(detailLabel);
 
-
+            var tap = require('UITapGestureRecognizer').alloc().initWithTarget_action(self,'tapClick:');
+            self.contentView().addGestureRecognizer(tap);
         }
         return self;
     },
@@ -2614,11 +2612,13 @@ defineClass("SWHomeBangumiRecommendCell:UITableViewCell",{
         }
 
     },
-    touchesBegan_withEvent:function(touches,event){
+    tapClick:function(tap){
+    if(tap.state() == 3){
         var vc = SWBasicViewController.alloc().init();
         vc.view().setBackgroundColor(mainColor);
         mainNavigator.pushViewController_animated(vc,1);
-    },
+    }
+},
     calculateDetailLabelHeight:function(desc){
         var attributeDict = {
             "NSFont":UIFont.systemFontOfSize(12)
