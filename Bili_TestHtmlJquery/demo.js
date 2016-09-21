@@ -159,6 +159,7 @@ defineClass("SWHomeViewController: SWBaseViewController", {
             selectImage = selectImage.imageWithRenderingMode(1);
             self.tabBarItem().setImage(normalImage);
             self.tabBarItem().setSelectedImage(selectImage);
+//            self.tabBarItem().setImageInsets({top:6, left:0, bottom: -6, right: 0}); 原生也是可以实现的。
             self.setProp_forKey("http://bangumi.bilibili.com/sponsor/rank/get_sponsor_week_list?access_key=5e0df12c70fcf9a5b20a2a8dcb956ca1&actionKey=appkey&appkey=27eb53fc9058f8c3&build=3445&device=phone&mobi_app=iphone&page=1&pagesize=100&platform=ios&season_id=5027&sign=6dfbe4193ec84aed0ef3e38d1f810ec4&ts=1468406428",'urlStr');
         }
         return self;
@@ -203,7 +204,7 @@ defineClass("SWHomeViewController: SWBaseViewController", {
         self.super().viewWillLayoutSubviews();
         var rect = self.view().bounds();
         var contain = self.getProp("contain");
-        contain.setFrame({x:0, y:0, width:rect.width, height:rect.height - 44 });
+        contain.setFrame({x:0, y:0, width:rect.width, height:rect.height - 49 });
     }
 })
 
